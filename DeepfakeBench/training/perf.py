@@ -324,13 +324,12 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
                         labels.append(0)  # Real
                         print(f"[DEBUG] {img_path.name} -> REAL (from {img_path.parent})")
                     elif img_dir_name in fake_dir_names:
-                        labels.append(1)  # Fake  
+                        labels.append(1)  # Fake
                         print(f"[DEBUG] {img_path.name} -> FAKE (from {img_path.parent})")
                     else:
-                        # If we can't determine from directory, try filename
-                        label = _extract_label_from_filepath(img_path)
-                        labels.append(label)
-                        print(f"[DEBUG] {img_path.name} -> FALLBACK to filepath analysis")
+                        # If we can't determine from directory, skip this image
+                        print(f"[DEBUG] {img_path.name} -> SKIPPED (no matching directory found)")
+                        continue
                 
                 return labels
             else:
@@ -340,20 +339,30 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
     except Exception as e:
         print(f"[DEBUG] Directory-based labeling failed: {e}")
     
-    # Strategy 2: Filename-based labeling for all images
-    print("[DEBUG] Using filename-based labeling strategy")
+    # Strategy 2: Directory-based labeling for all images (no fallback to filename)
+    print("[DEBUG] Using directory-based labeling strategy only")
     fake_count = 0
     real_count = 0
+    skipped_count = 0
     
     for img_path in img_paths:
-        label = _extract_label_from_filepath(img_path)
-        labels.append(label)
-        if label == 0:
+        # Get the parent directory name
+        img_dir_name = img_path.parent.name.lower()
+        
+        if img_dir_name in real_dir_names:
+            labels.append(0)  # Real
             real_count += 1
-        else:
+            print(f"[DEBUG] {img_path.name} -> REAL (from {img_path.parent})")
+        elif img_dir_name in fake_dir_names:
+            labels.append(1)  # Fake
             fake_count += 1
+            print(f"[DEBUG] {img_path.name} -> FAKE (from {img_path.parent})")
+        else:
+            # Skip images that don't match any directory pattern
+            skipped_count += 1
+            print(f"[DEBUG] {img_path.name} -> SKIPPED (no matching directory found)")
     
-    print(f"[DEBUG] Filename analysis results: Real={real_count}, Fake={fake_count}")
+    print(f"[DEBUG] Directory analysis results: Real={real_count}, Fake={fake_count}, Skipped={skipped_count}")
     
     # Show sample filenames for debugging
     print(f"[DEBUG] Sample filenames: {[img.name for img in img_paths[:5]]}")
@@ -452,67 +461,78 @@ def main():
     probabilities = []
     valid_paths = []
     
-    for idx, img_path in enumerate(img_paths, 1):
-        img = cv2.imread(str(img_path))
-        if img is None:
-            print(f"[Warning] loading wrong, skip: {img_path}", file=sys.stderr)
-            continue
+    # Open output file for writing results
+    output_file = "inference_results.txt"
+    with open(output_file, "w") as f:
+        f.write("Deepfake Detection Results\n")
+        f.write("="*80 + "\n\n")
+        
+        for idx, img_path in enumerate(img_paths, 1):
+            img = cv2.imread(str(img_path))
+            if img is None:
+                print(f"[Warning] loading wrong, skip: {img_path}", file=sys.stderr)
+                continue
 
-        cls, prob = infer_single_image(img, face_det, shape_predictor, model)
-        
-        # Store predictions and probabilities for AUC calculation
-        predictions.append(int(cls))
-        probabilities.append(float(prob))
-        valid_paths.append(img_path)
-        
-        print(
-            f"[{idx}/{len(img_paths)}] {img_path.name:>30} | Pred Label: {cls} "
-            f"(0=Real, 1=Fake) | Fake Prob: {prob:.4f}"
-        )
-    
-    # ---------- Calculate AUC if we have multiple images ----------
-    if len(predictions) > 1:
-        try:
-            # Extract true labels
-            true_labels = extract_true_labels(valid_paths, args.image)
+            cls, prob = infer_single_image(img, face_det, shape_predictor, model)
             
-            # Check if we have both classes for AUC calculation
-            unique_labels = set(true_labels)
-            print(f"[DEBUG] Unique true labels found: {unique_labels}")
+            # Store predictions and probabilities for AUC calculation
+            predictions.append(int(cls))
+            probabilities.append(float(prob))
+            valid_paths.append(img_path)
             
-            if len(unique_labels) < 2:
-                print("\n[WARNING] Cannot calculate AUC - only one class present in true labels")
-                print(f"Classes found: {list(unique_labels)}")
-                print(f"This means the dataset appears to contain only {'REAL' if 0 in unique_labels else 'FAKE'} images")
-                print("\nFor AUC calculation, the dataset should contain both:")
-                print("- Images with 'real' or 'fake' in directory names, OR")
-                print("- Filenames containing patterns like 'real_*', 'fake_*', 'synthetic_*'")
+            # Write to file
+            f.write(f"[{idx}/{len(img_paths)}] {img_path.name:>30} | Pred Label: {cls} "
+                   f"(0=Real, 1=Fake) | Fake Prob: {prob:.4f}\n")
+        
+        f.write("\n" + "="*80 + "\n")
+        f.write("PERFORMANCE METRICS\n")
+        f.write("="*80 + "\n")
+        
+        # ---------- Calculate AUC if we have multiple images ----------
+        if len(predictions) > 1:
+            try:
+                # Extract true labels
+                true_labels = extract_true_labels(valid_paths, args.image)
                 
-                # Show some sample filenames for diagnosis
-                print("\nSample filenames from your dataset:")
-                for i, img_path in enumerate(valid_paths[:5]):
-                    print(f"  {img_path.name}")
+                # Write true labels for verification
+                f.write("\nTRUE LABELS (for verification):\n")
+                for i, (img_path, true_label) in enumerate(zip(valid_paths, true_labels), 1):
+                    label_str = "REAL" if true_label == 0 else "FAKE"
+                    f.write(f"[{i}] {img_path.name:>30} -> {label_str}\n")
+                
+                # Check if we have both classes for AUC calculation
+                unique_labels = set(true_labels)
+                f.write(f"\nUnique true labels found: {unique_labels}\n")
+                
+                if len(unique_labels) < 2:
+                    f.write("\n[WARNING] Cannot calculate AUC - only one class present in true labels\n")
+                    f.write(f"Classes found: {list(unique_labels)}\n")
+                    f.write(f"This means the dataset appears to contain only {'REAL' if 0 in unique_labels else 'FAKE'} images\n")
+                    f.write("\nFor AUC calculation, the dataset should contain both:\n")
+                    f.write("- Images with 'real' or 'fake' in directory names\n")
                     
-            else:
-                # Calculate AUC
-                auc_score = roc_auc_score(true_labels, probabilities)
-                
-                print("\n" + "="*50)
-                print("PERFORMANCE METRICS")
-                print("="*50)
-                print(f"Total images processed: {len(predictions)}")
-                print(f"Real images: {sum(1 for label in true_labels if label == 0)}")
-                print(f"Fake images: {sum(1 for label in true_labels if label == 1)}")
-                print(f"AUC (Area Under Curve): {auc_score:.4f}")
-                print("="*50)
-                
-        except Exception as e:
-            print(f"[Warning] Could not calculate AUC: {e}", file=sys.stderr)
-            print("AUC calculation may require:")
-            print("- Images with 'real' or 'fake' in directory names")
-            print("- Filenames containing 'real', 'fake', 'synthetic', etc.")
-    elif len(predictions) == 1:
-        print("\nSingle image processed - AUC calculation not applicable.")
+                    # Show some sample filenames for diagnosis
+                    f.write("\nSample filenames from your dataset:\n")
+                    for i, img_path in enumerate(valid_paths[:5]):
+                        f.write(f"  {img_path.name}\n")
+                        
+                else:
+                    # Calculate AUC
+                    auc_score = roc_auc_score(true_labels, probabilities)
+                    
+                    f.write(f"\nTotal images processed: {len(predictions)}\n")
+                    f.write(f"Real images: {sum(1 for label in true_labels if label == 0)}\n")
+                    f.write(f"Fake images: {sum(1 for label in true_labels if label == 1)}\n")
+                    f.write(f"AUC (Area Under Curve): {auc_score:.4f}\n")
+                    
+            except Exception as e:
+                f.write(f"\n[Warning] Could not calculate AUC: {e}\n")
+                f.write("AUC calculation may require:\n")
+                f.write("- Images with 'real' or 'fake' in directory names\n")
+        elif len(predictions) == 1:
+            f.write("\nSingle image processed - AUC calculation not applicable.\n")
+    
+    print(f"\nResults written to {output_file}")
 
 
 if __name__ == "__main__":
