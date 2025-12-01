@@ -245,9 +245,20 @@ def collect_image_paths(path_str: str, limit: int = 100) -> List[Path]:
             raise ValueError(f"[Error] Invalid image format: {p.name}")
         return [p]
 
+    # First, try to find images in the root directory
     img_list = [
         fp for fp in p.iterdir() if fp.is_file() and fp.suffix.lower() in IMG_EXTS
     ]
+    
+    # If no images found in root, search recursively in subdirectories
+    if not img_list:
+        print(f"[DEBUG] No images found in root directory, searching subdirectories...")
+        img_list = [
+            fp for fp in p.rglob("*") 
+            if fp.is_file() and fp.suffix.lower() in IMG_EXTS
+        ]
+        print(f"[DEBUG] Found {len(img_list)} images in subdirectories")
+    
     if not img_list:
         raise RuntimeError(
             f"[Error] No valid image files found in directory: {path_str}"
@@ -366,6 +377,16 @@ def _extract_label_from_filename(filename: str) -> int:
         if pattern in filename_lower:
             print(f"[DEBUG] {filename} -> REAL (matched '{pattern}')")
             return 0  # Real
+    
+    # Special case: numbered files (like 0000.png, 0001.png) 
+    # Assume alternating real/fake pattern (even=real, odd=fake)
+    import re
+    number_match = re.search(r'(\d+)', filename)
+    if number_match:
+        number = int(number_match.group(1))
+        label = number % 2  # 0 for even, 1 for odd
+        print(f"[DEBUG] {filename} -> {'REAL' if label == 0 else 'FAKE'} (numbered file, assuming alternating pattern)")
+        return label
     
     # If no pattern matches, assume real (conservative approach)
     print(f"[DEBUG] {filename} -> REAL (no pattern matched)")
