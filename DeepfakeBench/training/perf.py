@@ -278,11 +278,10 @@ def collect_image_paths(path_str: str, limit: int = 100) -> List[Path]:
 
 def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
     """
-    Extract true labels (0=Real, 1=Fake) from image paths.
+    Extract true labels (0=Real, 1=Fake) from image paths using directory-based labeling only.
     
-    Supports multiple strategies:
-    1. Directory-based: If base_path contains 'real' and 'fake' subdirectories
-    2. Filename-based: Checks for patterns like 'real', 'fake', 'fake_' in filenames
+    This function only uses directory-based labeling and does not fall back to filename patterns.
+    Images are labeled based on their parent directory names containing 'real' or 'fake' patterns.
     
     Returns:
         List of integer labels (0 for Real, 1 for Fake)
@@ -293,11 +292,9 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
     print(f"[DEBUG] Analyzing {len(img_paths)} images for label extraction...")
     print(f"[DEBUG] Base path: {base_path}")
     
-    # Strategy 1: Check for directory-based labeling
-    # Look for 'real' and 'fake' subdirectories in the base path
+    # Get subdirectories at the base level
     try:
         if base_path.exists():
-            # Get subdirectories at the base level
             subdirs = [d for d in base_path.iterdir() if d.is_dir()]
             print(f"[DEBUG] Found {len(subdirs)} subdirectories: {[d.name for d in subdirs]}")
             
@@ -308,39 +305,21 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
             print(f"[DEBUG] Real directories found: {[d.name for d in real_dirs]}")
             print(f"[DEBUG] Fake directories found: {[d.name for d in fake_dirs]}")
             
-            if real_dirs or fake_dirs:
-                print("[DEBUG] Using directory-based labeling strategy")
-                
-                # Create a set of directory paths for faster lookup
-                real_dir_names = {d.name.lower() for d in real_dirs}
-                fake_dir_names = {d.name.lower() for d in fake_dirs}
-                
-                # Process each image
-                for img_path in img_paths:
-                    # Get the parent directory name
-                    img_dir_name = img_path.parent.name.lower()
-                    
-                    if img_dir_name in real_dir_names:
-                        labels.append(0)  # Real
-                        print(f"[DEBUG] {img_path.name} -> REAL (from {img_path.parent})")
-                    elif img_dir_name in fake_dir_names:
-                        labels.append(1)  # Fake
-                        print(f"[DEBUG] {img_path.name} -> FAKE (from {img_path.parent})")
-                    else:
-                        # If we can't determine from directory, skip this image
-                        print(f"[DEBUG] {img_path.name} -> SKIPPED (no matching directory found)")
-                        continue
-                
-                return labels
-            else:
+            if not (real_dirs or fake_dirs):
                 print("[DEBUG] No 'real' or 'fake' directories found")
+                return []
         else:
             print(f"[DEBUG] Base path does not exist: {base_path}")
+            return []
     except Exception as e:
         print(f"[DEBUG] Directory-based labeling failed: {e}")
+        return []
     
-    # Strategy 2: Directory-based labeling for all images (no fallback to filename)
-    print("[DEBUG] Using directory-based labeling strategy only")
+    # Create a set of directory paths for faster lookup
+    real_dir_names = {d.name.lower() for d in real_dirs}
+    fake_dir_names = {d.name.lower() for d in fake_dirs}
+    
+    # Process each image
     fake_count = 0
     real_count = 0
     skipped_count = 0
