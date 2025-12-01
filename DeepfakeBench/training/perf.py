@@ -1,4 +1,5 @@
 import argparse
+import random
 import sys
 from pathlib import Path
 from typing import List, Tuple
@@ -264,8 +265,13 @@ def collect_image_paths(path_str: str, limit: int = 100) -> List[Path]:
             f"[Error] No valid image files found in directory: {path_str}"
         )
 
-    # Limit to specified number of images
-    img_list = sorted(img_list)[:limit]
+    # Randomly sample to limit number of images for better representation
+    if len(img_list) > limit:
+        print(f"[DEBUG] Randomly sampling {limit} images from {len(img_list)} available images...")
+        img_list = random.sample(img_list, limit)
+    else:
+        # Shuffle to ensure random order even when taking all images
+        random.shuffle(img_list)
     
     return img_list
 
