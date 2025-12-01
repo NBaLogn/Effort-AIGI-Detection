@@ -325,13 +325,18 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
     skipped_count = 0
     
     for img_path in img_paths:
-        # Get the parent directory name
+        # Get the parent directory name (1st level)
         img_dir_name = img_path.parent.name.lower()
         
-        # Also check the 2nd subdirectory (grandparent directory)
+        # Check the 2nd subdirectory (grandparent directory)
         img_2nd_dir_name = ""
         if len(img_path.parts) >= 2:
             img_2nd_dir_name = img_path.parts[-2].lower()
+        
+        # Check the 3rd subdirectory (great-grandparent directory) - for cases like MIXED/real/subfolder/image.jpg
+        img_3rd_dir_name = ""
+        if len(img_path.parts) >= 3:
+            img_3rd_dir_name = img_path.parts[-3].lower()
         
         if img_dir_name in real_dir_names:
             labels.append(0)  # Real
@@ -349,6 +354,14 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
             labels.append(1)  # Fake
             fake_count += 1
             print(f"[DEBUG] {img_path.name} -> FAKE (from 2nd subdir: {img_path.parts[-2]})")
+        elif img_3rd_dir_name in real_dir_names:
+            labels.append(0)  # Real
+            real_count += 1
+            print(f"[DEBUG] {img_path.name} -> REAL (from 3rd subdir: {img_path.parts[-3]})")
+        elif img_3rd_dir_name in fake_dir_names:
+            labels.append(1)  # Fake
+            fake_count += 1
+            print(f"[DEBUG] {img_path.name} -> FAKE (from 3rd subdir: {img_path.parts[-3]})")
         else:
             # Skip images that don't match any directory pattern
             skipped_count += 1
@@ -356,6 +369,7 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
             print(f"         Full path: {img_path}")
             print(f"         Parent dir: {img_path.parent.name}")
             print(f"         2nd subdir: {img_2nd_dir_name if img_2nd_dir_name else 'N/A'}")
+            print(f"         3rd subdir: {img_3rd_dir_name if img_3rd_dir_name else 'N/A'}")
             print(f"         Available real dirs: {list(real_dir_names)}")
             print(f"         Available fake dirs: {list(fake_dir_names)}")
     
