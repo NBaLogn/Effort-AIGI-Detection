@@ -273,32 +273,73 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
     labels = []
     base_path = Path(base_path)
     
+    print(f"[DEBUG] Analyzing {len(img_paths)} images for label extraction...")
+    print(f"[DEBUG] Base path: {base_path}")
+    
     # Strategy 1: Check for directory-based labeling
     # Look for 'real' and 'fake' subdirectories in the base path
     try:
-        subdirs = [d for d in base_path.iterdir() if d.is_dir()]
-        real_dirs = [d for d in subdirs if 'real' in d.name.lower()]
-        fake_dirs = [d for d in subdirs if 'fake' in d.name.lower() or 'synthetic' in d.name.lower()]
-        
-        if real_dirs or fake_dirs:
-            # Directory-based labeling
-            for img_path in img_paths:
-                # Check if the image is in a real or fake subdirectory
-                img_parent = img_path.parent
-                if any(real_dir in img_path.parents for real_dir in real_dirs):
-                    labels.append(0)  # Real
-                elif any(fake_dir in img_path.parents for fake_dir in fake_dirs):
-                    labels.append(1)  # Fake
-                else:
-                    # If we can't determine from directory, try filename
-                    labels.append(_extract_label_from_filename(img_path.name))
-            return labels
-    except:
-        pass  # If directory structure check fails, try filename-based approach
+        if base_path.exists():
+            # Get subdirectories at the base level
+            subdirs = [d for d in base_path.iterdir() if d.is_dir()]
+            print(f"[DEBUG] Found {len(subdirs)} subdirectories: {[d.name for d in subdirs]}")
+            
+            # Find directories containing 'real' or 'fake' (case insensitive)
+            real_dirs = [d for d in subdirs if 'real' in d.name.lower()]
+            fake_dirs = [d for d in subdirs if 'fake' in d.name.lower() or 'synthetic' in d.name.lower()]
+            
+            print(f"[DEBUG] Real directories found: {[d.name for d in real_dirs]}")
+            print(f"[DEBUG] Fake directories found: {[d.name for d in fake_dirs]}")
+            
+            if real_dirs or fake_dirs:
+                print("[DEBUG] Using directory-based labeling strategy")
+                
+                # Create a set of directory paths for faster lookup
+                real_dir_names = {d.name.lower() for d in real_dirs}
+                fake_dir_names = {d.name.lower() for d in fake_dirs}
+                
+                # Process each image
+                for img_path in img_paths:
+                    # Get the parent directory name
+                    img_dir_name = img_path.parent.name.lower()
+                    
+                    if img_dir_name in real_dir_names:
+                        labels.append(0)  # Real
+                        print(f"[DEBUG] {img_path.name} -> REAL (from {img_path.parent})")
+                    elif img_dir_name in fake_dir_names:
+                        labels.append(1)  # Fake  
+                        print(f"[DEBUG] {img_path.name} -> FAKE (from {img_path.parent})")
+                    else:
+                        # If we can't determine from directory, try filename
+                        label = _extract_label_from_filename(img_path.name)
+                        labels.append(label)
+                        print(f"[DEBUG] {img_path.name} -> FALLBACK to filename analysis")
+                
+                return labels
+            else:
+                print("[DEBUG] No 'real' or 'fake' directories found")
+        else:
+            print(f"[DEBUG] Base path does not exist: {base_path}")
+    except Exception as e:
+        print(f"[DEBUG] Directory-based labeling failed: {e}")
     
     # Strategy 2: Filename-based labeling for all images
+    print("[DEBUG] Using filename-based labeling strategy")
+    fake_count = 0
+    real_count = 0
+    
     for img_path in img_paths:
-        labels.append(_extract_label_from_filename(img_path.name))
+        label = _extract_label_from_filename(img_path.name)
+        labels.append(label)
+        if label == 0:
+            real_count += 1
+        else:
+            fake_count += 1
+    
+    print(f"[DEBUG] Filename analysis results: Real={real_count}, Fake={fake_count}")
+    
+    # Show sample filenames for debugging
+    print(f"[DEBUG] Sample filenames: {[img.name for img in img_paths[:5]]}")
     
     return labels
 
@@ -311,20 +352,23 @@ def _extract_label_from_filename(filename: str) -> int:
     filename_lower = filename.lower()
     
     # Common patterns indicating fake images
-    fake_patterns = ['fake', 'synthetic', 'generated', 'ai_', '_fake', 'synth']
-    real_patterns = ['real', 'original', 'authentic', 'genuine']
+    fake_patterns = ['fake', 'synthetic', 'generated', 'ai_', '_fake', 'synth', 'faceswap', 'face_swap', 'swap', 'deepfake', 'df_']
+    real_patterns = ['real', 'original', 'authentic', 'genuine', 'real_', 'orig']
     
     # Check for fake patterns first (more specific)
     for pattern in fake_patterns:
         if pattern in filename_lower:
+            print(f"[DEBUG] {filename} -> FAKE (matched '{pattern}')")
             return 1  # Fake
     
     # Check for real patterns
     for pattern in real_patterns:
         if pattern in filename_lower:
+            print(f"[DEBUG] {filename} -> REAL (matched '{pattern}')")
             return 0  # Real
     
     # If no pattern matches, assume real (conservative approach)
+    print(f"[DEBUG] {filename} -> REAL (no pattern matched)")
     return 0
 
 
@@ -391,16 +435,36 @@ def main():
             # Extract true labels
             true_labels = extract_true_labels(valid_paths, args.image)
             
-            # Calculate AUC
-            auc_score = roc_auc_score(true_labels, probabilities)
+            # Check if we have both classes for AUC calculation
+            unique_labels = set(true_labels)
+            print(f"[DEBUG] Unique true labels found: {unique_labels}")
             
-            print(f"\n" + "="*50)
-            print(f"PERFORMANCE METRICS")
-            print(f"="*50)
-            print(f"Total images processed: {len(predictions)}")
-            print(f"AUC (Area Under Curve): {auc_score:.4f}")
-            print(f"="*50)
-            
+            if len(unique_labels) < 2:
+                print(f"\n[WARNING] Cannot calculate AUC - only one class present in true labels")
+                print(f"Classes found: {list(unique_labels)}")
+                print(f"This means the dataset appears to contain only {'REAL' if 0 in unique_labels else 'FAKE'} images")
+                print("\nFor AUC calculation, the dataset should contain both:")
+                print("- Images with 'real' or 'fake' in directory names, OR")
+                print("- Filenames containing patterns like 'real_*', 'fake_*', 'synthetic_*'")
+                
+                # Show some sample filenames for diagnosis
+                print(f"\nSample filenames from your dataset:")
+                for i, img_path in enumerate(valid_paths[:5]):
+                    print(f"  {img_path.name}")
+                    
+            else:
+                # Calculate AUC
+                auc_score = roc_auc_score(true_labels, probabilities)
+                
+                print(f"\n" + "="*50)
+                print(f"PERFORMANCE METRICS")
+                print(f"="*50)
+                print(f"Total images processed: {len(predictions)}")
+                print(f"Real images: {sum(1 for label in true_labels if label == 0)}")
+                print(f"Fake images: {sum(1 for label in true_labels if label == 1)}")
+                print(f"AUC (Area Under Curve): {auc_score:.4f}")
+                print(f"="*50)
+                
         except Exception as e:
             print(f"[Warning] Could not calculate AUC: {e}", file=sys.stderr)
             print("AUC calculation may require:")
