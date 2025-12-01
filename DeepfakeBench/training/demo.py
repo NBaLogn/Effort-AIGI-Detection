@@ -198,9 +198,17 @@ def infer_single_image(
     if face_detector is None or landmark_predictor is None:
         face_aligned = img_bgr
     else:
-        face_aligned, _, _ = extract_aligned_face_dlib(
+        # Try to extract and align face
+        face_detection_result = extract_aligned_face_dlib(
             face_detector, landmark_predictor, img_bgr, res=224
         )
+        
+        if len(face_detection_result) == 3 and face_detection_result[0] is not None:
+            # Face detected successfully - use the aligned face
+            face_aligned, _, _ = face_detection_result
+        else:
+            # No face detected - fall back to using original image
+            face_aligned = img_bgr
 
     face_tensor = preprocess_face(face_aligned).to(device)
     data = {"image": face_tensor, "label": torch.tensor([0]).to(device)}
