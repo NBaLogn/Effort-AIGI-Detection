@@ -222,6 +222,13 @@ def infer_single_image(
     preds = inference(model, data)
     cls_out = preds["cls"].squeeze().cpu().numpy()  # 0/1
     prob = preds["prob"].squeeze().cpu().numpy()  # prob
+    
+    # Handle numpy arrays - convert to scalars
+    if isinstance(cls_out, np.ndarray):
+        cls_out = cls_out.item() if cls_out.ndim == 0 else int(np.argmax(cls_out))
+    if isinstance(prob, np.ndarray):
+        prob = prob.item() if prob.ndim == 0 else float(prob)
+    
     return cls_out, prob
 
 
