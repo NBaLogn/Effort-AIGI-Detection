@@ -146,8 +146,14 @@ def extract_aligned_face_dlib(face_detector, predictor, image, res=224, mask=Non
 
         # Extract the all landmarks from the aligned face
         face_align = face_detector(cropped_face, 1)
-        landmark = predictor(cropped_face, face_align[0])
-        landmark = face_utils.shape_to_np(landmark)
+        
+        # Check if faces were detected in the cropped image
+        if len(face_align) > 0:
+            landmark = predictor(cropped_face, face_align[0])
+            landmark = face_utils.shape_to_np(landmark)
+        else:
+            # No face detected in cropped image, return without landmarks
+            landmark = None
 
         return cropped_face, landmark, face
 
