@@ -1,2 +1,3 @@
 *.pyc
 *.pth
+DeepfakeBench/models--openai--clip-vit-large-patch14
