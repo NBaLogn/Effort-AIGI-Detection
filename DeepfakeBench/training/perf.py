@@ -1,5 +1,4 @@
 import argparse
-import random
 import sys
 from pathlib import Path
 from typing import List, Tuple
@@ -253,7 +252,7 @@ def collect_image_paths(path_str: str, limit: int = 100) -> List[Path]:
     
     # If no images found in root, search recursively in subdirectories
     if not img_list:
-        print(f"[DEBUG] No images found in root directory, searching subdirectories...")
+        print("[DEBUG] No images found in root directory, searching subdirectories...")
         img_list = [
             fp for fp in p.rglob("*") 
             if fp.is_file() and fp.suffix.lower() in IMG_EXTS
@@ -265,13 +264,8 @@ def collect_image_paths(path_str: str, limit: int = 100) -> List[Path]:
             f"[Error] No valid image files found in directory: {path_str}"
         )
 
-    # Randomly sample to limit number of images for better representation
-    if len(img_list) > limit:
-        print(f"[DEBUG] Randomly sampling {limit} images from {len(img_list)} available images...")
-        img_list = random.sample(img_list, limit)
-    else:
-        # Shuffle to ensure random order even when taking all images
-        random.shuffle(img_list)
+    # Limit to specified number of images
+    img_list = sorted(img_list)[:limit]
     
     return img_list
 
@@ -317,24 +311,20 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
                 
                 # Process each image
                 for img_path in img_paths:
-                    # Check the full path for real/fake directories, not just immediate parent
-                    img_path_str = str(img_path).lower()
+                    # Get the parent directory name
+                    img_dir_name = img_path.parent.name.lower()
                     
-                    # Check if the image path contains any real or fake directory
-                    is_real = any(real_dir.name.lower() in img_path_str for real_dir in real_dirs)
-                    is_fake = any(fake_dir.name.lower() in img_path_str for fake_dir in fake_dirs)
-                    
-                    if is_real:
+                    if img_dir_name in real_dir_names:
                         labels.append(0)  # Real
-                        print(f"[DEBUG] {img_path.name} -> REAL (from path: {img_path})")
-                    elif is_fake:
+                        print(f"[DEBUG] {img_path.name} -> REAL (from {img_path.parent})")
+                    elif img_dir_name in fake_dir_names:
                         labels.append(1)  # Fake  
-                        print(f"[DEBUG] {img_path.name} -> FAKE (from path: {img_path})")
+                        print(f"[DEBUG] {img_path.name} -> FAKE (from {img_path.parent})")
                     else:
                         # If we can't determine from directory, try filename
-                        label = _extract_label_from_filename(img_path.name)
+                        label = _extract_label_from_filepath(img_path)
                         labels.append(label)
-                        print(f"[DEBUG] {img_path.name} -> FALLBACK to filename analysis")
+                        print(f"[DEBUG] {img_path.name} -> FALLBACK to filepath analysis")
                 
                 return labels
             else:
@@ -350,7 +340,7 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
     real_count = 0
     
     for img_path in img_paths:
-        label = _extract_label_from_filename(img_path.name)
+        label = _extract_label_from_filepath(img_path)
         labels.append(label)
         if label == 0:
             real_count += 1
@@ -365,31 +355,55 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
     return labels
 
 
-def _extract_label_from_filename(filename: str) -> int:
+def _extract_label_from_filepath(filepath: Path) -> int:
     """
-    Extract label from filename using common patterns.
+    Extract label from filepath using directory structure.
+    Uses the 2 subdirectories right below the root directory.
     Returns 0 for Real, 1 for Fake.
     """
-    filename_lower = filename.lower()
+    filepath_str = str(filepath)
+    filepath_lower = filepath_str.lower()
     
     # Common patterns indicating fake images
     fake_patterns = ['fake', 'synthetic', 'generated', 'ai_', '_fake', 'synth', 'faceswap', 'face_swap', 'swap', 'deepfake', 'df_']
     real_patterns = ['real', 'original', 'authentic', 'genuine', 'real_', 'orig']
     
+    # Extract the 2 subdirectories right below the root directory
+    path_parts = filepath.parts
+    if len(path_parts) >= 2:
+        # Get the 2 subdirectories right below root
+        subdirs = [path_parts[0], path_parts[1]]  # First two subdirectories
+        subdir_path = '/'.join(subdirs).lower()
+        
+        # Check for fake patterns in the subdirectory path
+        for pattern in fake_patterns:
+            if pattern in subdir_path:
+                print(f"[DEBUG] {filepath.name} -> FAKE (matched '{pattern}' in subdirs: {subdirs})")
+                return 1  # Fake
+        
+        # Check for real patterns in the subdirectory path
+        for pattern in real_patterns:
+            if pattern in subdir_path:
+                print(f"[DEBUG] {filepath.name} -> REAL (matched '{pattern}' in subdirs: {subdirs})")
+                return 0  # Real
+    
+    # Fallback to filename patterns if directory-based detection fails
+    filename_lower = filepath.name.lower()
+    
     # Check for fake patterns first (more specific)
     for pattern in fake_patterns:
         if pattern in filename_lower:
-            print(f"[DEBUG] {filename} -> FAKE (matched '{pattern}')")
+            print(f"[DEBUG] {filepath.name} -> FAKE (matched '{pattern}' in filename)")
             return 1  # Fake
     
     # Check for real patterns
     for pattern in real_patterns:
         if pattern in filename_lower:
-            print(f"[DEBUG] {filename} -> REAL (matched '{pattern}')")
+            print(f"[DEBUG] {filepath.name} -> REAL (matched '{pattern}' in filename)")
             return 0  # Real
     
     # If no pattern matches, assume real (conservative approach)
-    print(f"[DEBUG] {filename} -> REAL (no pattern matched)")
+    print(f"[DEBUG] {filepath.name} -> REAL (no pattern matched)")
     return 0
 
 
@@ -435,7 +449,7 @@ def main():
     for idx, img_path in enumerate(img_paths, 1):
         img = cv2.imread(str(img_path))
         if img is None:
-            print(f"[Warning] loading wrong，skip: {img_path}", file=sys.stderr)
+            print(f"[Warning] loading wrong, skip: {img_path}", file=sys.stderr)
             continue
 
         cls, prob = infer_single_image(img, face_det, shape_predictor, model)
@@ -461,7 +475,7 @@ def main():
             print(f"[DEBUG] Unique true labels found: {unique_labels}")
             
             if len(unique_labels) < 2:
-                print(f"\n[WARNING] Cannot calculate AUC - only one class present in true labels")
+                print("\n[WARNING] Cannot calculate AUC - only one class present in true labels")
                 print(f"Classes found: {list(unique_labels)}")
                 print(f"This means the dataset appears to contain only {'REAL' if 0 in unique_labels else 'FAKE'} images")
                 print("\nFor AUC calculation, the dataset should contain both:")
@@ -469,7 +483,7 @@ def main():
                 print("- Filenames containing patterns like 'real_*', 'fake_*', 'synthetic_*'")
                 
                 # Show some sample filenames for diagnosis
-                print(f"\nSample filenames from your dataset:")
+                print("\nSample filenames from your dataset:")
                 for i, img_path in enumerate(valid_paths[:5]):
                     print(f"  {img_path.name}")
                     
@@ -477,14 +491,14 @@ def main():
                 # Calculate AUC
                 auc_score = roc_auc_score(true_labels, probabilities)
                 
-                print(f"\n" + "="*50)
-                print(f"PERFORMANCE METRICS")
-                print(f"="*50)
+                print("\n" + "="*50)
+                print("PERFORMANCE METRICS")
+                print("="*50)
                 print(f"Total images processed: {len(predictions)}")
                 print(f"Real images: {sum(1 for label in true_labels if label == 0)}")
                 print(f"Fake images: {sum(1 for label in true_labels if label == 1)}")
                 print(f"AUC (Area Under Curve): {auc_score:.4f}")
-                print(f"="*50)
+                print("="*50)
                 
         except Exception as e:
             print(f"[Warning] Could not calculate AUC: {e}", file=sys.stderr)
@@ -492,7 +506,7 @@ def main():
             print("- Images with 'real' or 'fake' in directory names")
             print("- Filenames containing 'real', 'fake', 'synthetic', etc.")
     elif len(predictions) == 1:
-        print(f"\nSingle image processed - AUC calculation not applicable.")
+        print("\nSingle image processed - AUC calculation not applicable.")
 
 
 if __name__ == "__main__":
