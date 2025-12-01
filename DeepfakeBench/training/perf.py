@@ -378,16 +378,6 @@ def _extract_label_from_filename(filename: str) -> int:
             print(f"[DEBUG] {filename} -> REAL (matched '{pattern}')")
             return 0  # Real
     
-    # Special case: numbered files (like 0000.png, 0001.png) 
-    # Assume alternating real/fake pattern (even=real, odd=fake)
-    import re
-    number_match = re.search(r'(\d+)', filename)
-    if number_match:
-        number = int(number_match.group(1))
-        label = number % 2  # 0 for even, 1 for odd
-        print(f"[DEBUG] {filename} -> {'REAL' if label == 0 else 'FAKE'} (numbered file, assuming alternating pattern)")
-        return label
-    
     # If no pattern matches, assume real (conservative approach)
     print(f"[DEBUG] {filename} -> REAL (no pattern matched)")
     return 0
