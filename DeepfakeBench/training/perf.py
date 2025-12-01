@@ -317,15 +317,19 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
                 
                 # Process each image
                 for img_path in img_paths:
-                    # Get the parent directory name
-                    img_dir_name = img_path.parent.name.lower()
+                    # Check the full path for real/fake directories, not just immediate parent
+                    img_path_str = str(img_path).lower()
                     
-                    if img_dir_name in real_dir_names:
+                    # Check if the image path contains any real or fake directory
+                    is_real = any(real_dir.name.lower() in img_path_str for real_dir in real_dirs)
+                    is_fake = any(fake_dir.name.lower() in img_path_str for fake_dir in fake_dirs)
+                    
+                    if is_real:
                         labels.append(0)  # Real
-                        print(f"[DEBUG] {img_path.name} -> REAL (from {img_path.parent})")
-                    elif img_dir_name in fake_dir_names:
+                        print(f"[DEBUG] {img_path.name} -> REAL (from path: {img_path})")
+                    elif is_fake:
                         labels.append(1)  # Fake  
-                        print(f"[DEBUG] {img_path.name} -> FAKE (from {img_path.parent})")
+                        print(f"[DEBUG] {img_path.name} -> FAKE (from path: {img_path})")
                     else:
                         # If we can't determine from directory, try filename
                         label = _extract_label_from_filename(img_path.name)
