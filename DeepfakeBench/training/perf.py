@@ -14,7 +14,7 @@ from detectors import DETECTOR
 from imutils import face_utils
 from PIL import Image as pil_image
 from skimage import transform as trans
-from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_auc_score, average_precision_score
 
 """
 Usage:
@@ -497,13 +497,18 @@ def main():
                         f.write(f"  {img_path.name}\n")
                         
                 else:
-                    # Calculate AUC
+                    # Calculate AUC and PR-AUC
                     auc_score = roc_auc_score(true_labels, probabilities)
-                    
+                    pr_auc_score = average_precision_score(true_labels, probabilities)
+
                     f.write(f"\nTotal images processed: {len(predictions)}\n")
                     f.write(f"Real images: {sum(1 for label in true_labels if label == 0)}\n")
                     f.write(f"Fake images: {sum(1 for label in true_labels if label == 1)}\n")
-                    f.write(f"AUC (Area Under Curve): {auc_score:.4f}\n")
+                    f.write(f"AUC (Area Under ROC Curve): {auc_score:.4f}\n")
+                    f.write(f"PR-AUC (Area Under Precision-Recall Curve): {pr_auc_score:.4f}\n")
+
+                    print(f"AUC (Area Under ROC Curve): {auc_score:.4f}")
+                    print(f"PR-AUC (Area Under Precision-Recall Curve): {pr_auc_score:.4f}")
                     
             except Exception as e:
                 f.write(f"\n[Warning] Could not calculate AUC: {e}\n")
