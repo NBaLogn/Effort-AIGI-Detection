@@ -8,8 +8,6 @@ import cv2
 import dlib
 import numpy as np
 import torch
-import torch.nn.parallel
-import torch.utils.data
 import torchvision.transforms as T
 import yaml
 from detectors import DETECTOR
@@ -276,35 +274,44 @@ def collect_image_paths(path_str: str, limit: int = 100) -> List[Path]:
     return img_list
 
 
+def _check_directory_label(dir_name: str, real_dirs: set, fake_dirs: set) -> int | None:
+    """Check if a directory name matches real or fake patterns. Returns label or None if no match."""
+    if dir_name in real_dirs:
+        return 0  # Real
+    elif dir_name in fake_dirs:
+        return 1  # Fake
+    return None
+
+
 def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
     """
     Extract true labels (0=Real, 1=Fake) from image paths using directory-based labeling only.
-    
+
     This function only uses directory-based labeling and does not fall back to filename patterns.
     Images are labeled based on their parent directory names containing 'real' or 'fake' patterns.
-    
+
     Returns:
         List of integer labels (0 for Real, 1 for Fake)
     """
     labels = []
     base_path = Path(base_path)
-    
+
     print(f"[DEBUG] Analyzing {len(img_paths)} images for label extraction...")
     print(f"[DEBUG] Base path: {base_path}")
-    
+
     # Get subdirectories at the base level
     try:
         if base_path.exists():
             subdirs = [d for d in base_path.iterdir() if d.is_dir()]
             print(f"[DEBUG] Found {len(subdirs)} subdirectories: {[d.name for d in subdirs]}")
-            
+
             # Find directories containing 'real' or 'fake' (case insensitive)
             real_dirs = [d for d in subdirs if 'real' in d.name.lower()]
-            fake_dirs = [d for d in subdirs if 'fake' in d.name.lower() or 'synthetic' in d.name.lower()]
-            
+            fake_dirs = [d for d in subdirs if 'fake' in d.name.lower() or 'synthetic' in d.name.lower() or 'faceswap' in d.name.lower()]
+
             print(f"[DEBUG] Real directories found: {[d.name for d in real_dirs]}")
             print(f"[DEBUG] Fake directories found: {[d.name for d in fake_dirs]}")
-            
+
             if not (real_dirs or fake_dirs):
                 print("[DEBUG] No 'real' or 'fake' directories found")
                 return []
@@ -314,123 +321,85 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
     except Exception as e:
         print(f"[DEBUG] Directory-based labeling failed: {e}")
         return []
-    
+
     # Create a set of directory paths for faster lookup
     real_dir_names = {d.name.lower() for d in real_dirs}
     fake_dir_names = {d.name.lower() for d in fake_dirs}
-    
+
     # Process each image
     fake_count = 0
     real_count = 0
     skipped_count = 0
-    
+
+    # Add diagnostic counters for different path patterns
+    path_pattern_counts = {}
+
     for img_path in img_paths:
-        # Get the parent directory name (1st level)
-        img_dir_name = img_path.parent.name.lower()
-        
-        # Check the 2nd subdirectory (grandparent directory)
-        img_2nd_dir_name = ""
-        if len(img_path.parts) >= 2:
-            img_2nd_dir_name = img_path.parts[-2].lower()
-        
-        # Check the 3rd subdirectory (great-grandparent directory) - for cases like MIXED/real/subfolder/image.jpg
-        img_3rd_dir_name = ""
-        if len(img_path.parts) >= 3:
-            img_3rd_dir_name = img_path.parts[-3].lower()
-        
-        if img_dir_name in real_dir_names:
-            labels.append(0)  # Real
-            real_count += 1
-            print(f"[DEBUG] {img_path.name} -> REAL (from {img_path.parent})")
-        elif img_dir_name in fake_dir_names:
-            labels.append(1)  # Fake
-            fake_count += 1
-            print(f"[DEBUG] {img_path.name} -> FAKE (from {img_path.parent})")
-        elif img_2nd_dir_name in real_dir_names:
-            labels.append(0)  # Real
-            real_count += 1
-            print(f"[DEBUG] {img_path.name} -> REAL (from 2nd subdir: {img_path.parts[-2]})")
-        elif img_2nd_dir_name in fake_dir_names:
-            labels.append(1)  # Fake
-            fake_count += 1
-            print(f"[DEBUG] {img_path.name} -> FAKE (from 2nd subdir: {img_path.parts[-2]})")
-        elif img_3rd_dir_name in real_dir_names:
-            labels.append(0)  # Real
-            real_count += 1
-            print(f"[DEBUG] {img_path.name} -> REAL (from 3rd subdir: {img_path.parts[-3]})")
-        elif img_3rd_dir_name in fake_dir_names:
-            labels.append(1)  # Fake
-            fake_count += 1
-            print(f"[DEBUG] {img_path.name} -> FAKE (from 3rd subdir: {img_path.parts[-3]})")
-        else:
+        # Extract directory names at different levels
+        dir_names = []
+        for i in range(1, 6):  # Check up to 5 levels
+            if len(img_path.parts) >= i:
+                dir_names.append(img_path.parts[-i].lower())
+            else:
+                dir_names.append("")
+
+        img_dir_name, img_2nd_dir_name, img_3rd_dir_name, img_4th_dir_name, img_5th_dir_name = dir_names
+
+        # Track path patterns for diagnosis
+        path_pattern = f"{img_5th_dir_name}/{img_4th_dir_name}/{img_3rd_dir_name}/{img_2nd_dir_name}/{img_dir_name}"
+        path_pattern_counts[path_pattern] = path_pattern_counts.get(path_pattern, 0) + 1
+
+        # Check each directory level for real/fake patterns
+        label_found = False
+        for level, (dir_name, level_desc) in enumerate([
+            (img_dir_name, f"from {img_path.parent}"),
+            (img_2nd_dir_name, f"from 2nd subdir: {img_path.parts[-2] if len(img_path.parts) >= 2 else 'N/A'}"),
+            (img_3rd_dir_name, f"from 3rd subdir: {img_path.parts[-3] if len(img_path.parts) >= 3 else 'N/A'}"),
+            (img_4th_dir_name, f"from 4th subdir: {img_path.parts[-4] if len(img_path.parts) >= 4 else 'N/A'}"),
+            (img_5th_dir_name, f"from 5th subdir: {img_path.parts[-5] if len(img_path.parts) >= 5 else 'N/A'}"),
+        ], 1):
+            if not dir_name:  # Skip empty directory names
+                continue
+
+            label = _check_directory_label(dir_name, real_dir_names, fake_dir_names)
+            if label is not None:
+                labels.append(label)
+                if label == 0:
+                    real_count += 1
+                    print(f"[DEBUG] {img_path.name} -> REAL ({level_desc})")
+                else:
+                    fake_count += 1
+                    print(f"[DEBUG] {img_path.name} -> FAKE ({level_desc})")
+                label_found = True
+                break
+
+        if not label_found:
             # Skip images that don't match any directory pattern
             skipped_count += 1
             print(f"[DEBUG] {img_path.name} -> SKIPPED (no matching directory found)")
             print(f"         Full path: {img_path}")
             print(f"         Parent dir: {img_path.parent.name}")
-            print(f"         2nd subdir: {img_2nd_dir_name if img_2nd_dir_name else 'N/A'}")
-            print(f"         3rd subdir: {img_3rd_dir_name if img_3rd_dir_name else 'N/A'}")
+            print(f"         2nd subdir: {img_2nd_dir_name or 'N/A'}")
+            print(f"         3rd subdir: {img_3rd_dir_name or 'N/A'}")
+            print(f"         4th subdir: {img_4th_dir_name or 'N/A'}")
+            print(f"         5th subdir: {img_5th_dir_name or 'N/A'}")
             print(f"         Available real dirs: {list(real_dir_names)}")
             print(f"         Available fake dirs: {list(fake_dir_names)}")
-    
+
     print(f"[DEBUG] Directory analysis results: Real={real_count}, Fake={fake_count}, Skipped={skipped_count}")
-    
+
     # Show sample filenames for debugging
     print(f"[DEBUG] Sample filenames: {[img.name for img in img_paths[:5]]}")
-    
+
+    # Show path pattern distribution for diagnosis
+    print(f"[DEBUG] Path pattern distribution (top 10):")
+    sorted_patterns = sorted(path_pattern_counts.items(), key=lambda x: x[1], reverse=True)
+    for pattern, count in sorted_patterns[:10]:
+        print(f"  {pattern}: {count} images")
+
     return labels
 
 
-def _extract_label_from_filepath(filepath: Path) -> int:
-    """
-    Extract label from filepath using directory structure.
-    Uses the 2 subdirectories right below the root directory.
-    Returns 0 for Real, 1 for Fake.
-    """
-    filepath_str = str(filepath)
-    filepath_lower = filepath_str.lower()
-    
-    # Common patterns indicating fake images
-    fake_patterns = ['fake', 'synthetic', 'generated', 'ai_', '_fake', 'synth', 'faceswap', 'face_swap', 'swap', 'deepfake', 'df_']
-    real_patterns = ['real', 'original', 'authentic', 'genuine', 'real_', 'orig']
-    
-    # Extract the 2 subdirectories right below the root directory
-    path_parts = filepath.parts
-    if len(path_parts) >= 2:
-        # Get the 2 subdirectories right below root
-        subdirs = [path_parts[0], path_parts[1]]  # First two subdirectories
-        subdir_path = '/'.join(subdirs).lower()
-        
-        # Check for fake patterns in the subdirectory path
-        for pattern in fake_patterns:
-            if pattern in subdir_path:
-                print(f"[DEBUG] {filepath.name} -> FAKE (matched '{pattern}' in subdirs: {subdirs})")
-                return 1  # Fake
-        
-        # Check for real patterns in the subdirectory path
-        for pattern in real_patterns:
-            if pattern in subdir_path:
-                print(f"[DEBUG] {filepath.name} -> REAL (matched '{pattern}' in subdirs: {subdirs})")
-                return 0  # Real
-    
-    # Fallback to filename patterns if directory-based detection fails
-    filename_lower = filepath.name.lower()
-    
-    # Check for fake patterns first (more specific)
-    for pattern in fake_patterns:
-        if pattern in filename_lower:
-            print(f"[DEBUG] {filepath.name} -> FAKE (matched '{pattern}' in filename)")
-            return 1  # Fake
-    
-    # Check for real patterns
-    for pattern in real_patterns:
-        if pattern in filename_lower:
-            print(f"[DEBUG] {filepath.name} -> REAL (matched '{pattern}' in filename)")
-            return 0  # Real
-    
-    # If no pattern matches, assume real (conservative approach)
-    print(f"[DEBUG] {filepath.name} -> REAL (no pattern matched)")
-    return 0
 
 
 def parse_args():
