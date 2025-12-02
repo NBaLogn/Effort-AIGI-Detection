@@ -4,3 +4,4 @@ DeepfakeBench/models--openai--clip-vit-large-patch14
 .kilocode
 .venv
 figs
+inference_results.txt
