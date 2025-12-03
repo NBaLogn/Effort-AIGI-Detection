@@ -9,3 +9,4 @@ sys.path.append(project_root_dir)
 from utils.registry import DETECTOR
 from .effort_detector import EffortDetector
 from .huggingface_detector import HuggingFaceCLIPDetector
+from .prodet_detector import ProDetDetector
