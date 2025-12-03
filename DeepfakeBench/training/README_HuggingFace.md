@@ -1,42 +1,58 @@
-# Simplified HuggingFace CLIP Inference for Deepfake Detection
+# HuggingFace Model Integration for Deepfake Detection
 
-This document describes the simplified `perf_huggingface.py` script, which provides basic HuggingFace CLIP model inference for deepfake detection.
+This document describes the `perf_huggingface.py` script, which is a HuggingFace-based alternative to the original `perf.py` script.
 
-## Key Features
+## Key Differences from Original `perf.py`
 
-- **Simple Interface**: Direct model loading from HuggingFace Hub
-- **CLIP Models**: Support for any CLIP vision model (ViT-Base, ViT-Large, etc.)
-- **GPU Support**: Automatic MPS/CUDA/CPU detection
-- **Easy Usage**: Minimal dependencies and straightforward API
+### 1. Model Loading
+- **Original**: Loads local PyTorch model weights from `.pth` files using `torch.load()`
+- **HuggingFace**: Loads models directly from HuggingFace Hub using `CLIPModel.from_pretrained()`
 
-## Differences from Original `perf.py`
+### 2. Model Architecture
+- **Original**: Uses custom detector classes with local weights and complex SVD modifications
+- **HuggingFace**: Uses standard CLIP models from HuggingFace with optional SVD modifications
 
-- **Simplified**: Removed complex face detection, directory analysis, and batch processing
-- **Direct**: Loads models directly without detector registry system
-- **Basic**: Uses random classification weights (for demonstration only)
-- **Focused**: Single image inference only
+### 3. Dependencies
+- **Original**: Requires local model weights and custom detector implementations
+- **HuggingFace**: Requires `transformers` library and internet connection for model downloads
+
+### 4. Classification Head
+- **Original**: Uses trained classification head from local weights
+- **HuggingFace**: Uses a simple linear layer (requires proper training for production use)
 
 ## Usage
 
 ### Basic Usage
 ```bash
 uv run python DeepfakeBench/training/perf_huggingface.py \
-    --model openai/clip-vit-base-patch32 \
+    --detector_config DeepfakeBench/training/config/detector/huggingface_clip.yaml \
+    --weights openai/clip-vit-large-patch14 \
     --image path/to/image.jpg
 ```
 
-### Different Models
+### With Face Detection
 ```bash
-# Use larger model
 uv run python DeepfakeBench/training/perf_huggingface.py \
-    --model openai/clip-vit-large-patch14 \
-    --image path/to/image.jpg
+    --detector_config DeepfakeBench/training/config/detector/huggingface_clip.yaml \
+    --weights openai/clip-vit-large-patch14 \
+    --image path/to/image.jpg \
+    --landmark_model DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat
+```
+
+### Batch Processing
+```bash
+uv run python DeepfakeBench/training/perf_huggingface.py \
+    --detector_config DeepfakeBench/training/config/detector/huggingface_clip.yaml \
+    --weights openai/clip-vit-large-patch14 \
+    --image path/to/image_directory/
 ```
 
 ## Command Line Arguments
 
-- `--model`: HuggingFace model name (default: "openai/clip-vit-base-patch32")
-- `--image`: Path to image file (required)
+- `--detector_config`: YAML configuration file path (default: "training/config/detector/huggingface_clip.yaml")
+- `--weights`: HuggingFace model name (e.g., "openai/clip-vit-large-patch14")
+- `--image`: Path to image file or directory containing images (required)
+- `--landmark_model`: Path to dlib landmark model for face detection (optional)
 
 ## Supported Models
 
