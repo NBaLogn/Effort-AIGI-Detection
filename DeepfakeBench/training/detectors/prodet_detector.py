@@ -14,7 +14,7 @@ class ProDetDetector(AbstractDetector):
         super(ProDetDetector, self).__init__(config, load_param)
         self.config = config
         self.backbone = self.build_backbone(config)
-        self.classifier = self.build_classifier(config)
+        self.head = self.build_classifier(config)
         self.loss_func = self.build_loss(config)
         self.prob, self.label = [], []
         self.correct, self.total = 0, 0
@@ -79,7 +79,7 @@ class ProDetDetector(AbstractDetector):
 
     def classifier(self, features: torch.tensor) -> torch.tensor:
         """Classify the features"""
-        return self.classifier(features)
+        return self.head(features)
 
     def get_losses(self, data_dict: dict, pred_dict: dict) -> dict:
         """Compute losses"""
