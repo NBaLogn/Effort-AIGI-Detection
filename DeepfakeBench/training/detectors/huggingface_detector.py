@@ -23,6 +23,17 @@ from transformers import CLIPModel, AutoProcessor
 
 logger = logging.getLogger(__name__)
 
+# CLIP normalization constants
+CLIP_MEAN = [0.48145466, 0.4578275, 0.40821073]
+CLIP_STD = [0.26862954, 0.26130258, 0.27577711]
+
+
+def denormalize_clip_tensor(tensor: torch.Tensor) -> torch.Tensor:
+    """Denormalize a CLIP-normalized tensor back to [0, 1] range for PIL conversion."""
+    mean = torch.tensor(CLIP_MEAN).view(3, 1, 1).to(tensor.device)
+    std = torch.tensor(CLIP_STD).view(3, 1, 1).to(tensor.device)
+    return torch.clamp((tensor * std + mean), 0, 1)
+
 
 @DETECTOR.register_module(module_name='huggingface_clip')
 class HuggingFaceCLIPDetector(nn.Module):
@@ -43,7 +54,7 @@ class HuggingFaceCLIPDetector(nn.Module):
         # Get model name from config or use default
         model_name = getattr(config, 'huggingface_model_name', 'openai/clip-vit-large-patch14')
 
-        print(f"Loading HuggingFace model: {model_name}")
+        logger.info(f"Loading HuggingFace model: {model_name}")
         model = CLIPModel.from_pretrained(model_name)
 
         # Apply SVD modifications if specified in config
@@ -63,27 +74,14 @@ class HuggingFaceCLIPDetector(nn.Module):
         to_pil = ToPILImage()
         pil_images = []
 
-        # Handle batch dimension
-        if images.dim() == 4:  # [batch, channels, height, width]
+        # Convert tensors to PIL images
+        pil_images = []
+        if images.dim() == 4:  # Batch of images
             for i in range(images.shape[0]):
-                # Denormalize from CLIP normalization for PIL conversion
-                img_tensor = images[i].clone()
-                # CLIP normalization constants
-                mean = torch.tensor([0.48145466, 0.4578275, 0.40821073]).view(3, 1, 1).to(images.device)
-                std = torch.tensor([0.26862954, 0.26130258, 0.27577711]).view(3, 1, 1).to(images.device)
-                # Denormalize: img = img * std + mean
-                img_tensor = img_tensor * std + mean
-                # Clamp to [0, 1] range
-                img_tensor = torch.clamp(img_tensor, 0, 1)
-                pil_img = to_pil(img_tensor)
-                pil_images.append(pil_img)
-        else:
-            # Single image case
-            img_tensor = images.clone()
-            mean = torch.tensor([0.48145466, 0.4578275, 0.40821073]).view(3, 1, 1).to(images.device)
-            std = torch.tensor([0.26862954, 0.26130258, 0.27577711]).view(3, 1, 1).to(images.device)
-            img_tensor = img_tensor * std + mean
-            img_tensor = torch.clamp(img_tensor, 0, 1)
+                img_tensor = denormalize_clip_tensor(images[i])
+                pil_images.append(to_pil(img_tensor))
+        else:  # Single image
+            img_tensor = denormalize_clip_tensor(images)
             pil_images = [to_pil(img_tensor)]
 
         # Initialize processor if not done yet
@@ -134,7 +132,10 @@ class HuggingFaceCLIPDetector(nn.Module):
         return pred_dict
 
 
+# ============================================================================
 # SVD-related functions (copied from effort_detector.py)
+# ============================================================================
+
 class SVDResidualLinear(nn.Module):
     def __init__(self, in_features, out_features, r, bias=True, init_weight=None):
         super(SVDResidualLinear, self).__init__()
