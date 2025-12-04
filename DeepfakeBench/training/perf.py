@@ -2,7 +2,6 @@ import argparse
 import random
 import sys
 from pathlib import Path
-from typing import List, Tuple
 
 import cv2
 import dlib
@@ -14,7 +13,7 @@ from detectors import DETECTOR
 from imutils import face_utils
 from PIL import Image as pil_image
 from skimage import transform as trans
-from sklearn.metrics import roc_auc_score, average_precision_score
+from sklearn.metrics import average_precision_score, roc_auc_score
 
 """
 Usage:
@@ -65,11 +64,9 @@ def get_keypts(image, face, predictor, face_detector):
 
 def extract_aligned_face_dlib(face_detector, predictor, image, res=224, mask=None):
     def img_align_crop(img, landmark=None, outsize=None, scale=1.3, mask=None):
-        """
-        align and crop the face according to the given bbox and landmarks
+        """Align and crop the face according to the given bbox and landmarks
         landmark: 5 key points
         """
-
         M = None
         target_size = [112, 112]
         dst = np.array(
@@ -122,8 +119,7 @@ def extract_aligned_face_dlib(face_detector, predictor, image, res=224, mask=Non
             mask = cv2.warpAffine(mask, M, (target_size[1], target_size[0]))
             mask = cv2.resize(mask, (outsize[1], outsize[0]))
             return img, mask
-        else:
-            return img
+        return img
 
     # Image size
     height, width = image.shape[:2]
@@ -146,7 +142,7 @@ def extract_aligned_face_dlib(face_detector, predictor, image, res=224, mask=Non
 
         # Extract the all landmarks from the aligned face
         face_align = face_detector(cropped_face, 1)
-        
+
         # Check if faces were detected in the cropped image
         if len(face_align) > 0:
             landmark = predictor(cropped_face, face_align[0])
@@ -157,12 +153,11 @@ def extract_aligned_face_dlib(face_detector, predictor, image, res=224, mask=Non
 
         return cropped_face, landmark, face
 
-    else:
-        return None, None
+    return None, None
 
 
 def load_detector(detector_cfg: str, weights: str):
-    with open(detector_cfg, "r") as f:
+    with open(detector_cfg) as f:
         cfg = yaml.safe_load(f)
 
     model_cls = DETECTOR[cfg["model_name"]]
@@ -188,7 +183,7 @@ def preprocess_face(img_bgr: np.ndarray):
                 [0.48145466, 0.4578275, 0.40821073],
                 [0.26862954, 0.26130258, 0.27577711],
             ),
-        ]
+        ],
     )
     return transform(pil_image.fromarray(img_rgb)).unsqueeze(0)  # 1×3×H×W
 
@@ -199,16 +194,19 @@ def infer_single_image(
     face_detector,
     landmark_predictor,
     model,
-) -> Tuple[int, float]:
+) -> tuple[int, float]:
     """Return (cls_out, prob)"""
     if face_detector is None or landmark_predictor is None:
         face_aligned = img_bgr
     else:
         # Try to extract and align face
         face_detection_result = extract_aligned_face_dlib(
-            face_detector, landmark_predictor, img_bgr, res=224
+            face_detector,
+            landmark_predictor,
+            img_bgr,
+            res=224,
         )
-        
+
         if len(face_detection_result) == 3 and face_detection_result[0] is not None:
             # Face detected successfully - use the aligned face
             face_aligned, _, _ = face_detection_result
@@ -221,20 +219,20 @@ def infer_single_image(
     preds = inference(model, data)
     cls_out = preds["cls"].squeeze().cpu().numpy()  # 0/1
     prob = preds["prob"].squeeze().cpu().numpy()  # prob
-    
+
     # Handle numpy arrays - convert to scalars
     if isinstance(cls_out, np.ndarray):
         cls_out = cls_out.item() if cls_out.ndim == 0 else int(np.argmax(cls_out))
     if isinstance(prob, np.ndarray):
         prob = prob.item() if prob.ndim == 0 else float(prob)
-    
+
     return cls_out, prob
 
 
 IMG_EXTS = {".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".webp"}
 
 
-def collect_image_paths(path_str: str, limit: int = 100) -> List[Path]:
+def collect_image_paths(path_str: str, limit: int = 100) -> list[Path]:
     p = Path(path_str)
     if not p.exists():
         raise FileNotFoundError(f"[Error] Path does not exist: {path_str}")
@@ -248,29 +246,30 @@ def collect_image_paths(path_str: str, limit: int = 100) -> List[Path]:
     img_list = [
         fp for fp in p.iterdir() if fp.is_file() and fp.suffix.lower() in IMG_EXTS
     ]
-    
+
     # If no images found in root, search recursively in subdirectories
     if not img_list:
         print("[DEBUG] No images found in root directory, searching subdirectories...")
         img_list = [
-            fp for fp in p.rglob("*") 
-            if fp.is_file() and fp.suffix.lower() in IMG_EXTS
+            fp for fp in p.rglob("*") if fp.is_file() and fp.suffix.lower() in IMG_EXTS
         ]
         print(f"[DEBUG] Found {len(img_list)} images in subdirectories")
-    
+
     if not img_list:
         raise RuntimeError(
-            f"[Error] No valid image files found in directory: {path_str}"
+            f"[Error] No valid image files found in directory: {path_str}",
         )
 
     # Randomly sample to limit number of images for better representation
     if len(img_list) > limit:
-        print(f"[DEBUG] Randomly sampling {limit} images from {len(img_list)} available images...")
+        print(
+            f"[DEBUG] Randomly sampling {limit} images from {len(img_list)} available images...",
+        )
         img_list = random.sample(img_list, limit)
     else:
         # Shuffle to ensure random order even when taking all images
         random.shuffle(img_list)
-    
+
     return img_list
 
 
@@ -278,20 +277,20 @@ def _check_directory_label(dir_name: str, real_dirs: set, fake_dirs: set) -> int
     """Check if a directory name matches real or fake patterns. Returns label or None if no match."""
     if dir_name in real_dirs:
         return 0  # Real
-    elif dir_name in fake_dirs:
+    if dir_name in fake_dirs:
         return 1  # Fake
     return None
 
 
-def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
-    """
-    Extract true labels (0=Real, 1=Fake) from image paths using directory-based labeling only.
+def extract_true_labels(img_paths: list[Path], base_path: str) -> list[int]:
+    """Extract true labels (0=Real, 1=Fake) from image paths using directory-based labeling only.
 
     This function only uses directory-based labeling and does not fall back to filename patterns.
     Images are labeled based on their parent directory names containing 'real' or 'fake' patterns.
 
     Returns:
         List of integer labels (0 for Real, 1 for Fake)
+
     """
     labels = []
     base_path = Path(base_path)
@@ -303,11 +302,19 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
     try:
         if base_path.exists():
             subdirs = [d for d in base_path.iterdir() if d.is_dir()]
-            print(f"[DEBUG] Found {len(subdirs)} subdirectories: {[d.name for d in subdirs]}")
+            print(
+                f"[DEBUG] Found {len(subdirs)} subdirectories: {[d.name for d in subdirs]}",
+            )
 
             # Find directories containing 'real' or 'fake' (case insensitive)
-            real_dirs = [d for d in subdirs if 'real' in d.name.lower()]
-            fake_dirs = [d for d in subdirs if 'fake' in d.name.lower() or 'synthetic' in d.name.lower() or 'faceswap' in d.name.lower()]
+            real_dirs = [d for d in subdirs if "real" in d.name.lower()]
+            fake_dirs = [
+                d
+                for d in subdirs
+                if "fake" in d.name.lower()
+                or "synthetic" in d.name.lower()
+                or "faceswap" in d.name.lower()
+            ]
 
             print(f"[DEBUG] Real directories found: {[d.name for d in real_dirs]}")
             print(f"[DEBUG] Fake directories found: {[d.name for d in fake_dirs]}")
@@ -343,7 +350,13 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
             else:
                 dir_names.append("")
 
-        img_dir_name, img_2nd_dir_name, img_3rd_dir_name, img_4th_dir_name, img_5th_dir_name = dir_names
+        (
+            img_dir_name,
+            img_2nd_dir_name,
+            img_3rd_dir_name,
+            img_4th_dir_name,
+            img_5th_dir_name,
+        ) = dir_names
 
         # Track path patterns for diagnosis
         path_pattern = f"{img_5th_dir_name}/{img_4th_dir_name}/{img_3rd_dir_name}/{img_2nd_dir_name}/{img_dir_name}"
@@ -351,13 +364,28 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
 
         # Check each directory level for real/fake patterns
         label_found = False
-        for level, (dir_name, level_desc) in enumerate([
-            (img_dir_name, f"from {img_path.parent}"),
-            (img_2nd_dir_name, f"from 2nd subdir: {img_path.parts[-2] if len(img_path.parts) >= 2 else 'N/A'}"),
-            (img_3rd_dir_name, f"from 3rd subdir: {img_path.parts[-3] if len(img_path.parts) >= 3 else 'N/A'}"),
-            (img_4th_dir_name, f"from 4th subdir: {img_path.parts[-4] if len(img_path.parts) >= 4 else 'N/A'}"),
-            (img_5th_dir_name, f"from 5th subdir: {img_path.parts[-5] if len(img_path.parts) >= 5 else 'N/A'}"),
-        ], 1):
+        for level, (dir_name, level_desc) in enumerate(
+            [
+                (img_dir_name, f"from {img_path.parent}"),
+                (
+                    img_2nd_dir_name,
+                    f"from 2nd subdir: {img_path.parts[-2] if len(img_path.parts) >= 2 else 'N/A'}",
+                ),
+                (
+                    img_3rd_dir_name,
+                    f"from 3rd subdir: {img_path.parts[-3] if len(img_path.parts) >= 3 else 'N/A'}",
+                ),
+                (
+                    img_4th_dir_name,
+                    f"from 4th subdir: {img_path.parts[-4] if len(img_path.parts) >= 4 else 'N/A'}",
+                ),
+                (
+                    img_5th_dir_name,
+                    f"from 5th subdir: {img_path.parts[-5] if len(img_path.parts) >= 5 else 'N/A'}",
+                ),
+            ],
+            1,
+        ):
             if not dir_name:  # Skip empty directory names
                 continue
 
@@ -386,25 +414,29 @@ def extract_true_labels(img_paths: List[Path], base_path: str) -> List[int]:
             print(f"         Available real dirs: {list(real_dir_names)}")
             print(f"         Available fake dirs: {list(fake_dir_names)}")
 
-    print(f"[DEBUG] Directory analysis results: Real={real_count}, Fake={fake_count}, Skipped={skipped_count}")
+    print(
+        f"[DEBUG] Directory analysis results: Real={real_count}, Fake={fake_count}, Skipped={skipped_count}",
+    )
 
     # Show sample filenames for debugging
     print(f"[DEBUG] Sample filenames: {[img.name for img in img_paths[:5]]}")
 
     # Show path pattern distribution for diagnosis
-    print(f"[DEBUG] Path pattern distribution (top 10):")
-    sorted_patterns = sorted(path_pattern_counts.items(), key=lambda x: x[1], reverse=True)
+    print("[DEBUG] Path pattern distribution (top 10):")
+    sorted_patterns = sorted(
+        path_pattern_counts.items(),
+        key=lambda x: x[1],
+        reverse=True,
+    )
     for pattern, count in sorted_patterns[:10]:
         print(f"  {pattern}: {count} images")
 
     return labels
 
 
-
-
 def parse_args():
     p = argparse.ArgumentParser(
-        description="Deepfake image inference (single image version)"
+        description="Deepfake image inference (single image version)",
     )
     p.add_argument(
         "--detector_config",
@@ -449,7 +481,7 @@ def main():
     output_file = "inference_results.txt"
     with open(output_file, "w") as f:
         f.write("Deepfake Detection Results\n")
-        f.write("="*80 + "\n\n")
+        f.write("=" * 80 + "\n\n")
 
         for idx, img_path in enumerate(img_paths, 1):
             img = cv2.imread(str(img_path))
@@ -475,13 +507,15 @@ def main():
                         break
 
             # Write to file with true label and full path
-            f.write(f"[{idx}/{len(img_paths)}] {img_path.name:>30} | True: {true_label:>4} | Pred: {cls} "
-                   f"(0=Real, 1=Fake) | Prob: {prob:.4f} | Path: {img_path}\n")
-        
-        f.write("\n" + "="*80 + "\n")
+            f.write(
+                f"[{idx}/{len(img_paths)}] {img_path.name:>30} | True: {true_label:>4} | Pred: {cls} "
+                f"(0=Real, 1=Fake) | Prob: {prob:.4f} | Path: {img_path}\n",
+            )
+
+        f.write("\n" + "=" * 80 + "\n")
         f.write("PERFORMANCE METRICS\n")
-        f.write("="*80 + "\n")
-        
+        f.write("=" * 80 + "\n")
+
         # ---------- Calculate AUC if we have multiple images ----------
         if len(predictions) > 1:
             try:
@@ -490,7 +524,10 @@ def main():
 
                 # Write true labels for verification
                 f.write("\nTRUE LABELS (for verification):\n")
-                for i, (img_path, true_label) in enumerate(zip(valid_paths, true_labels_for_auc), 1):
+                for i, (img_path, true_label) in enumerate(
+                    zip(valid_paths, true_labels_for_auc),
+                    1,
+                ):
                     label_str = "REAL" if true_label == 0 else "FAKE"
                     f.write(f"[{i}] {img_path.name:>30} -> {label_str}\n")
 
@@ -499,9 +536,13 @@ def main():
                 f.write(f"\nUnique true labels found: {unique_labels}\n")
 
                 if len(unique_labels) < 2:
-                    f.write("\n[WARNING] Cannot calculate AUC - only one class present in true labels\n")
+                    f.write(
+                        "\n[WARNING] Cannot calculate AUC - only one class present in true labels\n",
+                    )
                     f.write(f"Classes found: {list(unique_labels)}\n")
-                    f.write(f"This means the dataset appears to contain only {'REAL' if 0 in unique_labels else 'FAKE'} images\n")
+                    f.write(
+                        f"This means the dataset appears to contain only {'REAL' if 0 in unique_labels else 'FAKE'} images\n",
+                    )
                     f.write("\nFor AUC calculation, the dataset should contain both:\n")
                     f.write("- Images with 'real' or 'fake' in directory names\n")
 
@@ -513,16 +554,27 @@ def main():
                 else:
                     # Calculate AUC and PR-AUC
                     auc_score = roc_auc_score(true_labels_for_auc, probabilities)
-                    pr_auc_score = average_precision_score(true_labels_for_auc, probabilities)
+                    pr_auc_score = average_precision_score(
+                        true_labels_for_auc,
+                        probabilities,
+                    )
 
                     f.write(f"\nTotal images processed: {len(predictions)}\n")
-                    f.write(f"Real images: {sum(1 for label in true_labels_for_auc if label == 0)}\n")
-                    f.write(f"Fake images: {sum(1 for label in true_labels_for_auc if label == 1)}\n")
+                    f.write(
+                        f"Real images: {sum(1 for label in true_labels_for_auc if label == 0)}\n",
+                    )
+                    f.write(
+                        f"Fake images: {sum(1 for label in true_labels_for_auc if label == 1)}\n",
+                    )
                     f.write(f"AUC (Area Under ROC Curve): {auc_score:.4f}\n")
-                    f.write(f"PR-AUC (Area Under Precision-Recall Curve): {pr_auc_score:.4f}\n")
+                    f.write(
+                        f"PR-AUC (Area Under Precision-Recall Curve): {pr_auc_score:.4f}\n",
+                    )
 
                     print(f"AUC (Area Under ROC Curve): {auc_score:.4f}")
-                    print(f"PR-AUC (Area Under Precision-Recall Curve): {pr_auc_score:.4f}")
+                    print(
+                        f"PR-AUC (Area Under Precision-Recall Curve): {pr_auc_score:.4f}",
+                    )
 
             except Exception as e:
                 f.write(f"\n[Warning] Could not calculate AUC: {e}\n")
@@ -530,7 +582,7 @@ def main():
                 f.write("- Images with 'real' or 'fake' in directory names\n")
         elif len(predictions) == 1:
             f.write("\nSingle image processed - AUC calculation not applicable.\n")
-    
+
     print(f"\nResults written to {output_file}")
 
 
