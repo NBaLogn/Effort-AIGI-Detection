@@ -6,6 +6,7 @@ Based on the PyTorch SVDResidualLinear for efficient parameter reduction.
 import math
 
 import mlx.core as mx
+import numpy as np
 from mlx import nn
 
 
