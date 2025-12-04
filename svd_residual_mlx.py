@@ -59,8 +59,14 @@ class SVDResidualLinear(nn.Module):
 
     def apply_svd(self):
         """Apply SVD to initialize the residual components."""
-        # Perform SVD on the original weight
-        U, S, Vh = mx.linalg.svd(self.weight_main)
+        # Convert to numpy for SVD (since MLX SVD not supported on GPU)
+        weight_np = np.array(self.weight_main)
+        U_np, S_np, Vh_np = np.linalg.svd(weight_np, full_matrices=False)
+
+        # Convert back to MLX arrays
+        U = mx.array(U_np)
+        S = mx.array(S_np)
+        Vh = mx.array(Vh_np)
 
         # Determine r
         r = min(self.r, len(S))
