@@ -28,7 +28,7 @@ class SVDResidualLinear(nn.Module):
         # Original weights (fixed)
         self.weight_main = mx.zeros((out_features, in_features))
         if init_weight is not None:
-            self.weight_main = init_weight.copy()
+            self.weight_main = mx.array(init_weight)
         else:
             # Kaiming uniform initialization
             scale = math.sqrt(1 / in_features)
@@ -60,7 +60,7 @@ class SVDResidualLinear(nn.Module):
     def apply_svd(self):
         """Apply SVD to initialize the residual components."""
         # Perform SVD on the original weight
-        U, S, Vh = mx.linalg.svd(self.weight_main, full_matrices=False)
+        U, S, Vh = mx.linalg.svd(self.weight_main)
 
         # Determine r
         r = min(self.r, len(S))
@@ -113,11 +113,20 @@ class SVDResidualLinear(nn.Module):
     def __call__(self, x: mx.array) -> mx.array:
         """Forward pass."""
         weight = self.compute_current_weight()
-        return mx.linear(x, weight, self.bias)
+        output = x @ weight.T
+        if self.bias is not None:
+            output = output + self.bias
+        return output
 
     def compute_orthogonal_loss(self) -> float:
         """Compute orthogonal regularization loss."""
-        if self.S_residual is not None:
+        if (
+            self.S_residual is not None
+            and self.U_r is not None
+            and self.U_residual is not None
+            and self.V_r is not None
+            and self.V_residual is not None
+        ):
             UUT = mx.concatenate([self.U_r, self.U_residual], axis=1)
             UUT = UUT @ UUT.T
 
@@ -169,7 +178,7 @@ def apply_svd_residual_to_self_attn(model, r: int):
                     svd_layer.apply_svd()
 
                     if sub_module.bias is not None:
-                        svd_layer.bias = sub_module.bias.copy()
+                        svd_layer.bias = mx.array(sub_module.bias)
 
                     setattr(parent_module, sub_module_names[-1], svd_layer)
 
