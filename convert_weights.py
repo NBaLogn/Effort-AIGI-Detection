@@ -7,55 +7,58 @@ import torch
 
 
 def map_pytorch_to_mlx(
-    key: str, value: torch.Tensor
+    key: str,
+    value: torch.Tensor,
 ) -> tuple[str | None, np.ndarray | None]:
     """Map PyTorch weight keys to MLX format."""
-    # Remove vision_model prefix
-    key = key.removeprefix("vision_model.")
+    # Add backbone prefix since MLX model has backbone.clip_vision_model
+    mlx_key = "backbone." + key
 
     # Handle embeddings
     if key == "embeddings.class_embedding":
-        return "embeddings.class_embedding", value.numpy()
+        return "backbone.embeddings.class_embedding", value.numpy()
     if key == "embeddings.patch_embedding.weight":
-        return "embeddings.patch_embedding.weight", value.numpy()
+        return "backbone.embeddings.patch_embedding.weight", value.numpy()
     if key == "embeddings.position_embedding.weight":
-        return "embeddings.position_embedding", value.numpy()
+        return "backbone.embeddings.position_embedding", value.numpy()
 
     # Handle encoder layers
     if key.startswith("encoder.layers."):
         # Replace layer indices and map attention/mlp components
-        key = key.replace("encoder.layers.", "encoder.layers.")
-        key = key.replace("self_attn.k_proj.", "self_attn.k_proj.")
-        key = key.replace("self_attn.v_proj.", "self_attn.v_proj.")
-        key = key.replace("self_attn.q_proj.", "self_attn.q_proj.")
-        key = key.replace("self_attn.out_proj.", "self_attn.out_proj.")
-        key = key.replace("mlp.fc1.", "mlp.fc1.")
-        key = key.replace("mlp.fc2.", "mlp.fc2.")
-        key = key.replace("layer_norm1.", "layer_norm1.")
-        key = key.replace("layer_norm2.", "layer_norm2.")
-        return key, value.numpy()
+        mlx_key = "backbone." + key.replace("encoder.layers.", "encoder.layers.")
+        return mlx_key, value.numpy()
 
     # Handle post layernorm
     if key == "post_layernorm.weight":
-        return "post_layernorm.weight", value.numpy()
+        return "backbone.post_layernorm.weight", value.numpy()
     if key == "post_layernorm.bias":
-        return "post_layernorm.bias", value.numpy()
+        return "backbone.post_layernorm.bias", value.numpy()
+
+    # Handle classifier
+    if key == "classifier.weight":
+        return "head.weight", value.numpy()
+    if key == "classifier.bias":
+        return "head.bias", value.numpy()
 
     # Skip other keys
     return None, None
 
 
-def convert_checkpoint(pytorch_checkpoint: str, output_file: str):
+def convert_checkpoint(pytorch_checkpoint: str, output_file: str) -> None:
     """Convert PyTorch checkpoint to MLX format."""
     # Load PyTorch checkpoint
     ckpt = torch.load(pytorch_checkpoint, map_location="cpu")
     state_dict = ckpt.get("state_dict", ckpt)
 
-    # Filter vision model weights
+    # Filter vision model and classifier weights
     vision_weights = {}
     for key, value in state_dict.items():
         if key.startswith("backbone.vision_model."):
             vision_weights[key[len("backbone.vision_model.") :]] = value
+        elif key == "classifier.weight":
+            vision_weights["classifier.weight"] = value
+        elif key == "classifier.bias":
+            vision_weights["classifier.bias"] = value
 
     # Map to MLX format
     mlx_weights = {}

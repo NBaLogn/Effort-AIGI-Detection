@@ -231,7 +231,10 @@ class ModelLoader:
 
         # Load weights
         weights_dict = mx.load(weights)
-        model.load_weights(list(weights_dict.items()))
+        # Load weights, filtering to only include parameters that exist in the model
+        model_params = set(model.parameters().keys())
+        filtered_weights = {k: v for k, v in weights_dict.items() if k in model_params}
+        model.load_weights(list(filtered_weights.items()))
 
         logger.info("MLX detector loaded successfully")
         return model
