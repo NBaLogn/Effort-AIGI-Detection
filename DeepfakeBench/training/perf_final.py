@@ -81,7 +81,7 @@ class FaceKeypointExtractor:
 
         # Extract key points
         points = []
-        for _name, idx in LANDMARK_INDICES.values():
+        for _name, idx in LANDMARK_INDICES.items():
             point = np.array([shape.part(idx).x, shape.part(idx).y]).reshape(-1, 2)
             points.append(point)
 
