@@ -1,10 +1,13 @@
-"""Refactored deepfake detection inference script following context7 and ruff best practices."""
+"""Refactored deepfake detection inference script.
+
+Follows context7 and ruff best practices for maintainable code.
+"""
 
 import argparse
 import logging
 import random
 from pathlib import Path
-from typing import Any
+from typing import IO, Any
 
 import cv2
 import dlib
@@ -13,7 +16,7 @@ import torch
 import yaml
 from detectors import DETECTOR
 from imutils import face_utils
-from PIL import Image as pil_image
+from PIL import Image
 from skimage import transform as trans
 from sklearn.metrics import average_precision_score, roc_auc_score
 from torchvision import transforms
@@ -21,6 +24,7 @@ from torchvision import transforms
 # Configuration constants
 DEFAULT_RESOLUTION = 224
 DEFAULT_TARGET_SIZE = (112, 112)
+TARGET_SIZE_112 = 112
 DEFAULT_SCALE = 1.3
 MIN_CLASSES_FOR_AUC = 2
 
@@ -103,7 +107,7 @@ class FaceAlignment:
         mask: np.ndarray | None = None,
     ) -> tuple[np.ndarray | None, np.ndarray | None, dlib.rectangle | None]:
         """Extract and align face from image with fallback handling."""
-        height, width = image.shape[:2]
+        image.shape[:2]  # Get height and width but don't store
 
         # Convert to RGB
         rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -151,16 +155,20 @@ class FaceAlignment:
         mask: np.ndarray | None = None,
     ) -> np.ndarray | tuple[np.ndarray, np.ndarray]:
         """Align and crop face based on landmarks."""
-        M = self._compute_transform_matrix(landmarks, outsize, scale)
+        transform_matrix = self._compute_transform_matrix(landmarks, outsize, scale)
 
         target_height, target_width = outsize
-        transformed = cv2.warpAffine(rgb, M, (target_width, target_height))
+        transformed = cv2.warpAffine(
+            rgb,
+            transform_matrix,
+            (target_width, target_height),
+        )
 
         if outsize != (DEFAULT_TARGET_SIZE[1], DEFAULT_TARGET_SIZE[0]):
             transformed = cv2.resize(transformed, (outsize[1], outsize[0]))
 
         if mask is not None:
-            mask = cv2.warpAffine(mask, M, (target_width, target_height))
+            mask = cv2.warpAffine(mask, transform_matrix, (target_width, target_height))
             mask = cv2.resize(mask, (outsize[1], outsize[0]))
             return transformed, mask
 
@@ -185,7 +193,7 @@ class FaceAlignment:
         )
 
         # Adjust for 112x112 target
-        if outsize[1] == 112:
+        if outsize[1] == TARGET_SIZE_112:
             dst[:, 0] += 8.0
 
         # Scale destination points
@@ -212,9 +220,9 @@ class FaceAlignment:
 
     def _fallback_no_detection(
         self,
-        rgb: np.ndarray,
-        res: int,
-        mask: np.ndarray | None = None,
+        _rgb: np.ndarray,
+        _res: int,
+        _mask: np.ndarray | None = None,
     ) -> tuple[None, None, None]:
         """Fallback when no face detector is available."""
         return None, None, None
@@ -225,7 +233,9 @@ class ModelLoader:
 
     @staticmethod
     def load_detector(
-        detector_cfg: str, weights: str, device: torch.device
+        detector_cfg: str,
+        weights: str,
+        device: torch.device,
     ) -> torch.nn.Module:
         """Load and configure detector model."""
         config_path = Path(detector_cfg)
@@ -267,7 +277,7 @@ class ImagePreprocessor:
                 ),
             ],
         )
-        return transform(pil_image.fromarray(img_rgb)).unsqueeze(0)
+        return transform(Image.fromarray(img_rgb)).unsqueeze(0)
 
 
 class InferenceEngine:
@@ -286,7 +296,8 @@ class InferenceEngine:
             face_aligned = img_bgr
         else:
             face_result = face_detector.extract_aligned_face(
-                img_bgr, res=DEFAULT_RESOLUTION
+                img_bgr,
+                res=DEFAULT_RESOLUTION,
             )
             face_aligned = face_result[0] if face_result[0] is not None else img_bgr
 
@@ -310,7 +321,8 @@ class InferenceEngine:
     @staticmethod
     @torch.no_grad()
     def _run_model(
-        model: torch.nn.Module, data_dict: dict[str, Any]
+        model: torch.nn.Module,
+        data_dict: dict[str, Any],
     ) -> dict[str, torch.Tensor]:
         """Run model inference with gradient disabled."""
         return model(data_dict, inference=True)  # type: ignore[return-value]
@@ -403,7 +415,9 @@ class LabelExtractor:
         fake_names = {d.name.lower() for d in fake_dirs}
 
         return LabelExtractor._extract_labels_from_paths(
-            img_paths, real_names, fake_names
+            img_paths,
+            real_names,
+            fake_names,
         )
 
     @staticmethod
@@ -415,7 +429,9 @@ class LabelExtractor:
 
         subdirs = [d for d in base_path.iterdir() if d.is_dir()]
         logger.debug(
-            "Found %d subdirectories: %s", len(subdirs), [d.name for d in subdirs]
+            "Found %d subdirectories: %s",
+            len(subdirs),
+            [d.name for d in subdirs],
         )
 
         real_dirs = [d for d in subdirs if "real" in d.name.lower()]
@@ -443,7 +459,9 @@ class LabelExtractor:
 
         for img_path in img_paths:
             label = LabelExtractor._find_label_for_path(
-                img_path, real_names, fake_names
+                img_path,
+                real_names,
+                fake_names,
             )
             if label is not None:
                 labels.append(label)
@@ -525,12 +543,12 @@ class ResultWriter:
             if metrics:
                 self._write_metrics_section(f, metrics)
 
-    def _write_header(self, f: Any) -> None:
+    def _write_header(self, f: IO) -> None:
         """Write file header."""
         f.write("Deepfake Detection Results\n")
         f.write("=" * 80 + "\n\n")
 
-    def _write_single_result(self, f: Any, result: dict[str, Any]) -> None:
+    def _write_single_result(self, f: IO[str], result: dict[str, Any]) -> None:
         """Write single result line."""
         f.write(
             f"[{result['index']}/{result['total']}] {result['filename']:>30} | "
@@ -539,7 +557,7 @@ class ResultWriter:
             f"Path: {result['path']}\n",
         )
 
-    def _write_metrics_section(self, f: Any, metrics: dict[str, Any]) -> None:
+    def _write_metrics_section(self, f: IO[str], metrics: dict[str, Any]) -> None:
         """Write metrics section."""
         f.write("\n" + "=" * 80 + "\n")
         f.write("PERFORMANCE METRICS\n")
@@ -550,7 +568,7 @@ class ResultWriter:
         else:
             self._write_detailed_metrics(f, metrics)
 
-    def _write_detailed_metrics(self, f: Any, metrics: dict[str, Any]) -> None:
+    def _write_detailed_metrics(self, f: IO[str], metrics: dict[str, Any]) -> None:
         """Write detailed metrics information."""
         f.write(f"\nTotal images processed: {metrics['total_images']}\n")
         f.write(f"Real images: {metrics['real_count']}\n")
@@ -564,7 +582,7 @@ class ResultWriter:
 def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(
-        description="Deepfake image inference (refactored version)"
+        description="Deepfake image inference (refactored version)",
     )
     parser.add_argument(
         "--detector_config",
@@ -622,7 +640,10 @@ def main() -> None:
             continue
 
         cls, prob = InferenceEngine.infer_single_image(
-            img, face_detector, model, device
+            img,
+            face_detector,
+            model,
+            device,
         )
 
         # Store results
