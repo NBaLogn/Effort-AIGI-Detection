@@ -21,6 +21,7 @@ dependencies = [
     "logging>=0.4.9.6",
     "loralib>=0.1.2",
     "loss>=0.1.2",
+    "mlx>=0.30.0",
     "network>=0.1",
     "numpy>=2.3.5",
     "opencv-python>=4.11.0.86",
