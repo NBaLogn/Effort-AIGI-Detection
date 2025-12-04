@@ -232,7 +232,7 @@ def infer_single_image(
 IMG_EXTS = {".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".webp"}
 
 
-def collect_image_paths(path_str: str, limit: int = 100) -> list[Path]:
+def collect_image_paths(path_str: str, limit: int = 3000) -> list[Path]:
     p = Path(path_str)
     if not p.exists():
         raise FileNotFoundError(f"[Error] Path does not exist: {path_str}")

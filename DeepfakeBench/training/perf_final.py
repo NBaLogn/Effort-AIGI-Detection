@@ -81,7 +81,8 @@ class FaceKeypointExtractor:
 
         # Extract key points
         points = []
-        for _name, idx in LANDMARK_INDICES.items():
+        # for _name, idx in LANDMARK_INDICES.items():
+        for idx in LANDMARK_INDICES.values():
             point = np.array([shape.part(idx).x, shape.part(idx).y]).reshape(-1, 2)
             points.append(point)
 
@@ -332,7 +333,7 @@ class ImageCollection:
     """Handles image path collection and validation."""
 
     @staticmethod
-    def collect_image_paths(path_str: str, limit: int = 100) -> list[Path]:
+    def collect_image_paths(path_str: str, limit: int = 3000) -> list[Path]:
         """Collect valid image paths from given directory or file."""
         p = Path(path_str)
         ImageCollection._validate_path(p, path_str)
