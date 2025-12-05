@@ -275,11 +275,11 @@ def choose_metric(config: dict[str, Any]) -> str:
 
 def load_config() -> dict[str, Any]:
     """Load and merge configuration from YAML files and command line args."""
-    with open(args.detector_path) as f:
+    with Path(args.detector_path).open() as f:
         config = yaml.safe_load(f)
-    with open(
+    with Path(
         "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/config/train_config.yaml",
-    ) as f:
+    ).open() as f:
         config2 = yaml.safe_load(f)
     config.update(config2)
     config["local_rank"] = args.local_rank
@@ -299,7 +299,7 @@ def load_config() -> dict[str, Any]:
 
 
 def main() -> None:
-    """Main training function for the deepfake detection model."""
+    """Train the deepfake detection model."""
     # parse options and load config
     config = load_config()
     # create logger
