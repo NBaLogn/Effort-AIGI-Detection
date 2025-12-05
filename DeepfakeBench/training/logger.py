@@ -1,5 +1,17 @@
-import os
 import logging
+import os
+
+import torch.distributed as dist
+
+
+class RankFilter(logging.Filter):
+    def __init__(self, rank):
+        super().__init__()
+        self.rank = rank
+
+    def filter(self, record):
+        return dist.get_rank() == self.rank
+
 
 def create_logger(log_path):
     # Create log path
@@ -12,7 +24,7 @@ def create_logger(log_path):
 
     # Create file handler and set the formatter
     fh = logging.FileHandler(log_path)
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     fh.setFormatter(formatter)
 
     # Add the file handler to the logger

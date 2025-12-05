@@ -5,3 +5,4 @@ DeepfakeBench/models--openai--clip-vit-large-patch14
 .venv
 figs
 inference_results.txt
+logs

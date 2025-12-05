@@ -1,5 +1,5 @@
 # log dir 
-log_dir: ./zhiyuanyan/logs/benchv2/icml25/release
+log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
 
 # model setting
 pretrained: 'no need to provide this for the effort model'
@@ -19,10 +19,10 @@ train_dataset: [FaceForensics++]
 test_dataset: [Celeb-DF-v2, FaceShifter, DeeperForensics-1.0]
 
 compression: c23  # compression-level for videos
-train_batchSize: 32   # training batch size
-test_batchSize: 32   # test batch size
-workers: 8   # number of data loading workers
-frame_num: {'train': 8, 'test': 8}   # number of frames to use per video in training and testing
+train_batchSize: 16   # training batch size
+test_batchSize: 16   # test batch size
+workers: 4   # number of data loading workers
+frame_num: {'train': 4, 'test': 4}   # number of frames to use per video in training and testing
 resolution: 224   # resolution of output image to network
 with_mask: false   # whether to include mask information in the input
 with_landmark: false   # whether to include facial landmark information in the input

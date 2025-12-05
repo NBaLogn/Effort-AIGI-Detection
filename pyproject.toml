@@ -18,6 +18,7 @@ dependencies = [
     "imgaug>=0.4.0",
     "imutils>=0.5.4",
     "kornia>=0.8.2",
+    "logger>=1.4",
     "logging>=0.4.9.6",
     "loralib>=0.1.2",
     "loss>=0.1.2",

@@ -4,3 +4,4 @@ DeepfakeBench/models--openai--clip-vit-large-patch14
 .history
 .venv
 figs
+**/logs/**

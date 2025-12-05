@@ -282,6 +282,7 @@ dependencies = [
     { name = "imgaug" },
     { name = "imutils" },
     { name = "kornia" },
+    { name = "logger" },
     { name = "logging" },
     { name = "loralib" },
     { name = "loss" },
@@ -324,6 +325,7 @@ requires-dist = [
     { name = "imgaug", specifier = ">=0.4.0" },
     { name = "imutils", specifier = ">=0.5.4" },
     { name = "kornia", specifier = ">=0.8.2" },
+    { name = "logger", specifier = ">=1.4" },
     { name = "logging", specifier = ">=0.4.9.6" },
     { name = "loralib", specifier = ">=0.1.2" },
     { name = "loss", specifier = ">=0.1.2" },
@@ -727,6 +729,12 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/ba/c0/dc66cd1981de260ce14815a6821e33caf9003c206f43d50ae09052edb311/lmdb-1.7.5-cp314-cp314t-win_arm64.whl", hash = "sha256:742ed8fba936a10d13c72e5b168736c3d51656bd7b054d931daea17bcfcd7b41", size = 96895, upload-time = "2025-10-15T03:39:27.685Z" },
     { url = "https://files.pythonhosted.org/packages/bd/2c/982cb5afed533d0cb8038232b40c19b5b85a2d887dec74dfd39e8351ef4b/lmdb-1.7.5-py3-none-any.whl", hash = "sha256:fc344bb8bc0786c87c4ccb19b31f09a38c08bd159ada6f037d669426fea06f03", size = 148539, upload-time = "2025-10-15T03:39:42.982Z" },
 ]
+
+[[package]]
+name = "logger"
+version = "1.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/73/2f/b0d28eaa1e2c1cf64129f8da3fe701888d152677fec708cd0f13e8309e1e/logger-1.4.tar.gz", hash = "sha256:4ecac57133c6376fa215f0fe6b4dc4d60e4d1ad8be005cab4e8a702df682f8b3", size = 1187, upload-time = "2013-10-22T16:49:01.48Z" }
 
 [[package]]
 name = "logging"
@@ -1644,9 +1652,9 @@ sdist = { url = "https://files.pythonhosted.org/packages/ce/af/20290b55d469e873c
 
 [[package]]
 name = "stringzilla"
-version = "4.4.0"
+version = "4.4.2"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/06/27/62c3b95d6544c13ae3800cfc8a0e65098c6e1bae038ebc96efd1c930c189/stringzilla-4.4.0.tar.gz", hash = "sha256:e82870bec8aa10c212ca041642fde2d4c4539952806f422bef132b0cb309369b", size = 549968, upload-time = "2025-11-29T16:28:48.406Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d3/15/1dbfe6357eebceb4b138c5a56ccd75115f7c9e0baf8d40077a4af7ea7ad8/stringzilla-4.4.2.tar.gz", hash = "sha256:fcc6db090fe7da377e828900dae1dbbecd8b63bbc8dfe367fd36038c4f12caa0", size = 550336, upload-time = "2025-12-04T21:16:02.986Z" }
 
 [[package]]
 name = "sympy"
