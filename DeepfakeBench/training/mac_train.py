@@ -6,10 +6,10 @@ description: training code for macOS with MPS
 """
 
 import argparse
-import os
 import random
 import secrets
 from datetime import timedelta
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import torch
@@ -57,11 +57,11 @@ parser.add_argument("--local_rank", type=int, default=0)
 args = parser.parse_args()
 
 
-def init_seed(config) -> None:
-    """_summary_.
+def init_seed(config: dict[str, Any]) -> None:
+    """Initialize random seeds for reproducibility.
 
     Args:
-        config (_type_): _description_
+        config: Configuration dictionary containing manualSeed and cuda settings.
 
     """
     if config["manualSeed"] is None:
@@ -75,10 +75,15 @@ def init_seed(config) -> None:
         torch.cuda.manual_seed_all(config["manualSeed"])
 
 
-def prepare_training_data(config) -> torch.utils.data.DataLoader:
-    """Docstring for prepare_training_data.
+def prepare_training_data(config: dict[str, Any]) -> torch.utils.data.DataLoader:
+    """Prepare the training data loader.
 
-    :param config: Description
+    Args:
+        config: Configuration dictionary containing training settings.
+
+    Returns:
+        DataLoader for training data.
+
     """
     # Only use the blending dataset class in training
     train_set = DeepfakeAbstractBaseDataset(
@@ -105,26 +110,31 @@ def prepare_training_data(config) -> torch.utils.data.DataLoader:
     return train_data_loader
 
 
-def prepare_testing_data(config) -> dict:
-    """_summary_.
+def prepare_testing_data(
+    config: dict[str, Any],
+) -> dict[str, torch.utils.data.DataLoader]:
+    """Prepare the testing data loaders.
 
     Args:
-        config (_type_): _description_
+        config: Configuration dictionary containing testing settings.
 
     Returns:
-        dict: _description_
+        Dictionary of DataLoaders for each test dataset.
 
     """
 
-    def get_test_data_loader(config, test_name) -> torch.utils.data.DataLoader:
-        """_summary_.
+    def get_test_data_loader(
+        config: dict[str, Any],
+        test_name: str,
+    ) -> torch.utils.data.DataLoader:
+        """Get a data loader for a specific test dataset.
 
         Args:
-            config (_type_): _description_
-            test_name (_type_): _description_
+            config: Configuration dictionary.
+            test_name: Name of the test dataset.
 
         Returns:
-            torch.utils.data.DataLoader: _description_
+            DataLoader for the specified test dataset.
 
         """
         # update the config dictionary with the specific testing dataset
@@ -153,18 +163,21 @@ def prepare_testing_data(config) -> dict:
     return test_data_loaders
 
 
-def choose_optimizer(model, config) -> optim.SGD | optim.Adam | SAM[Any, optim.SGD]:
-    """_summary_.
+def choose_optimizer(
+    model: torch.nn.Module,
+    config: dict[str, Any],
+) -> optim.SGD | optim.Adam | SAM[Any, optim.SGD]:
+    """Choose and initialize the optimizer based on config.
 
     Args:
-        model (_type_): _description_
-        config (_type_): _description_
+        model: The neural network model.
+        config: Configuration dictionary containing optimizer settings.
 
     Raises:
-        NotImplementedError: _description_
+        NotImplementedError: If the specified optimizer is not implemented.
 
     Returns:
-        optim.SGD | optim.Adam | SAM[Any, optim.SGD]: _description_
+        The initialized optimizer.
 
     """
     opt_name = config["optimizer"]["type"]
@@ -200,18 +213,21 @@ def choose_optimizer(model, config) -> optim.SGD | optim.Adam | SAM[Any, optim.S
     return optimizer
 
 
-def choose_scheduler(config, optimizer) -> None | StepLR | CosineAnnealingLR:
-    """_summary_.
+def choose_scheduler(
+    config: dict[str, Any],
+    optimizer: torch.optim.Optimizer,
+) -> None | StepLR | CosineAnnealingLR:
+    """Choose and initialize the learning rate scheduler based on config.
 
     Args:
-        config (_type_): _description_
-        optimizer (_type_): _description_
+        config: Configuration dictionary containing scheduler settings.
+        optimizer: The optimizer to schedule.
 
     Raises:
-        NotImplementedError: _description_
+        NotImplementedError: If the specified scheduler is not implemented.
 
     Returns:
-        None | StepLR | CosineAnnealingLR: _description_
+        The initialized scheduler or None.
 
     """
     if config["lr_scheduler"] is None:
@@ -240,10 +256,15 @@ def choose_scheduler(config, optimizer) -> None | StepLR | CosineAnnealingLR:
     return None
 
 
-def choose_metric(config) -> Any:
-    """Docstring for choose_metric.
+def choose_metric(config: dict[str, Any]) -> str:
+    """Choose the evaluation metric based on config.
 
-    :param config: Description
+    Args:
+        config: Configuration dictionary containing metric settings.
+
+    Returns:
+        The metric name.
+
     """
     metric_scoring = config["metric_scoring"]
     if metric_scoring not in ["eer", "auc", "acc", "ap"]:
@@ -252,12 +273,11 @@ def choose_metric(config) -> Any:
     return metric_scoring
 
 
-def main() -> None:
-    """_summary_."""
-    # parse options and load config
-    with os.open(args.detector_path) as f:
+def load_config() -> dict[str, Any]:
+    """Load and merge configuration from YAML files and command line args."""
+    with open(args.detector_path) as f:
         config = yaml.safe_load(f)
-    with os.open(
+    with open(
         "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/config/train_config.yaml",
     ) as f:
         config2 = yaml.safe_load(f)
@@ -275,11 +295,18 @@ def main() -> None:
     config["save_feat"] = args.save_feat
     if config["lmdb"]:
         config["dataset_json_folder"] = "preprocessing/dataset_json_v3"
+    return config
+
+
+def main() -> None:
+    """Main training function for the deepfake detection model."""
+    # parse options and load config
+    config = load_config()
     # create logger
     logger_path = config["log_dir"]
-    os.makedirs(logger_path, exist_ok=True)
-    logger = create_logger(os.path.join(logger_path, "training.log"))
-    logger.info(f"Save log to {logger_path}")
+    Path(logger_path).mkdir(parents=True, exist_ok=True)
+    logger = create_logger(Path(logger_path) / "training.log")
+    logger.info("Save log to %s", logger_path)
     config["ddp"] = args.ddp
     # print configuration
     logger.info("--------------- Configuration ---------------")
@@ -332,11 +359,14 @@ def main() -> None:
         )
         if best_metric is not None:
             logger.info(
-                f"===> Epoch[{epoch}] end with testing {metric_scoring}: \
-                    {parse_metric_for_print(best_metric)}!",
+                "===> Epoch[%s] end with testing %s: %s!",
+                epoch,
+                metric_scoring,
+                parse_metric_for_print(best_metric),
             )
     logger.info(
-        f"Stop Training on best Testing metric {parse_metric_for_print(best_metric)}",
+        "Stop Training on best Testing metric %s",
+        parse_metric_for_print(best_metric),
     )
     # update
     if "svdd" in config["model_name"]:
