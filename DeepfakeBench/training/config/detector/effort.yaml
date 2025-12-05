@@ -80,9 +80,4 @@ losstype: null
 # metric
 metric_scoring: auc   # metric for evaluation (auc, acc, eer, ap)
 
-# cuda
-ngpu: 1   # number of GPUs to use
-cuda: true   # whether to use CUDA acceleration
-cudnn: true   # whether to use CuDNN for convolution operations
-
 save_avg: true

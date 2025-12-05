@@ -26,13 +26,11 @@ from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
 FFpp_pool = ["FaceForensics++", "FF-DF", "FF-F2F", "FF-FS", "FF-NT"]
-device = torch.device(
-    "mps"
-    if torch.backends.mps.is_available()
-    else "cuda"
-    if torch.cuda.is_available()
-    else "cpu",
-)
+if not torch.backends.mps.is_available():
+    raise RuntimeError(
+        "MPS is not available. This script requires Apple Silicon with MPS support.",
+    )
+device = torch.device("mps")
 
 
 class Trainer:
@@ -106,17 +104,11 @@ class Trainer:
     def speed_up(self):
         self.model.to(device)
         self.model.device = device
-        if self.config["ddp"] == True and device.type == "cuda":
-            num_gpus = torch.cuda.device_count()
-            print(f"avai gpus: {num_gpus}")
-            # local_rank=[i for i in range(0,num_gpus)]
+        if self.config["ddp"] == True and device.type == "mps":
             self.model = DDP(
                 self.model,
-                device_ids=[self.config["local_rank"]],
                 find_unused_parameters=True,
-                output_device=self.config["local_rank"],
             )
-            # self.optimizer =  nn.DataParallel(self.optimizer, device_ids=[int(os.environ['LOCAL_RANK'])])
 
     def setTrain(self):
         self.model.train()

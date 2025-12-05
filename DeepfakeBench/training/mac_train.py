@@ -24,7 +24,6 @@ from metrics.utils import parse_metric_for_print
 from optimizor.LinearLR import LinearDecayLR
 from optimizor.SAM import SAM
 from torch import optim
-from torch.backends import cudnn
 from torch.utils.data.distributed import DistributedSampler
 from trainer.trainer import Trainer
 
@@ -61,7 +60,7 @@ def init_seed(config: dict[str, Any]) -> None:
     """Initialize random seeds for reproducibility.
 
     Args:
-        config: Configuration dictionary containing manualSeed and cuda settings.
+        config: Configuration dictionary containing manualSeed settings.
 
     """
     if config["manualSeed"] is None:
@@ -69,10 +68,11 @@ def init_seed(config: dict[str, Any]) -> None:
     random.seed(config["manualSeed"])
     if torch.backends.mps.is_available():
         torch.manual_seed(config["manualSeed"])
-        torch.mps.manual_seed(config["manualSeed"])  # If available
-    elif config["cuda"]:
-        torch.manual_seed(config["manualSeed"])
-        torch.cuda.manual_seed_all(config["manualSeed"])
+        torch.mps.manual_seed(config["manualSeed"])
+    else:
+        raise RuntimeError(
+            "MPS is not available. This script requires Apple Silicon with MPS support.",
+        )
 
 
 def prepare_training_data(config: dict[str, Any]) -> torch.utils.data.DataLoader:
@@ -318,9 +318,6 @@ def main() -> None:
     # init seed
     init_seed(config)
 
-    # set cudnn benchmark if needed
-    if config["cudnn"]:
-        cudnn.benchmark = True
     if config["ddp"]:
         dist.init_process_group(
             backend="gloo",  # Changed from nccl
