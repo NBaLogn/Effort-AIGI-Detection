@@ -294,7 +294,9 @@ def load_config() -> dict[str, Any]:
     config["save_ckpt"] = args.save_ckpt
     config["save_feat"] = args.save_feat
     if config["lmdb"]:
-        config["dataset_json_folder"] = "preprocessing/dataset_json"
+        config["dataset_json_folder"] = (
+            "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json"
+        )
     return config
 
 
@@ -333,6 +335,8 @@ def main() -> None:
     # prepare the model (detector)
     model_class = DETECTOR[config["model_name"]]
     model = model_class(config)
+    # Note: torch.compile may not be fully supported on MPS yet, commented out
+    # model = torch.compile(model)
 
     # prepare the optimizer
     optimizer = choose_optimizer(model, config)

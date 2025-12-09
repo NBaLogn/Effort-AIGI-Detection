@@ -221,9 +221,9 @@ class Trainer:
     ):
         self.logger.info(f"===> Epoch[{epoch}] start!")
         if epoch >= 1:
-            times_per_epoch = 2
+            times_per_epoch = 1  # Reduced testing frequency for performance
         else:
-            times_per_epoch = 2
+            times_per_epoch = 1
 
         # times_per_epoch=4
 
@@ -276,7 +276,7 @@ class Trainer:
                 train_recorder_loss[name].update(value)
 
             # run tensorboard to visualize the training process
-            if iteration % 300 == 0 and self.config["local_rank"] == 0:
+            if iteration % 1000 == 0 and self.config["local_rank"] == 0:
                 if self.config["SWA"] and (
                     epoch > self.config["swa_start"] or self.config["dry_run"]
                 ):

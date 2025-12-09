@@ -34,10 +34,16 @@ parser.add_argument(
 parser.add_argument("--train_dataset", nargs="+")
 parser.add_argument("--test_dataset", nargs="+")
 parser.add_argument(
-    "--no-save_ckpt", dest="save_ckpt", action="store_false", default=True
+    "--no-save_ckpt",
+    dest="save_ckpt",
+    action="store_false",
+    default=True,
 )
 parser.add_argument(
-    "--no-save_feat", dest="save_feat", action="store_false", default=True
+    "--no-save_feat",
+    dest="save_feat",
+    action="store_false",
+    default=True,
 )
 parser.add_argument("--ddp", action="store_true", default=False)
 parser.add_argument("--local_rank", type=int, default=0)
@@ -142,7 +148,7 @@ def choose_optimizer(model, config):
         )
     else:
         raise NotImplementedError(
-            "Optimizer {} is not implemented".format(config["optimizer"])
+            "Optimizer {} is not implemented".format(config["optimizer"]),
         )
     return optimizer
 
@@ -172,7 +178,7 @@ def choose_scheduler(config, optimizer):
         )
     else:
         raise NotImplementedError(
-            "Scheduler {} is not implemented".format(config["lr_scheduler"])
+            "Scheduler {} is not implemented".format(config["lr_scheduler"]),
         )
 
 
@@ -202,7 +208,9 @@ def main():
     config["save_ckpt"] = args.save_ckpt
     config["save_feat"] = args.save_feat
     if config["lmdb"]:
-        config["dataset_json_folder"] = "preprocessing/dataset_json"
+        config["dataset_json_folder"] = (
+            "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json"
+        )
     # create logger
     logger_path = config["log_dir"]
     os.makedirs(logger_path, exist_ok=True)
@@ -261,10 +269,10 @@ def main():
         )
         if best_metric is not None:
             logger.info(
-                f"===> Epoch[{epoch}] end with testing {metric_scoring}: {parse_metric_for_print(best_metric)}!"
+                f"===> Epoch[{epoch}] end with testing {metric_scoring}: {parse_metric_for_print(best_metric)}!",
             )
     logger.info(
-        f"Stop Training on best Testing metric {parse_metric_for_print(best_metric)}"
+        f"Stop Training on best Testing metric {parse_metric_for_print(best_metric)}",
     )
     # update
     if "svdd" in config["model_name"]:
