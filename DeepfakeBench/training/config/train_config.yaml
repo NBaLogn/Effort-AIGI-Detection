@@ -1,5 +1,5 @@
 mode: train
-lmdb: False
+lmdb: True
 dry_run: false
 dataset_root_rgb: '/Volumes/Crucial/Large_Downloads/AI/DATASETS/DFB/rgb'
 lmdb_dir:  '/Volumes/Crucial/Large_Downloads/AI/DATASETS/DFB/lmdbs'

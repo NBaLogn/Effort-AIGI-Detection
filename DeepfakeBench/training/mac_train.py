@@ -294,7 +294,7 @@ def load_config() -> dict[str, Any]:
     config["save_ckpt"] = args.save_ckpt
     config["save_feat"] = args.save_feat
     if config["lmdb"]:
-        config["dataset_json_folder"] = "preprocessing/dataset_json_v3"
+        config["dataset_json_folder"] = "preprocessing/dataset_json"
     return config
 
 
