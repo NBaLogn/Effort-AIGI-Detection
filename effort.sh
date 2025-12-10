@@ -13,7 +13,7 @@
 # 2. FINE-TUNING ON UADFV DATASET
 # =============================================
 uv run DeepfakeBench/training/finetune.py \
-    --detector_path DeepfakeBench/training/config/detector/effort_finetune.yaml \
+    --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
     --train_dataset UADFV \
     --test_dataset UADFV \
     --pretrained_weights /Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort_clip_L14_trainOn_FaceForensic.pth
@@ -40,7 +40,7 @@ uv run DeepfakeBench/training/evaluate_finetune.py \
 # 5. ADVANCED FINE-TUNING WITH CUSTOM PARAMETERS
 # =============================================
 # uv run DeepfakeBench/training/finetune.py \
-#     --detector_path DeepfakeBench/training/config/detector/effort_finetune.yaml \
+#     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
 #     --train_dataset UADFV \
 #     --test_dataset UADFV \
 #     --pretrained_weights /path/to/pretrained.pth \

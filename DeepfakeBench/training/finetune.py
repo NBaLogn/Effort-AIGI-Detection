@@ -34,10 +34,10 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description="Effort Model Fine-Tuning")
 
     parser.add_argument(
-        "--detector_path",
+        "--detector_config",
         type=str,
         default="/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/config/detector/effort_finetune.yaml",
-        help="path to detector YAML file",
+        help="YAML configuration file path",
     )
     parser.add_argument("--train_dataset", nargs="+", help="training dataset(s)")
     parser.add_argument("--test_dataset", nargs="+", help="testing dataset(s)")
@@ -47,10 +47,16 @@ def parse_arguments():
         help="path to pretrained weights for fine-tuning",
     )
     parser.add_argument(
-        "--no-save_ckpt", dest="save_ckpt", action="store_false", default=True
+        "--no-save_ckpt",
+        dest="save_ckpt",
+        action="store_false",
+        default=True,
     )
     parser.add_argument(
-        "--no-save_feat", dest="save_feat", action="store_false", default=True
+        "--no-save_feat",
+        dest="save_feat",
+        action="store_false",
+        default=True,
     )
     parser.add_argument(
         "--ddp",
@@ -139,7 +145,7 @@ def load_pretrained_weights(model, pretrained_path, config):
     """Load pretrained weights for fine-tuning."""
     if not pretrained_path or not os.path.exists(pretrained_path):
         logger.warning(
-            f"No pretrained weights found at {pretrained_path}, starting from scratch"
+            f"No pretrained weights found at {pretrained_path}, starting from scratch",
         )
         return model
 
@@ -167,7 +173,7 @@ def load_pretrained_weights(model, pretrained_path, config):
                 pretrained_state_dict[new_key] = value
             else:
                 logger.debug(
-                    f"Skipping weight {key} due to shape mismatch or missing key"
+                    f"Skipping weight {key} due to shape mismatch or missing key",
                 )
 
         # Load compatible weights
@@ -207,7 +213,7 @@ def configure_fine_tuning(model, config):
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
 
     logger.info(
-        f"Trainable parameters: {trainable_params}/{total_params} ({100 * trainable_params / total_params:.2f}%)"
+        f"Trainable parameters: {trainable_params}/{total_params} ({100 * trainable_params / total_params:.2f}%)",
     )
 
     return model
@@ -302,12 +308,12 @@ def main():
         if torch.cuda.is_available()
         else "mps"
         if torch.backends.mps.is_available()
-        else "cpu"
+        else "cpu",
     )
     logger.info(f"Using device: {device}")
 
     # Load configuration
-    with open(args.detector_path) as f:
+    with open(args.detector_config) as f:
         config = yaml.safe_load(f)
     with open("./training/config/train_config.yaml") as f:
         config.update(yaml.safe_load(f))
@@ -387,7 +393,7 @@ def main():
         if epoch_metric is not None:
             best_metric = epoch_metric
             logger.info(
-                f"===> Epoch[{epoch}] completed with {metric_scoring}: {parse_metric_for_print(epoch_metric)}!"
+                f"===> Epoch[{epoch}] completed with {metric_scoring}: {parse_metric_for_print(epoch_metric)}!",
             )
 
         # Step scheduler if available
@@ -395,7 +401,7 @@ def main():
             scheduler.step()
 
     logger.info(
-        f"Fine-tuning completed! Best {metric_scoring}: {parse_metric_for_print(best_metric)}"
+        f"Fine-tuning completed! Best {metric_scoring}: {parse_metric_for_print(best_metric)}",
     )
 
     # Clean up

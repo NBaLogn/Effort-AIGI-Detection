@@ -8,7 +8,7 @@ This guide provides comprehensive instructions for fine-tuning the Effort model 
 
 ```bash
 uv run DeepfakeBench/training/finetune.py \
-    --detector_path DeepfakeBench/training/config/detector/effort_finetune.yaml \
+    --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
     --train_dataset UADFV \
     --test_dataset UADFV \
     --pretrained_weights /path/to/pretrained_weights.pth
@@ -169,7 +169,7 @@ The evaluation script provides comprehensive metrics:
 ```bash
 # Step 1: Fine-tune on target dataset
 uv run DeepfakeBench/training/finetune.py \
-    --detector_path DeepfakeBench/training/config/detector/effort_finetune.yaml \
+    --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
     --train_dataset UADFV \
     --test_dataset UADFV \
     --pretrained_weights pretrained/effort_base.pth
@@ -187,14 +187,14 @@ uv run DeepfakeBench/training/evaluate_finetune.py \
 ```bash
 # Stage 1: Classification head only
 uv run DeepfakeBench/training/finetune.py \
-    --detector_path DeepfakeBench/training/config/detector/effort_finetune.yaml \
+    --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
     --train_dataset UADFV \
     --nEpochs 2 \
     --optimizer.lr 0.001
 
 # Stage 2: Full fine-tuning
 uv run DeepfakeBench/training/finetune.py \
-    --detector_path DeepfakeBench/training/config/detector/effort_finetune.yaml \
+    --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
     --train_dataset UADFV \
     --nEpochs 8 \
     --pretrained_weights stage1_checkpoint.pth
