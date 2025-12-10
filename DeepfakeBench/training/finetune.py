@@ -26,7 +26,6 @@ from trainer.trainer import Trainer
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 
 def parse_arguments():
@@ -81,7 +80,7 @@ def init_seed(config):
 
 def prepare_training_data(config):
     """Prepare training data loader with fine-tuning specific settings."""
-    logger.info("Preparing training data for fine-tuning")
+    logging.info("Preparing training data for fine-tuning")
 
     train_set = DeepfakeAbstractBaseDataset(
         config=config,
@@ -106,7 +105,7 @@ def prepare_training_data(config):
             collate_fn=train_set.collate_fn,
         )
 
-    logger.info(f"Training data loader prepared with {len(train_data_loader)} batches")
+    logging.info(f"Training data loader prepared with {len(train_data_loader)} batches")
     return train_data_loader
 
 
@@ -137,7 +136,7 @@ def prepare_testing_data(config):
     for test_name in config["test_dataset"]:
         test_data_loaders[test_name] = get_test_data_loader(config, test_name)
 
-    logger.info(f"Prepared {len(test_data_loaders)} test data loaders")
+    logging.info(f"Prepared {len(test_data_loaders)} test data loaders")
     return test_data_loaders
 
 
@@ -149,7 +148,7 @@ def load_pretrained_weights(model, pretrained_path, config):
         )
         return model
 
-    logger.info(f"Loading pretrained weights from {pretrained_path}")
+    logging.info(f"Loading pretrained weights from {pretrained_path}")
 
     try:
         checkpoint = torch.load(pretrained_path, map_location="cpu")
@@ -172,7 +171,7 @@ def load_pretrained_weights(model, pretrained_path, config):
             ):
                 pretrained_state_dict[new_key] = value
             else:
-                logger.debug(
+                logging.debug(
                     f"Skipping weight {key} due to shape mismatch or missing key",
                 )
 
@@ -183,22 +182,22 @@ def load_pretrained_weights(model, pretrained_path, config):
         # Log loading statistics
         loaded_params = len(pretrained_state_dict)
         total_params = len(model_state_dict)
-        logger.info(f"Loaded {loaded_params}/{total_params} pretrained parameters")
+        logging.info(f"Loaded {loaded_params}/{total_params} pretrained parameters")
 
         return model
 
     except Exception as e:
-        logger.error(f"Failed to load pretrained weights: {e}")
+        logging.exception(f"Failed to load pretrained weights: {e}")
         return model
 
 
 def configure_fine_tuning(model, config):
     """Configure model for fine-tuning based on configuration."""
-    logger.info("Configuring model for fine-tuning")
+    logging.info("Configuring model for fine-tuning")
 
     # Apply fine-tuning settings
     if config.get("freeze_backbone", True):
-        logger.info("Freezing backbone SVD main components")
+        logging.info("Freezing backbone SVD main components")
         for name, param in model.named_parameters():
             if "weight_main" in name:
                 param.requires_grad = False
@@ -212,7 +211,7 @@ def configure_fine_tuning(model, config):
     total_params = sum(p.numel() for p in model.parameters())
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
 
-    logger.info(
+    logging.info(
         f"Trainable parameters: {trainable_params}/{total_params} ({100 * trainable_params / total_params:.2f}%)",
     )
 
@@ -310,12 +309,14 @@ def main():
         if torch.backends.mps.is_available()
         else "cpu",
     )
-    logger.info(f"Using device: {device}")
+    logging.info(f"Using device: {device}")
 
     # Load configuration
     with open(args.detector_config) as f:
         config = yaml.safe_load(f)
-    with open("./training/config/train_config.yaml") as f:
+    with open(
+        "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/config/train_config.yaml"
+    ) as f:
         config.update(yaml.safe_load(f))
 
     config["local_rank"] = args.local_rank

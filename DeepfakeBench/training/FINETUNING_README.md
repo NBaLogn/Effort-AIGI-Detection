@@ -11,7 +11,7 @@ uv run DeepfakeBench/training/finetune.py \
     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
     --train_dataset UADFV \
     --test_dataset UADFV \
-    --pretrained_weights /path/to/pretrained_weights.pth
+    --pretrained_weights /Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_UniversalFakeDetect.pth
 ```
 
 ### 2. Evaluation Command
