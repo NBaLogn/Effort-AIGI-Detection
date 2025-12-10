@@ -52,16 +52,15 @@ class EffortDetector(nn.Module):
 
     def features(self, data_dict: dict) -> torch.tensor:
         # Log memory usage and input shape before backbone call
-        if torch.backends.mps.is_available():
-            allocated = torch.mps.current_allocated_memory() / 1024**3  # GB
-            driver = torch.mps.driver_allocated_memory() / 1024**3  # GB
-            logger.info(
-                f"MPS Memory - Allocated: {allocated:.2f} GB, Driver: {driver:.2f} GB"
-            )
+        # if torch.backends.mps.is_available():
+        #     allocated = torch.mps.current_allocated_memory() / 1024**3  # GB
+        #     driver = torch.mps.driver_allocated_memory() / 1024**3  # GB
+        #     logger.info(
+        #         f"MPS Memory - Allocated: {allocated:.2f} GB, Driver: {driver:.2f} GB"
+        #     )
         input_shape = data_dict["image"].shape
-        logger.info(f"Input image shape: {input_shape}")
-        feat = self.backbone(data_dict["image"])["pooler_output"]
-        return feat
+        # logger.info(f"Input image shape: {input_shape}")
+        return self.backbone(data_dict["image"])["pooler_output"]
 
     def classifier(self, features: torch.tensor) -> torch.tensor:
         return self.head(features)
