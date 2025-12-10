@@ -1,0 +1,92 @@
+# Effort Model Fine-Tuning Configuration
+# This configuration is optimized for fine-tuning the SVD-based Effort model
+
+# log dir
+log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+
+# model setting
+pretrained: 'no need to provide this for the effort model'  # Will be overridden if loading from checkpoint
+model_name: effort   # model name
+backbone_name: vit  # backbone name
+
+#backbone setting
+backbone_config:
+  mode: original
+  num_classes: 2
+  inc: 3
+  dropout: false
+
+# dataset - Configure these for your specific fine-tuning task
+all_dataset: [FaceForensics++, FF-F2F, FF-DF, FF-FS, FF-NT, FaceShifter, DeepFakeDetection, Celeb-DF-v1, Celeb-DF-v2, DFDCP, DFDC, DeeperForensics-1.0, UADFV]
+train_dataset: [UADFV]  # Target dataset for fine-tuning
+test_dataset: [UADFV]   # Use same dataset for evaluation during fine-tuning
+
+compression: c23  # compression-level for videos
+train_batchSize: 8   # Smaller batch size for fine-tuning stability
+test_batchSize: 8   # Match training batch size
+workers: 0   # number of data loading workers
+frame_num: {'train': 2, 'test': 2}   # number of frames to use per video
+resolution: 224   # resolution of output image to network
+with_mask: false   # whether to include mask information in the input
+with_landmark: false   # whether to include facial landmark information in the input
+
+# data augmentation - Reduced for fine-tuning to avoid overfitting
+use_data_augmentation: true
+data_aug:
+  flip_prob: 0.3  # Reduced from 0.5
+  rotate_prob: 0.2  # Reduced from 0.5
+  rotate_limit: [-5, 5]  # Reduced range
+  blur_prob: 0.2  # Reduced from 0.5
+  blur_limit: [3, 5]  # Tighter range
+  brightness_prob: 0.2  # Reduced from 0.5
+  brightness_limit: [-0.05, 0.05]  # Reduced range
+  contrast_limit: [-0.05, 0.05]  # Reduced range
+  quality_lower: 60  # Higher quality floor
+  quality_upper: 95  # Lower quality ceiling
+
+# mean and std for normalization (keep same as original training)
+mean: [0.48145466, 0.4578275, 0.40821073]
+std: [0.26862954, 0.26130258, 0.27577711]
+
+# optimizer config - Fine-tuning optimized settings
+optimizer:
+  # choose between 'adam' and 'sgd' - Adam works better for fine-tuning
+  type: adam
+  adam:
+    lr: 0.0001  # Lower learning rate for fine-tuning (1e-4)
+    beta1: 0.9  # beta1 for Adam optimizer
+    beta2: 0.999 # beta2 for Adam optimizer
+    eps: 0.00000001  # epsilon for Adam optimizer
+    weight_decay: 0.0001  # Reduced weight decay (1e-4)
+    amsgrad: false
+  sgd:
+    lr: 0.0001  # Lower learning rate for fine-tuning
+    momentum: 0.9  # momentum for SGD optimizer
+    weight_decay: 0.0001  # Reduced weight decay
+
+# training config - Fine-tuning specific settings
+lr_scheduler: null   # Start without scheduler, can add if needed
+nEpochs: 10   # 5-15 epochs typically sufficient for fine-tuning
+start_epoch: 0   # manual epoch number (useful for restarts)
+save_epoch: 1   # save checkpoint every epoch
+rec_iter: 50   # more frequent recording for fine-tuning monitoring
+logdir: ./logs   # folder to output images and logs
+manualSeed: 1024   # manual seed for random number generation
+save_ckpt: true   # whether to save checkpoint
+save_feat: true   # whether to save features
+
+# loss function
+loss_func: cross_entropy   # loss function to use
+losstype: null
+
+# metric for evaluation
+metric_scoring: auc   # metric for evaluation (auc, acc, eer, ap)
+
+# Fine-tuning specific settings
+fine_tune: true   # Flag to indicate this is fine-tuning
+pretrained_checkpoint: null  # Set this to path of pretrained weights if resuming
+freeze_backbone: true   # Freeze backbone SVD main components (recommended)
+train_classification_head: true   # Train classification head
+train_svd_residuals: true   # Train SVD residual components
+
+save_avg: true
