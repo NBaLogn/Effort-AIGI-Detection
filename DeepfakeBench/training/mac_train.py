@@ -64,7 +64,7 @@ def init_seed(config: dict[str, Any]) -> None:
 
     """
     if config["manualSeed"] is None:
-        config["manualSeed"] = 1 + secrets.randbelow(1, 10000)
+        config["manualSeed"] = 1 + secrets.randbelow(10000)
     random.seed(config["manualSeed"])
     if torch.backends.mps.is_available():
         torch.manual_seed(config["manualSeed"])
