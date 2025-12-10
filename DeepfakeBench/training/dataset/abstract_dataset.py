@@ -410,8 +410,22 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
                 # transfer the path format from rgb-path to lmdb-key
                 if file_path[0] == ".":
                     file_path = file_path.replace("./datasets\\", "")
+                else:
+                    # Remove dataset_root_rgb prefix for LMDB key
+                    dataset_root = self.config.get("dataset_root_rgb", "")
+                    if dataset_root and file_path.startswith(dataset_root):
+                        file_path = file_path[len(dataset_root) + 1 :]
+
+                # Debug: Log the key being searched
+                import logging
+
+                logging.info(f"Searching LMDB for key: {file_path}")
 
                 image_bin = txn.get(file_path.encode())
+                if image_bin is None:
+                    # Debug: Log that key was not found
+                    logging.error(f"Image not found in LMDB: {file_path}")
+                    raise ValueError(f"Image not found in LMDB: {file_path}")
                 image_buf = np.frombuffer(image_bin, dtype=np.uint8)
                 img = cv2.imdecode(image_buf, cv2.IMREAD_COLOR)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -585,10 +599,9 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
                 # image_path = image_path.replace("frames", "frames_wocropface")
                 image = self.load_rgb(image_path)
             except Exception as e:
-                # Skip this image and return the first one
+                # Handle loading error elegantly
                 print(f"Error loading image at index {index}: {e}")
-                index_random = random.randint(0, len(self.image_list) - 1)
-                return self.__getitem__(index_random)
+                raise ValueError(f"Failed to load image at index {index}: {e}")
             image = np.array(image)  # Convert to numpy array for data augmentation
 
             # Load mask and landmark (if needed)

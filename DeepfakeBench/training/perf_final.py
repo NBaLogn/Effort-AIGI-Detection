@@ -14,13 +14,12 @@ import dlib
 import numpy as np
 import torch
 import yaml
+from detectors import DETECTOR
 from imutils import face_utils
 from PIL import Image
 from skimage import transform as trans
 from sklearn.metrics import average_precision_score, roc_auc_score
 from torchvision import transforms
-
-from .detectors import DETECTOR
 
 # Configuration constants
 DEFAULT_RESOLUTION = 224
