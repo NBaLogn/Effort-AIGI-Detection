@@ -333,7 +333,7 @@ class ImageCollection:
     """Handles image path collection and validation."""
 
     @staticmethod
-    def collect_image_paths(path_str: str, limit: int = 3000) -> list[Path]:
+    def collect_image_paths(path_str: str, limit: int = 1000) -> list[Path]:
         """Collect valid image paths from given directory or file."""
         p = Path(path_str)
         ImageCollection._validate_path(p, path_str)
