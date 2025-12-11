@@ -23,8 +23,8 @@ uv run DeepfakeBench/training/finetune.py \
 # =============================================
 # uv run DeepfakeBench/training/evaluate_finetune.py \
 #     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
-#     --weights ./training/weights/finetuned_effort_uadfv.pth \
-#     --test_dataset UADFV Celeb-DF-v2 \
+#     --weights /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/effort_2025-12-11-08-19-01/test/UADFV/ckpt_best.pth \
+#     --test_dataset UADFV Celeb-DF-v2 FaceForensics++\
 #     --output_dir evaluation_results
 
 # =============================================

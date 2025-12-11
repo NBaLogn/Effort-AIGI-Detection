@@ -11,7 +11,7 @@ from datetime import datetime
 
 import torch
 import yaml
-from dataset import *
+from dataset.abstract_dataset import *
 from detectors import DETECTOR
 from logger import create_logger
 from metrics.base_metrics_class import calculate_metrics_for_train
@@ -19,7 +19,6 @@ from torch.utils.data import DataLoader
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 
 def parse_arguments():
@@ -78,7 +77,7 @@ def setup_device(device_arg):
 
 def load_model(config, weights_path, device):
     """Load the fine-tuned model."""
-    logger.info(f"Loading model from {weights_path}")
+    logging.info(f"Loading model from {weights_path}")
 
     try:
         # Initialize model
@@ -109,11 +108,11 @@ def load_model(config, weights_path, device):
         model.load_state_dict(cleaned_state_dict, strict=False)
         model.eval()
 
-        logger.info("Model loaded successfully")
+        logging.info("Model loaded successfully")
         return model
 
     except Exception as e:
-        logger.error(f"Failed to load model: {e}")
+        logging.exception(f"Failed to load model: {e}")
         raise
 
 
@@ -124,7 +123,28 @@ def prepare_test_data(config, test_dataset, batch_size):
     test_config["test_dataset"] = test_dataset
     test_config["test_batchSize"] = batch_size
 
-    logger.info(f"Preparing test data for {test_dataset}")
+    logging.info(f"Preparing test data for {test_dataset}")
+
+    # Add fallback for dataset_json_folder if not in config
+    if "dataset_json_folder" not in test_config:
+        test_config["dataset_json_folder"] = (
+            "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json"
+        )
+
+    # Add fallback for label_dict if not in config
+    if "label_dict" not in test_config:
+        # Add basic label_dict for common datasets
+        test_config["label_dict"] = {
+            "FF-real": 0,
+            "FF-F2F": 1,
+            "FF-DF": 1,
+            "FF-FS": 1,
+            "FF-NT": 1,
+            "CelebDFv2_real": 0,
+            "CelebDFv2_fake": 1,
+            "UADFV_Real": 0,
+            "UADFV_Fake": 1,
+        }
 
     test_set = DeepfakeAbstractBaseDataset(
         config=test_config,
@@ -140,13 +160,13 @@ def prepare_test_data(config, test_dataset, batch_size):
         drop_last=False,
     )
 
-    logger.info(f"Test loader prepared with {len(test_loader)} batches")
+    logging.info(f"Test loader prepared with {len(test_loader)} batches")
     return test_loader
 
 
 def evaluate_model(model, test_loader, device, dataset_name):
     """Evaluate model on test dataset."""
-    logger.info(f"Evaluating on {dataset_name}")
+    logging.info(f"Evaluating on {dataset_name}")
 
     model.eval()
     all_labels = []
@@ -176,7 +196,7 @@ def evaluate_model(model, test_loader, device, dataset_name):
             all_probs.extend(probs.tolist())
 
             if (batch_idx + 1) % 50 == 0:
-                logger.info(f"Processed batch {batch_idx + 1}/{len(test_loader)}")
+                logging.info(f"Processed batch {batch_idx + 1}/{len(test_loader)}")
 
     # Calculate metrics
     labels_tensor = torch.tensor(all_labels)
@@ -206,9 +226,9 @@ def evaluate_model(model, test_loader, device, dataset_name):
         "sample_count": len(all_labels),
     }
 
-    logger.info(f"Evaluation results for {dataset_name}:")
+    logging.info(f"Evaluation results for {dataset_name}:")
     for metric_name, metric_value in metrics.items():
-        logger.info(f"  {metric_name}: {metric_value:.4f}")
+        logging.info(f"  {metric_name}: {metric_value:.4f}")
 
     return metrics
 
@@ -239,7 +259,7 @@ def save_results(metrics, dataset_name, output_dir, config):
     with open(output_path, "w") as f:
         json.dump(result_data, f, indent=2)
 
-    logger.info(f"Saved evaluation results to {output_path}")
+    logging.info(f"Saved evaluation results to {output_path}")
     return output_path
 
 
@@ -249,7 +269,7 @@ def main():
 
     # Set up device
     device = setup_device(args.device)
-    logger.info(f"Using device: {device}")
+    logging.info(f"Using device: {device}")
 
     # Load configuration
     with open(args.detector_config) as f:
@@ -293,7 +313,7 @@ def main():
             all_results[dataset] = metrics
 
         except Exception as e:
-            logger.error(f"Failed to evaluate on {dataset}: {e}")
+            logger.exception(f"Failed to evaluate on {dataset}: {e}")
             continue
 
     # Save summary

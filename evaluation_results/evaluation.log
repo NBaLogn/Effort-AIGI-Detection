@@ -1,0 +1,425 @@
+2025-12-11 08:39:34,045 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-11 08:39:34,045 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-11 08:39:34,045 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-11 08:39:34,045 - INFO - pretrained: no need to provide this for the effort model
+2025-12-11 08:39:34,045 - INFO - model_name: effort
+2025-12-11 08:39:34,045 - INFO - backbone_name: vit
+2025-12-11 08:39:34,045 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-11 08:39:34,045 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-11 08:39:34,045 - INFO - train_dataset: ['UADFV']
+2025-12-11 08:39:34,045 - INFO - test_dataset: ['UADFV', 'Celeb-DF-v2', 'FaceForensics++']
+2025-12-11 08:39:34,045 - INFO - compression: c23
+2025-12-11 08:39:34,045 - INFO - train_batchSize: 8
+2025-12-11 08:39:34,045 - INFO - test_batchSize: 8
+2025-12-11 08:39:34,045 - INFO - workers: 0
+2025-12-11 08:39:34,045 - INFO - frame_num: {'train': 2, 'test': 2}
+2025-12-11 08:39:34,045 - INFO - resolution: 224
+2025-12-11 08:39:34,045 - INFO - with_mask: False
+2025-12-11 08:39:34,045 - INFO - with_landmark: False
+2025-12-11 08:39:34,045 - INFO - use_data_augmentation: True
+2025-12-11 08:39:34,045 - INFO - data_aug: {'flip_prob': 0.3, 'rotate_prob': 0.2, 'rotate_limit': [-5, 5], 'blur_prob': 0.2, 'blur_limit': [3, 5], 'brightness_prob': 0.2, 'brightness_limit': [-0.05, 0.05], 'contrast_limit': [-0.05, 0.05], 'quality_lower': 60, 'quality_upper': 95}
+2025-12-11 08:39:34,045 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-11 08:39:34,045 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-11 08:39:34,045 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-11 08:39:34,045 - INFO - lr_scheduler: None
+2025-12-11 08:39:34,045 - INFO - nEpochs: 10
+2025-12-11 08:39:34,045 - INFO - start_epoch: 0
+2025-12-11 08:39:34,045 - INFO - save_epoch: 1
+2025-12-11 08:39:34,045 - INFO - rec_iter: 50
+2025-12-11 08:39:34,045 - INFO - logdir: ./logs
+2025-12-11 08:39:34,045 - INFO - manualSeed: 1024
+2025-12-11 08:39:34,045 - INFO - save_ckpt: True
+2025-12-11 08:39:34,045 - INFO - save_feat: True
+2025-12-11 08:39:34,045 - INFO - loss_func: cross_entropy
+2025-12-11 08:39:34,045 - INFO - losstype: None
+2025-12-11 08:39:34,045 - INFO - metric_scoring: auc
+2025-12-11 08:39:34,045 - INFO - fine_tune: True
+2025-12-11 08:39:34,045 - INFO - pretrained_checkpoint: None
+2025-12-11 08:39:34,045 - INFO - freeze_backbone: True
+2025-12-11 08:39:34,045 - INFO - train_classification_head: True
+2025-12-11 08:39:34,045 - INFO - train_svd_residuals: True
+2025-12-11 08:39:34,045 - INFO - save_avg: True
+2025-12-11 08:39:34,045 - INFO - Loading model from /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/effort_2025-12-11-08-19-01/test/UADFV/ckpt_best.pth
+2025-12-11 08:41:14,480 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-11 08:41:14,480 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-11 08:41:14,480 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-11 08:41:14,480 - INFO - pretrained: no need to provide this for the effort model
+2025-12-11 08:41:14,480 - INFO - model_name: effort
+2025-12-11 08:41:14,480 - INFO - backbone_name: vit
+2025-12-11 08:41:14,480 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-11 08:41:14,480 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-11 08:41:14,480 - INFO - train_dataset: ['UADFV']
+2025-12-11 08:41:14,480 - INFO - test_dataset: ['UADFV', 'Celeb-DF-v2', 'FaceForensics++']
+2025-12-11 08:41:14,480 - INFO - compression: c23
+2025-12-11 08:41:14,480 - INFO - train_batchSize: 8
+2025-12-11 08:41:14,480 - INFO - test_batchSize: 8
+2025-12-11 08:41:14,480 - INFO - workers: 0
+2025-12-11 08:41:14,480 - INFO - frame_num: {'train': 2, 'test': 2}
+2025-12-11 08:41:14,480 - INFO - resolution: 224
+2025-12-11 08:41:14,480 - INFO - with_mask: False
+2025-12-11 08:41:14,480 - INFO - with_landmark: False
+2025-12-11 08:41:14,480 - INFO - use_data_augmentation: True
+2025-12-11 08:41:14,480 - INFO - data_aug: {'flip_prob': 0.3, 'rotate_prob': 0.2, 'rotate_limit': [-5, 5], 'blur_prob': 0.2, 'blur_limit': [3, 5], 'brightness_prob': 0.2, 'brightness_limit': [-0.05, 0.05], 'contrast_limit': [-0.05, 0.05], 'quality_lower': 60, 'quality_upper': 95}
+2025-12-11 08:41:14,480 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-11 08:41:14,480 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-11 08:41:14,480 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-11 08:41:14,480 - INFO - lr_scheduler: None
+2025-12-11 08:41:14,480 - INFO - nEpochs: 10
+2025-12-11 08:41:14,480 - INFO - start_epoch: 0
+2025-12-11 08:41:14,480 - INFO - save_epoch: 1
+2025-12-11 08:41:14,480 - INFO - rec_iter: 50
+2025-12-11 08:41:14,481 - INFO - logdir: ./logs
+2025-12-11 08:41:14,481 - INFO - manualSeed: 1024
+2025-12-11 08:41:14,481 - INFO - save_ckpt: True
+2025-12-11 08:41:14,481 - INFO - save_feat: True
+2025-12-11 08:41:14,481 - INFO - loss_func: cross_entropy
+2025-12-11 08:41:14,481 - INFO - losstype: None
+2025-12-11 08:41:14,481 - INFO - metric_scoring: auc
+2025-12-11 08:41:14,481 - INFO - fine_tune: True
+2025-12-11 08:41:14,481 - INFO - pretrained_checkpoint: None
+2025-12-11 08:41:14,481 - INFO - freeze_backbone: True
+2025-12-11 08:41:14,481 - INFO - train_classification_head: True
+2025-12-11 08:41:14,481 - INFO - train_svd_residuals: True
+2025-12-11 08:41:14,481 - INFO - save_avg: True
+2025-12-11 08:41:14,481 - INFO - Loading model from /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/effort_2025-12-11-08-19-01/test/UADFV/ckpt_best.pth
+2025-12-11 08:41:30,709 - INFO - Model loaded successfully
+2025-12-11 08:41:30,710 - INFO - Preparing test data for UADFV
+2025-12-11 08:41:30,711 - ERROR - Failed to evaluate on UADFV: name 'DeepfakeAbstractBaseDataset' is not defined
+2025-12-11 08:41:30,711 - INFO - Preparing test data for Celeb-DF-v2
+2025-12-11 08:41:30,711 - ERROR - Failed to evaluate on Celeb-DF-v2: name 'DeepfakeAbstractBaseDataset' is not defined
+2025-12-11 08:41:30,711 - INFO - Preparing test data for FaceForensics++
+2025-12-11 08:41:30,711 - ERROR - Failed to evaluate on FaceForensics++: name 'DeepfakeAbstractBaseDataset' is not defined
+2025-12-11 08:41:30,712 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-11 08:41:30,712 - INFO - Fine-tuned model evaluation finished successfully
+2025-12-11 08:43:49,177 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-11 08:43:49,177 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-11 08:43:49,177 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-11 08:43:49,177 - INFO - pretrained: no need to provide this for the effort model
+2025-12-11 08:43:49,177 - INFO - model_name: effort
+2025-12-11 08:43:49,177 - INFO - backbone_name: vit
+2025-12-11 08:43:49,177 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-11 08:43:49,177 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-11 08:43:49,177 - INFO - train_dataset: ['UADFV']
+2025-12-11 08:43:49,177 - INFO - test_dataset: ['UADFV', 'Celeb-DF-v2', 'FaceForensics++']
+2025-12-11 08:43:49,177 - INFO - compression: c23
+2025-12-11 08:43:49,177 - INFO - train_batchSize: 8
+2025-12-11 08:43:49,177 - INFO - test_batchSize: 8
+2025-12-11 08:43:49,177 - INFO - workers: 0
+2025-12-11 08:43:49,177 - INFO - frame_num: {'train': 2, 'test': 2}
+2025-12-11 08:43:49,177 - INFO - resolution: 224
+2025-12-11 08:43:49,177 - INFO - with_mask: False
+2025-12-11 08:43:49,177 - INFO - with_landmark: False
+2025-12-11 08:43:49,177 - INFO - use_data_augmentation: True
+2025-12-11 08:43:49,177 - INFO - data_aug: {'flip_prob': 0.3, 'rotate_prob': 0.2, 'rotate_limit': [-5, 5], 'blur_prob': 0.2, 'blur_limit': [3, 5], 'brightness_prob': 0.2, 'brightness_limit': [-0.05, 0.05], 'contrast_limit': [-0.05, 0.05], 'quality_lower': 60, 'quality_upper': 95}
+2025-12-11 08:43:49,177 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-11 08:43:49,177 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-11 08:43:49,177 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-11 08:43:49,177 - INFO - lr_scheduler: None
+2025-12-11 08:43:49,177 - INFO - nEpochs: 10
+2025-12-11 08:43:49,177 - INFO - start_epoch: 0
+2025-12-11 08:43:49,177 - INFO - save_epoch: 1
+2025-12-11 08:43:49,177 - INFO - rec_iter: 50
+2025-12-11 08:43:49,177 - INFO - logdir: ./logs
+2025-12-11 08:43:49,177 - INFO - manualSeed: 1024
+2025-12-11 08:43:49,177 - INFO - save_ckpt: True
+2025-12-11 08:43:49,177 - INFO - save_feat: True
+2025-12-11 08:43:49,177 - INFO - loss_func: cross_entropy
+2025-12-11 08:43:49,177 - INFO - losstype: None
+2025-12-11 08:43:49,177 - INFO - metric_scoring: auc
+2025-12-11 08:43:49,177 - INFO - fine_tune: True
+2025-12-11 08:43:49,177 - INFO - pretrained_checkpoint: None
+2025-12-11 08:43:49,177 - INFO - freeze_backbone: True
+2025-12-11 08:43:49,177 - INFO - train_classification_head: True
+2025-12-11 08:43:49,177 - INFO - train_svd_residuals: True
+2025-12-11 08:43:49,178 - INFO - save_avg: True
+2025-12-11 08:43:49,178 - INFO - Loading model from /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/effort_2025-12-11-08-19-01/test/UADFV/ckpt_best.pth
+2025-12-11 08:44:05,639 - INFO - Model loaded successfully
+2025-12-11 08:44:05,641 - INFO - Preparing test data for UADFV
+2025-12-11 08:44:05,641 - ERROR - Failed to evaluate on UADFV: 'dataset_json_folder'
+2025-12-11 08:44:05,641 - INFO - Preparing test data for Celeb-DF-v2
+2025-12-11 08:44:05,641 - ERROR - Failed to evaluate on Celeb-DF-v2: 'dataset_json_folder'
+2025-12-11 08:44:05,641 - INFO - Preparing test data for FaceForensics++
+2025-12-11 08:44:05,641 - ERROR - Failed to evaluate on FaceForensics++: 'dataset_json_folder'
+2025-12-11 08:44:05,642 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-11 08:44:05,642 - INFO - Fine-tuned model evaluation finished successfully
+2025-12-11 08:49:21,720 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-11 08:49:21,720 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-11 08:49:21,720 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-11 08:49:21,720 - INFO - pretrained: no need to provide this for the effort model
+2025-12-11 08:49:21,720 - INFO - model_name: effort
+2025-12-11 08:49:21,720 - INFO - backbone_name: vit
+2025-12-11 08:49:21,720 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-11 08:49:21,720 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-11 08:49:21,720 - INFO - train_dataset: ['UADFV']
+2025-12-11 08:49:21,720 - INFO - test_dataset: ['UADFV', 'Celeb-DF-v2', 'FaceForensics++']
+2025-12-11 08:49:21,721 - INFO - compression: c23
+2025-12-11 08:49:21,721 - INFO - train_batchSize: 8
+2025-12-11 08:49:21,721 - INFO - test_batchSize: 8
+2025-12-11 08:49:21,721 - INFO - workers: 0
+2025-12-11 08:49:21,721 - INFO - frame_num: {'train': 2, 'test': 2}
+2025-12-11 08:49:21,721 - INFO - resolution: 224
+2025-12-11 08:49:21,721 - INFO - with_mask: False
+2025-12-11 08:49:21,721 - INFO - with_landmark: False
+2025-12-11 08:49:21,721 - INFO - use_data_augmentation: True
+2025-12-11 08:49:21,721 - INFO - data_aug: {'flip_prob': 0.3, 'rotate_prob': 0.2, 'rotate_limit': [-5, 5], 'blur_prob': 0.2, 'blur_limit': [3, 5], 'brightness_prob': 0.2, 'brightness_limit': [-0.05, 0.05], 'contrast_limit': [-0.05, 0.05], 'quality_lower': 60, 'quality_upper': 95}
+2025-12-11 08:49:21,721 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-11 08:49:21,721 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-11 08:49:21,721 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-11 08:49:21,721 - INFO - lr_scheduler: None
+2025-12-11 08:49:21,721 - INFO - nEpochs: 10
+2025-12-11 08:49:21,721 - INFO - start_epoch: 0
+2025-12-11 08:49:21,721 - INFO - save_epoch: 1
+2025-12-11 08:49:21,721 - INFO - rec_iter: 50
+2025-12-11 08:49:21,721 - INFO - logdir: ./logs
+2025-12-11 08:49:21,721 - INFO - manualSeed: 1024
+2025-12-11 08:49:21,721 - INFO - save_ckpt: True
+2025-12-11 08:49:21,721 - INFO - save_feat: True
+2025-12-11 08:49:21,721 - INFO - loss_func: cross_entropy
+2025-12-11 08:49:21,721 - INFO - losstype: None
+2025-12-11 08:49:21,721 - INFO - metric_scoring: auc
+2025-12-11 08:49:21,721 - INFO - fine_tune: True
+2025-12-11 08:49:21,721 - INFO - pretrained_checkpoint: None
+2025-12-11 08:49:21,721 - INFO - freeze_backbone: True
+2025-12-11 08:49:21,721 - INFO - train_classification_head: True
+2025-12-11 08:49:21,721 - INFO - train_svd_residuals: True
+2025-12-11 08:49:21,721 - INFO - save_avg: True
+2025-12-11 08:49:21,721 - INFO - Loading model from /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/effort_2025-12-11-08-19-01/test/UADFV/ckpt_best.pth
+2025-12-11 08:49:37,385 - INFO - Model loaded successfully
+2025-12-11 08:49:37,387 - INFO - Preparing test data for UADFV
+2025-12-11 08:49:37,388 - ERROR - Failed to evaluate on UADFV: 'dataset_json_folder'
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 283, in main
+    test_loader = prepare_test_data(config, dataset, args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 128, in prepare_test_data
+    test_set = DeepfakeAbstractBaseDataset(
+        config=test_config,
+        mode="test",
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/abstract_dataset.py", line 117, in __init__
+    self.collect_img_and_label_for_one_dataset(one_data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/abstract_dataset.py", line 199, in collect_img_and_label_for_one_dataset
+    if not os.path.exists(self.config["dataset_json_folder"]):
+                          ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'dataset_json_folder'
+2025-12-11 08:49:37,391 - INFO - Preparing test data for Celeb-DF-v2
+2025-12-11 08:49:37,391 - ERROR - Failed to evaluate on Celeb-DF-v2: 'dataset_json_folder'
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 283, in main
+    test_loader = prepare_test_data(config, dataset, args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 128, in prepare_test_data
+    test_set = DeepfakeAbstractBaseDataset(
+        config=test_config,
+        mode="test",
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/abstract_dataset.py", line 117, in __init__
+    self.collect_img_and_label_for_one_dataset(one_data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/abstract_dataset.py", line 199, in collect_img_and_label_for_one_dataset
+    if not os.path.exists(self.config["dataset_json_folder"]):
+                          ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'dataset_json_folder'
+2025-12-11 08:49:37,393 - INFO - Preparing test data for FaceForensics++
+2025-12-11 08:49:37,393 - ERROR - Failed to evaluate on FaceForensics++: 'dataset_json_folder'
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 283, in main
+    test_loader = prepare_test_data(config, dataset, args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 128, in prepare_test_data
+    test_set = DeepfakeAbstractBaseDataset(
+        config=test_config,
+        mode="test",
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/abstract_dataset.py", line 117, in __init__
+    self.collect_img_and_label_for_one_dataset(one_data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/abstract_dataset.py", line 199, in collect_img_and_label_for_one_dataset
+    if not os.path.exists(self.config["dataset_json_folder"]):
+                          ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'dataset_json_folder'
+2025-12-11 08:49:37,393 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-11 08:49:37,393 - INFO - Fine-tuned model evaluation finished successfully
+2025-12-11 08:56:54,904 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-11 08:56:54,904 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-11 08:56:54,904 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-11 08:56:54,904 - INFO - pretrained: no need to provide this for the effort model
+2025-12-11 08:56:54,904 - INFO - model_name: effort
+2025-12-11 08:56:54,904 - INFO - backbone_name: vit
+2025-12-11 08:56:54,904 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-11 08:56:54,904 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-11 08:56:54,904 - INFO - train_dataset: ['UADFV']
+2025-12-11 08:56:54,904 - INFO - test_dataset: ['UADFV', 'Celeb-DF-v2', 'FaceForensics++']
+2025-12-11 08:56:54,904 - INFO - compression: c23
+2025-12-11 08:56:54,905 - INFO - train_batchSize: 8
+2025-12-11 08:56:54,905 - INFO - test_batchSize: 8
+2025-12-11 08:56:54,905 - INFO - workers: 0
+2025-12-11 08:56:54,905 - INFO - frame_num: {'train': 2, 'test': 2}
+2025-12-11 08:56:54,905 - INFO - resolution: 224
+2025-12-11 08:56:54,905 - INFO - with_mask: False
+2025-12-11 08:56:54,905 - INFO - with_landmark: False
+2025-12-11 08:56:54,905 - INFO - use_data_augmentation: True
+2025-12-11 08:56:54,905 - INFO - data_aug: {'flip_prob': 0.3, 'rotate_prob': 0.2, 'rotate_limit': [-5, 5], 'blur_prob': 0.2, 'blur_limit': [3, 5], 'brightness_prob': 0.2, 'brightness_limit': [-0.05, 0.05], 'contrast_limit': [-0.05, 0.05], 'quality_lower': 60, 'quality_upper': 95}
+2025-12-11 08:56:54,905 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-11 08:56:54,905 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-11 08:56:54,905 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-11 08:56:54,905 - INFO - lr_scheduler: None
+2025-12-11 08:56:54,905 - INFO - nEpochs: 10
+2025-12-11 08:56:54,905 - INFO - start_epoch: 0
+2025-12-11 08:56:54,905 - INFO - save_epoch: 1
+2025-12-11 08:56:54,905 - INFO - rec_iter: 50
+2025-12-11 08:56:54,905 - INFO - logdir: ./logs
+2025-12-11 08:56:54,905 - INFO - manualSeed: 1024
+2025-12-11 08:56:54,905 - INFO - save_ckpt: True
+2025-12-11 08:56:54,905 - INFO - save_feat: True
+2025-12-11 08:56:54,905 - INFO - loss_func: cross_entropy
+2025-12-11 08:56:54,905 - INFO - losstype: None
+2025-12-11 08:56:54,905 - INFO - metric_scoring: auc
+2025-12-11 08:56:54,905 - INFO - fine_tune: True
+2025-12-11 08:56:54,905 - INFO - pretrained_checkpoint: None
+2025-12-11 08:56:54,905 - INFO - freeze_backbone: True
+2025-12-11 08:56:54,905 - INFO - train_classification_head: True
+2025-12-11 08:56:54,905 - INFO - train_svd_residuals: True
+2025-12-11 08:56:54,905 - INFO - save_avg: True
+2025-12-11 08:56:54,905 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2025-12-11 08:56:54,905 - INFO - Loading model from /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/effort_2025-12-11-08-19-01/test/UADFV/ckpt_best.pth
+2025-12-11 08:57:10,654 - INFO - Model loaded successfully
+2025-12-11 08:57:10,656 - INFO - Preparing test data for UADFV
+2025-12-11 08:57:10,660 - ERROR - Failed to evaluate on UADFV: 'label_dict'
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 289, in main
+    test_loader = prepare_test_data(config, dataset, args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 134, in prepare_test_data
+    test_set = DeepfakeAbstractBaseDataset(
+        config=test_config,
+        mode="test",
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/abstract_dataset.py", line 117, in __init__
+    self.collect_img_and_label_for_one_dataset(one_data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/abstract_dataset.py", line 264, in collect_img_and_label_for_one_dataset
+    if video_info["label"] not in self.config["label_dict"]:
+                                  ~~~~~~~~~~~^^^^^^^^^^^^^^
+KeyError: 'label_dict'
+2025-12-11 08:57:10,665 - INFO - Preparing test data for Celeb-DF-v2
+2025-12-11 08:57:10,721 - ERROR - Failed to evaluate on Celeb-DF-v2: 'label_dict'
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 289, in main
+    test_loader = prepare_test_data(config, dataset, args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 134, in prepare_test_data
+    test_set = DeepfakeAbstractBaseDataset(
+        config=test_config,
+        mode="test",
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/abstract_dataset.py", line 117, in __init__
+    self.collect_img_and_label_for_one_dataset(one_data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/abstract_dataset.py", line 264, in collect_img_and_label_for_one_dataset
+    if video_info["label"] not in self.config["label_dict"]:
+                                  ~~~~~~~~~~~^^^^^^^^^^^^^^
+KeyError: 'label_dict'
+2025-12-11 08:57:10,729 - INFO - Preparing test data for FaceForensics++
+2025-12-11 08:57:10,819 - ERROR - Failed to evaluate on FaceForensics++: 'label_dict'
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 289, in main
+    test_loader = prepare_test_data(config, dataset, args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 134, in prepare_test_data
+    test_set = DeepfakeAbstractBaseDataset(
+        config=test_config,
+        mode="test",
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/abstract_dataset.py", line 117, in __init__
+    self.collect_img_and_label_for_one_dataset(one_data)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/abstract_dataset.py", line 264, in collect_img_and_label_for_one_dataset
+    if video_info["label"] not in self.config["label_dict"]:
+                                  ~~~~~~~~~~~^^^^^^^^^^^^^^
+KeyError: 'label_dict'
+2025-12-11 08:57:10,829 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-11 08:57:10,829 - INFO - Fine-tuned model evaluation finished successfully
+2025-12-11 09:05:20,706 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-11 09:05:20,706 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-11 09:05:20,706 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-11 09:05:20,706 - INFO - pretrained: no need to provide this for the effort model
+2025-12-11 09:05:20,706 - INFO - model_name: effort
+2025-12-11 09:05:20,706 - INFO - backbone_name: vit
+2025-12-11 09:05:20,706 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-11 09:05:20,706 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-11 09:05:20,706 - INFO - train_dataset: ['UADFV']
+2025-12-11 09:05:20,706 - INFO - test_dataset: ['UADFV', 'Celeb-DF-v2', 'FaceForensics++']
+2025-12-11 09:05:20,706 - INFO - compression: c23
+2025-12-11 09:05:20,706 - INFO - train_batchSize: 8
+2025-12-11 09:05:20,706 - INFO - test_batchSize: 8
+2025-12-11 09:05:20,706 - INFO - workers: 0
+2025-12-11 09:05:20,706 - INFO - frame_num: {'train': 2, 'test': 2}
+2025-12-11 09:05:20,706 - INFO - resolution: 224
+2025-12-11 09:05:20,706 - INFO - with_mask: False
+2025-12-11 09:05:20,706 - INFO - with_landmark: False
+2025-12-11 09:05:20,706 - INFO - use_data_augmentation: True
+2025-12-11 09:05:20,707 - INFO - data_aug: {'flip_prob': 0.3, 'rotate_prob': 0.2, 'rotate_limit': [-5, 5], 'blur_prob': 0.2, 'blur_limit': [3, 5], 'brightness_prob': 0.2, 'brightness_limit': [-0.05, 0.05], 'contrast_limit': [-0.05, 0.05], 'quality_lower': 60, 'quality_upper': 95}
+2025-12-11 09:05:20,707 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-11 09:05:20,707 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-11 09:05:20,707 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-11 09:05:20,707 - INFO - lr_scheduler: None
+2025-12-11 09:05:20,707 - INFO - nEpochs: 10
+2025-12-11 09:05:20,707 - INFO - start_epoch: 0
+2025-12-11 09:05:20,707 - INFO - save_epoch: 1
+2025-12-11 09:05:20,707 - INFO - rec_iter: 50
+2025-12-11 09:05:20,707 - INFO - logdir: ./logs
+2025-12-11 09:05:20,707 - INFO - manualSeed: 1024
+2025-12-11 09:05:20,707 - INFO - save_ckpt: True
+2025-12-11 09:05:20,707 - INFO - save_feat: True
+2025-12-11 09:05:20,707 - INFO - loss_func: cross_entropy
+2025-12-11 09:05:20,707 - INFO - losstype: None
+2025-12-11 09:05:20,707 - INFO - metric_scoring: auc
+2025-12-11 09:05:20,707 - INFO - fine_tune: True
+2025-12-11 09:05:20,707 - INFO - pretrained_checkpoint: None
+2025-12-11 09:05:20,707 - INFO - freeze_backbone: True
+2025-12-11 09:05:20,707 - INFO - train_classification_head: True
+2025-12-11 09:05:20,707 - INFO - train_svd_residuals: True
+2025-12-11 09:05:20,707 - INFO - save_avg: True
+2025-12-11 09:05:20,707 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2025-12-11 09:05:20,707 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2025-12-11 09:05:20,707 - INFO - Loading model from /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/effort_2025-12-11-08-19-01/test/UADFV/ckpt_best.pth
+2025-12-11 09:05:36,561 - INFO - Model loaded successfully
+2025-12-11 09:05:36,562 - INFO - Preparing test data for UADFV
+2025-12-11 09:05:36,755 - INFO - Test loader prepared with 13 batches
+2025-12-11 09:05:36,755 - INFO - Evaluating on UADFV
+2025-12-11 09:05:50,676 - INFO - Evaluation results for UADFV:
+2025-12-11 09:05:50,676 - INFO -   auc: 0.9961
+2025-12-11 09:05:50,676 - INFO -   eer: 0.0408
+2025-12-11 09:05:50,676 - INFO -   accuracy: 0.5000
+2025-12-11 09:05:50,676 - INFO -   ap: 0.9965
+2025-12-11 09:05:50,676 - INFO -   precision: 1.0000
+2025-12-11 09:05:50,676 - INFO -   recall: 0.9490
+2025-12-11 09:05:50,676 - INFO -   f1: 0.9738
+2025-12-11 09:05:50,676 - INFO -   sample_count: 196.0000
+2025-12-11 09:05:50,677 - INFO - Saved evaluation results to evaluation_results/UADFV_eval_20251211_090550.json
+2025-12-11 09:05:50,677 - INFO - Preparing test data for Celeb-DF-v2
+2025-12-11 09:05:50,907 - INFO - Test loader prepared with 65 batches
+2025-12-11 09:05:50,907 - INFO - Evaluating on Celeb-DF-v2
+2025-12-11 09:06:41,510 - INFO - Processed batch 50/65
+2025-12-11 09:06:56,561 - INFO - Evaluation results for Celeb-DF-v2:
+2025-12-11 09:06:56,561 - INFO -   auc: 0.6712
+2025-12-11 09:06:56,561 - INFO -   eer: 0.3652
+2025-12-11 09:06:56,562 - INFO -   accuracy: 0.3436
+2025-12-11 09:06:56,562 - INFO -   ap: 0.8047
+2025-12-11 09:06:56,562 - INFO -   precision: 0.9091
+2025-12-11 09:06:56,562 - INFO -   recall: 0.2059
+2025-12-11 09:06:56,562 - INFO -   f1: 0.3357
+2025-12-11 09:06:56,562 - INFO -   sample_count: 1036.0000
+2025-12-11 09:06:56,563 - INFO - Saved evaluation results to evaluation_results/Celeb-DF-v2_eval_20251211_090656.json
+2025-12-11 09:06:56,563 - INFO - Preparing test data for FaceForensics++
+2025-12-11 09:06:56,820 - INFO - Test loader prepared with 88 batches
+2025-12-11 09:06:56,821 - INFO - Evaluating on FaceForensics++
+2025-12-11 09:07:47,428 - INFO - Processed batch 50/88
+2025-12-11 09:08:25,324 - INFO - Evaluation results for FaceForensics++:
+2025-12-11 09:08:25,325 - INFO -   auc: 0.6635
+2025-12-11 09:08:25,325 - INFO -   eer: 0.3929
+2025-12-11 09:08:25,325 - INFO -   accuracy: 0.2000
+2025-12-11 09:08:25,325 - INFO -   ap: 0.8958
+2025-12-11 09:08:25,325 - INFO -   precision: 0.9590
+2025-12-11 09:08:25,325 - INFO -   recall: 0.2295
+2025-12-11 09:08:25,325 - INFO -   f1: 0.3703
+2025-12-11 09:08:25,325 - INFO -   sample_count: 1400.0000
+2025-12-11 09:08:25,326 - INFO - Saved evaluation results to evaluation_results/FaceForensics++_eval_20251211_090825.json
+2025-12-11 09:08:25,326 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-11 09:08:25,326 - INFO - Fine-tuned model evaluation finished successfully

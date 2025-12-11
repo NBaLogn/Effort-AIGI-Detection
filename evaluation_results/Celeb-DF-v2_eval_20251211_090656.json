@@ -1,0 +1,23 @@
+{
+  "dataset": "Celeb-DF-v2",
+  "timestamp": "20251211_090656",
+  "metrics": {
+    "auc": 0.6711624256444151,
+    "eer": 0.3651685393258427,
+    "accuracy": 0.3436293436293436,
+    "ap": 0.804733677699166,
+    "precision": 0.9090909090909091,
+    "recall": 0.20588235294117646,
+    "f1": 0.33573141486810554,
+    "sample_count": 1036
+  },
+  "config": {
+    "model_name": "effort",
+    "backbone_name": "vit",
+    "resolution": 224,
+    "frame_num": {
+      "train": 2,
+      "test": 2
+    }
+  }
+}

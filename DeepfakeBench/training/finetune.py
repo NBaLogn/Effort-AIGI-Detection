@@ -14,7 +14,7 @@ import torch.distributed as dist
 import torch.nn.parallel
 import torch.utils.data
 import yaml
-from dataset import *
+from dataset.abstract_dataset import *
 from detectors import DETECTOR
 from logger import RankFilter, create_logger
 from metrics.utils import parse_metric_for_print
@@ -143,7 +143,7 @@ def prepare_testing_data(config):
 def load_pretrained_weights(model, pretrained_path, config):
     """Load pretrained weights for fine-tuning."""
     if not pretrained_path or not os.path.exists(pretrained_path):
-        logger.warning(
+        logging.warning(
             f"No pretrained weights found at {pretrained_path}, starting from scratch",
         )
         return model
@@ -315,7 +315,7 @@ def main():
     with open(args.detector_config) as f:
         config = yaml.safe_load(f)
     with open(
-        "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/config/train_config.yaml"
+        "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/config/train_config.yaml",
     ) as f:
         config.update(yaml.safe_load(f))
 
