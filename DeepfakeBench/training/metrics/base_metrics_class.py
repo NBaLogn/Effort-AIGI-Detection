@@ -1,12 +1,11 @@
 import numpy as np
-from sklearn import metrics
-from collections import defaultdict
 import torch
-import torch.nn as nn
+from sklearn import metrics
+from torch import nn
 
 
 def get_accracy(output, label):
-    _, prediction = torch.max(output, 1)    # argmax
+    _, prediction = torch.max(output, 1)  # argmax
     correct = (prediction == label).sum().item()
     accuracy = correct / prediction.size(0)
     return accuracy
@@ -16,7 +15,7 @@ def get_prediction(output, label):
     prob = nn.functional.softmax(output, dim=1)[:, 1]
     prob = prob.view(prob.size(0), 1)
     label = label.view(label.size(0), 1)
-    #print(prob.size(), label.size())
+    # print(prob.size(), label.size())
     datas = torch.cat((prob, label.float()), dim=1)
     return datas
 
@@ -35,15 +34,29 @@ def calculate_metrics_for_train(label, output):
     # Average Precision
     y_true = label.cpu().detach().numpy()
     y_pred = prob.cpu().detach().numpy()
-    ap = metrics.average_precision_score(y_true, y_pred)
+    # Handle homogeneous batches for AP calculation
+    if len(np.unique(y_true)) < 2:
+        # For homogeneous batches, AP is not meaningful
+        ap = None
+    else:
+        ap = metrics.average_precision_score(y_true, y_pred)
 
-    # AUC and EER
+    # Check for homogeneous batches (all samples same class) to avoid sklearn warnings
+    unique_labels = np.unique(label.cpu().numpy())
+    if len(unique_labels) < 2:
+        # Homogeneous batch - cannot compute meaningful AUC/EER
+        # Return None for AUC/EER to indicate they are not calculable
+        return None, None, accuracy, ap
+
+    # AUC and EER - only compute when we have both classes
     try:
-        fpr, tpr, thresholds = metrics.roc_curve(label.squeeze().cpu().numpy(),
-                                                 prob.squeeze().cpu().numpy(),
-                                                 pos_label=1)
+        fpr, tpr, thresholds = metrics.roc_curve(
+            label.squeeze().cpu().numpy(),
+            prob.squeeze().cpu().numpy(),
+            pos_label=1,
+        )
     except:
-        # for the case when we only have one sample
+        # for the case when we only have one sample or other edge cases
         return None, None, accuracy, ap
 
     if np.isnan(fpr[0]) or np.isnan(tpr[0]):
@@ -52,13 +65,13 @@ def calculate_metrics_for_train(label, output):
     else:
         auc = metrics.auc(fpr, tpr)
         fnr = 1 - tpr
-        eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
+        eer = fpr[np.nanargmin(np.absolute(fnr - fpr))]
 
     return auc, eer, accuracy, ap
 
 
 # ------------ compute average metrics of batches---------------------
-class Metrics_batch():
+class Metrics_batch:
     def __init__(self):
         self.tprs = []
         self.mean_fpr = np.linspace(0, 1, 100)
@@ -76,17 +89,19 @@ class Metrics_batch():
             prob = torch.softmax(output, dim=1)[:, 1]
         else:
             prob = output
-        #label = 1-label
-        #prob = torch.softmax(output, dim=1)[:, 1]
+        # label = 1-label
+        # prob = torch.softmax(output, dim=1)[:, 1]
         auc, eer = self._update_auc(label, prob)
         ap = self._update_ap(label, prob)
 
         return acc, auc, eer, ap
 
     def _update_auc(self, lab, prob):
-        fpr, tpr, thresholds = metrics.roc_curve(lab.squeeze().cpu().numpy(),
-                                                 prob.squeeze().cpu().numpy(),
-                                                 pos_label=1)
+        fpr, tpr, thresholds = metrics.roc_curve(
+            lab.squeeze().cpu().numpy(),
+            prob.squeeze().cpu().numpy(),
+            pos_label=1,
+        )
         if np.isnan(fpr[0]) or np.isnan(tpr[0]):
             return -1, -1
 
@@ -100,35 +115,35 @@ class Metrics_batch():
 
         # EER
         fnr = 1 - tpr
-        eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
+        eer = fpr[np.nanargmin(np.absolute(fnr - fpr))]
         self.eers.append(eer)
 
         return auc, eer
 
     def _update_acc(self, lab, output):
-        _, prediction = torch.max(output, 1)    # argmax
+        _, prediction = torch.max(output, 1)  # argmax
         correct = (prediction == lab).sum().item()
         accuracy = correct / prediction.size(0)
         # self.accs.append(accuracy)
-        self.correct = self.correct+correct
-        self.total = self.total+lab.size(0)
+        self.correct = self.correct + correct
+        self.total = self.total + lab.size(0)
         return accuracy
 
     def _update_ap(self, label, prob):
         y_true = label.cpu().detach().numpy()
         y_pred = prob.cpu().detach().numpy()
-        ap = metrics.average_precision_score(y_true,y_pred)
+        ap = metrics.average_precision_score(y_true, y_pred)
         self.aps.append(ap)
 
         return np.mean(ap)
 
     def get_mean_metrics(self):
-        mean_acc, std_acc = self.correct/self.total, 0
+        mean_acc, std_acc = self.correct / self.total, 0
         mean_auc, std_auc = self._mean_auc()
         mean_err, std_err = np.mean(self.eers), np.std(self.eers)
         mean_ap, std_ap = np.mean(self.aps), np.std(self.aps)
-        
-        return {'acc':mean_acc, 'auc':mean_auc, 'eer':mean_err, 'ap':mean_ap}
+
+        return {"acc": mean_acc, "auc": mean_auc, "eer": mean_err, "ap": mean_ap}
 
     def _mean_auc(self):
         mean_tpr = np.mean(self.tprs, axis=0)
@@ -141,15 +156,15 @@ class Metrics_batch():
         self.tprs.clear()
         self.aucs.clear()
         # self.accs.clear()
-        self.correct=0
-        self.total=0
+        self.correct = 0
+        self.total = 0
         self.eers.clear()
         self.aps.clear()
         self.losses.clear()
 
 
 # ------------ compute average metrics of all data ---------------------
-class Metrics_all():
+class Metrics_all:
     def __init__(self):
         self.probs = []
         self.labels = []
@@ -158,7 +173,7 @@ class Metrics_all():
 
     def store(self, label, output):
         prob = torch.softmax(output, dim=1)[:, 1]
-        _, prediction = torch.max(output, 1)    # argmax
+        _, prediction = torch.max(output, 1)  # argmax
         correct = (prediction == label).sum().item()
         self.correct += correct
         self.total += label.size(0)
@@ -169,16 +184,16 @@ class Metrics_all():
         y_pred = np.concatenate(self.probs)
         y_true = np.concatenate(self.labels)
         # auc
-        fpr, tpr, thresholds = metrics.roc_curve(y_true,y_pred,pos_label=1)
+        fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred, pos_label=1)
         auc = metrics.auc(fpr, tpr)
         # eer
         fnr = 1 - tpr
-        eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
+        eer = fpr[np.nanargmin(np.absolute(fnr - fpr))]
         # ap
-        ap = metrics.average_precision_score(y_true,y_pred)
+        ap = metrics.average_precision_score(y_true, y_pred)
         # acc
         acc = self.correct / self.total
-        return {'acc':acc, 'auc':auc, 'eer':eer, 'ap':ap}
+        return {"acc": acc, "auc": auc, "eer": eer, "ap": ap}
 
     def clear(self):
         self.probs.clear()
@@ -192,14 +207,17 @@ class Recorder:
     def __init__(self):
         self.sum = 0
         self.num = 0
+
     def update(self, item, num=1):
         if item is not None:
             self.sum += item * num
             self.num += num
+
     def average(self):
         if self.num == 0:
             return None
-        return self.sum/self.num
+        return self.sum / self.num
+
     def clear(self):
         self.sum = 0
         self.num = 0

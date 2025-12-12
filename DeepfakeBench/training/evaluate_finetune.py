@@ -11,7 +11,7 @@ from datetime import datetime
 
 import torch
 import yaml
-from dataset.abstract_dataset import *
+from dataset.abstract_dataset import DeepfakeAbstractBaseDataset
 from detectors import DETECTOR
 from logger import create_logger
 from metrics.base_metrics_class import calculate_metrics_for_train

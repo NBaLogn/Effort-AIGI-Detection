@@ -14,7 +14,7 @@ import torch.distributed as dist
 import torch.nn.parallel
 import torch.utils.data
 import yaml
-from dataset.abstract_dataset import *
+from dataset.factory import DatasetFactory
 from detectors import DETECTOR
 from logger import RankFilter, create_logger
 from metrics.utils import parse_metric_for_print
@@ -44,6 +44,12 @@ def parse_arguments():
         "--pretrained_weights",
         type=str,
         help="path to pretrained weights for fine-tuning",
+    )
+    parser.add_argument(
+        "--raw_data_dir",
+        type=str,
+        default=None,
+        help="Path to root directory with real/fake folders for raw file processing",
     )
     parser.add_argument(
         "--no-save_ckpt",
@@ -78,13 +84,14 @@ def init_seed(config):
         torch.cuda.manual_seed_all(config["manualSeed"])
 
 
-def prepare_training_data(config):
+def prepare_training_data(config, raw_data_root=None):
     """Prepare training data loader with fine-tuning specific settings."""
     logging.info("Preparing training data for fine-tuning")
 
-    train_set = DeepfakeAbstractBaseDataset(
+    train_set = DatasetFactory.create_dataset(
         config=config,
         mode="train",
+        raw_data_root=raw_data_root,
     )
 
     if config["ddp"]:
@@ -97,10 +104,18 @@ def prepare_training_data(config):
             sampler=sampler,
         )
     else:
+        # For RawFileDataset, don't shuffle since it already provides interleaved balanced batches
+        from dataset.raw_file_dataset import RawFileDataset
+
+        shuffle_train = not isinstance(train_set, RawFileDataset)
+        if isinstance(train_set, RawFileDataset):
+            logging.info(
+                "Using RawFileDataset with pre-interleaved samples, disabling DataLoader shuffle for balanced batches",
+            )
         train_data_loader = torch.utils.data.DataLoader(
             dataset=train_set,
             batch_size=config["train_batchSize"],
-            shuffle=True,
+            shuffle=shuffle_train,
             num_workers=int(config["workers"]),
             collate_fn=train_set.collate_fn,
         )
@@ -109,16 +124,17 @@ def prepare_training_data(config):
     return train_data_loader
 
 
-def prepare_testing_data(config):
+def prepare_testing_data(config, raw_data_root=None):
     """Prepare testing data loaders."""
 
-    def get_test_data_loader(config, test_name):
+    def get_test_data_loader(config, test_name, raw_data_root=None):
         config_copy = config.copy()
         config_copy["test_dataset"] = test_name
 
-        test_set = DeepfakeAbstractBaseDataset(
+        test_set = DatasetFactory.create_dataset(
             config=config_copy,
             mode="test",
+            raw_data_root=raw_data_root,
         )
 
         test_data_loader = torch.utils.data.DataLoader(
@@ -134,7 +150,11 @@ def prepare_testing_data(config):
 
     test_data_loaders = {}
     for test_name in config["test_dataset"]:
-        test_data_loaders[test_name] = get_test_data_loader(config, test_name)
+        test_data_loaders[test_name] = get_test_data_loader(
+            config,
+            test_name,
+            raw_data_root,
+        )
 
     logging.info(f"Prepared {len(test_data_loaders)} test data loaders")
     return test_data_loaders
@@ -334,6 +354,11 @@ def main():
     if args.pretrained_weights:
         config["pretrained_checkpoint"] = args.pretrained_weights
 
+    # Set raw data root from command line or config file
+    raw_data_root = args.raw_data_dir or config.get("raw_data_root")
+    if raw_data_root:
+        logging.info(f"Using raw data mode with root: {raw_data_root}")
+
     # Create logger
     logger_path = config["log_dir"]
     os.makedirs(logger_path, exist_ok=True)
@@ -355,8 +380,13 @@ def main():
         logger.addFilter(RankFilter(0))
 
     # Prepare data loaders
-    train_data_loader = prepare_training_data(config)
-    test_data_loaders = prepare_testing_data(config)
+    dataset_class = DatasetFactory.get_dataset_class_name(config, raw_data_root)
+    logging.info(f"Using {dataset_class} for data loading")
+    if raw_data_root:
+        logging.info(f"Raw data directory: {raw_data_root}")
+
+    train_data_loader = prepare_training_data(config, raw_data_root)
+    test_data_loaders = prepare_testing_data(config, raw_data_root)
 
     # Initialize model
     logger.info("Initializing Effort model")
