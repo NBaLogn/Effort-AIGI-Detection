@@ -1,0 +1,86 @@
+[
+  {
+    "file": "DeepfakeBench/training/logs/effort_2025-12-12-10-21-14/test/UADFV/acc/metric_board/events.out.tfevents.1765514728.miMBP.local.57108.10",
+    "tag": "test_metrics/acc",
+    "step": 4999,
+    "value": 0.998449981212616,
+    "wall_time": 1765514728.1502988
+  },
+  {
+    "file": "DeepfakeBench/training/logs/effort_2025-12-12-10-21-14/test/UADFV/eer/metric_board/events.out.tfevents.1765514728.miMBP.local.57108.12",
+    "tag": "test_metrics/eer",
+    "step": 4999,
+    "value": 0.0017000000225380063,
+    "wall_time": 1765514728.151398
+  },
+  {
+    "file": "DeepfakeBench/training/logs/effort_2025-12-12-10-21-14/test/UADFV/overall/metric_board/events.out.tfevents.1765514728.miMBP.local.57108.7",
+    "tag": "test_losses/overall",
+    "step": 4999,
+    "value": 0.007491181138902903,
+    "wall_time": 1765514728.146136
+  },
+  {
+    "file": "DeepfakeBench/training/logs/effort_2025-12-12-10-21-14/test/UADFV/video_eer/metric_board/events.out.tfevents.1765514728.miMBP.local.57108.15",
+    "tag": "test_metrics/video_eer",
+    "step": 4999,
+    "value": 0.0,
+    "wall_time": 1765514728.152761
+  },
+  {
+    "file": "DeepfakeBench/training/logs/effort_2025-12-12-10-21-14/test/UADFV/video_acc/metric_board/events.out.tfevents.1765514728.miMBP.local.57108.16",
+    "tag": "test_metrics/video_acc",
+    "step": 4999,
+    "value": 1.0,
+    "wall_time": 1765514728.1532428
+  },
+  {
+    "file": "DeepfakeBench/training/logs/effort_2025-12-12-10-21-14/test/UADFV/video_acc/metric_board/events.out.tfevents.1765514728.miMBP.local.57108.16",
+    "tag": "test_metrics/acc_real",
+    "step": 4999,
+    "value": 0.9986000061035156,
+    "wall_time": 1765514728.154273
+  },
+  {
+    "file": "DeepfakeBench/training/logs/effort_2025-12-12-10-21-14/test/UADFV/video_acc/metric_board/events.out.tfevents.1765514728.miMBP.local.57108.16",
+    "tag": "test_metrics/acc_fake",
+    "step": 4999,
+    "value": 0.9983000159263611,
+    "wall_time": 1765514728.154285
+  },
+  {
+    "file": "DeepfakeBench/training/logs/effort_2025-12-12-10-21-14/test/UADFV/auc/metric_board/events.out.tfevents.1765514728.miMBP.local.57108.11",
+    "tag": "test_metrics/auc",
+    "step": 4999,
+    "value": 0.9999589920043945,
+    "wall_time": 1765514728.150914
+  },
+  {
+    "file": "DeepfakeBench/training/logs/effort_2025-12-12-10-21-14/test/UADFV/real_loss/metric_board/events.out.tfevents.1765514728.miMBP.local.57108.8",
+    "tag": "test_losses/real_loss",
+    "step": 4999,
+    "value": 0.005101362243294716,
+    "wall_time": 1765514728.1484532
+  },
+  {
+    "file": "DeepfakeBench/training/logs/effort_2025-12-12-10-21-14/test/UADFV/fake_loss/metric_board/events.out.tfevents.1765514728.miMBP.local.57108.9",
+    "tag": "test_losses/fake_loss",
+    "step": 4999,
+    "value": 0.00988100841641426,
+    "wall_time": 1765514728.1495922
+  },
+  {
+    "file": "DeepfakeBench/training/logs/effort_2025-12-12-10-21-14/test/UADFV/video_auc/metric_board/events.out.tfevents.1765514728.miMBP.local.57108.14",
+    "tag": "test_metrics/video_auc",
+    "step": 4999,
+    "value": 1.0,
+    "wall_time": 1765514728.152351
+  },
+  {
+    "file": "DeepfakeBench/training/logs/effort_2025-12-12-10-21-14/test/UADFV/ap/metric_board/events.out.tfevents.1765514728.miMBP.local.57108.13",
+    "tag": "test_metrics/ap",
+    "step": 4999,
+    "value": 0.9999592900276184,
+    "wall_time": 1765514728.151907
+  }
+]

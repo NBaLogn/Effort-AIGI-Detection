@@ -40,12 +40,15 @@ class DatasetFactory:
         # Check if raw data processing is requested and available
         if raw_data_root:
             if RawFileDataset is None:
-                raise ImportError(
+                msg = (
                     "Raw file dataset support is not available. "
-                    "Please ensure raw_file_dataset.py is accessible.",
+                    "Please ensure raw_file_dataset.py is accessible."
+                )
+                raise ImportError(
+                    msg,
                 )
 
-            logger.info(f"Using RawFileDataset with data from: {raw_data_root}")
+            logger.info("Using RawFileDataset with data from %s", raw_data_root)
             return RawFileDataset(config, mode, raw_data_root)
 
         # Fall back to traditional JSON-based approach

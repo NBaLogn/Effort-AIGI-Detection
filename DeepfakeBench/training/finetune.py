@@ -164,11 +164,16 @@ def load_pretrained_weights(model, pretrained_path, config):
     """Load pretrained weights for fine-tuning."""
     if not pretrained_path or not os.path.exists(pretrained_path):
         logging.warning(
-            f"No pretrained weights found at {pretrained_path}, starting from scratch",
+            # f"No pretrained weights found at {pretrained_path}, starting from scratch",
+            "No pretrained weights found at {pretrained_path}, starting from scratch",
+            extra={"pretrained_path": pretrained_path},
         )
         return model
 
-    logging.info(f"Loading pretrained weights from {pretrained_path}")
+    logging.info(
+        "Loading pretrained weights from {pretrained_path}",
+        extra={"pretrained_path": pretrained_path},
+    )
 
     try:
         checkpoint = torch.load(pretrained_path, map_location="cpu")
