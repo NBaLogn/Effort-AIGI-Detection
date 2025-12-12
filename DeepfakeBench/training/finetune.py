@@ -52,6 +52,12 @@ def parse_arguments():
         help="Path to root directory with real/fake folders for raw file processing",
     )
     parser.add_argument(
+        "--lmdb_path",
+        type=str,
+        default=None,
+        help="Path to LMDB database directory for LMDB dataset processing",
+    )
+    parser.add_argument(
         "--no-save_ckpt",
         dest="save_ckpt",
         action="store_false",
@@ -364,6 +370,12 @@ def main():
     if raw_data_root:
         logging.info(f"Using raw data mode with root: {raw_data_root}")
 
+    # Set LMDB path from command line or config file
+    lmdb_path = args.lmdb_path or config.get("lmdb_path")
+    if lmdb_path:
+        config["lmdb_path"] = lmdb_path
+        logging.info(f"Using LMDB dataset mode with path: {lmdb_path}")
+
     # Create logger
     logger_path = config["log_dir"]
     os.makedirs(logger_path, exist_ok=True)
@@ -389,6 +401,8 @@ def main():
     logging.info(f"Using {dataset_class} for data loading")
     if raw_data_root:
         logging.info(f"Raw data directory: {raw_data_root}")
+    if lmdb_path:
+        logging.info(f"LMDB database path: {lmdb_path}")
 
     train_data_loader = prepare_training_data(config, raw_data_root)
     test_data_loaders = prepare_testing_data(config, raw_data_root)

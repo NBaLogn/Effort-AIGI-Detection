@@ -55,6 +55,12 @@ def parse_arguments():
         help="Evaluation batch size",
     )
     parser.add_argument(
+        "--lmdb_path",
+        type=str,
+        default=None,
+        help="Path to LMDB database directory for LMDB dataset processing",
+    )
+    parser.add_argument(
         "--device",
         type=str,
         default="auto",
@@ -277,6 +283,11 @@ def main():
 
     # Update config with test datasets
     config["test_dataset"] = args.test_dataset
+
+    # Set LMDB path if provided
+    if args.lmdb_path:
+        config["lmdb_path"] = args.lmdb_path
+        logging.info(f"Using LMDB dataset mode with path: {args.lmdb_path}")
 
     # Create output directory
     output_dir = args.output_dir

@@ -12,6 +12,11 @@ try:
 except ImportError:
     RawFileDataset = None
 
+try:
+    from dataset.lmdb_dataset import LMDBDataset
+except ImportError:
+    LMDBDataset = None
+
 logger = logging.getLogger(__name__)
 
 
@@ -23,7 +28,7 @@ class DatasetFactory:
         config: dict,
         mode: str,
         raw_data_root: str | None = None,
-    ) -> DeepfakeAbstractBaseDataset | RawFileDataset:
+    ) -> DeepfakeAbstractBaseDataset | RawFileDataset | LMDBDataset:
         """Create the appropriate dataset based on configuration and available data.
 
         Args:
@@ -37,6 +42,19 @@ class DatasetFactory:
         Raises:
             ValueError: If neither JSON nor raw file approach can be used
         """
+        # Check if LMDB dataset is requested
+        lmdb_path = config.get("lmdb_path")
+        if lmdb_path:
+            if LMDBDataset is None:
+                msg = (
+                    "LMDB dataset support is not available. "
+                    "Please ensure lmdb_dataset.py is accessible."
+                )
+                raise ImportError(msg)
+
+            logger.info("Using LMDBDataset with data from %s", lmdb_path)
+            return LMDBDataset(config, mode, lmdb_path)
+
         # Check if raw data processing is requested and available
         if raw_data_root:
             if RawFileDataset is None:
@@ -61,6 +79,8 @@ class DatasetFactory:
         raw_data_root: str | None = None,
     ) -> str:
         """Get the name of the dataset class that would be created."""
+        if config.get("lmdb_path") and LMDBDataset is not None:
+            return "LMDBDataset"
         if raw_data_root and RawFileDataset is not None:
             return "RawFileDataset"
         return "DeepfakeAbstractBaseDataset"

@@ -6,3 +6,4 @@ DeepfakeBench/models--openai--clip-vit-large-patch14
 figs
 inference_results.txt
 logs
+*.lmdb
