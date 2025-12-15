@@ -19,9 +19,15 @@
 #     --pretrained_weights /Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort_clip_L14_trainOn_FaceForensic.pth
 
 #use direct image loading instead of the processed images
+# uv run DeepfakeBench/training/finetune.py \
+#     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
+#     --raw_data_dir /Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_dataset \
+#     --pretrained_weights /Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_FaceForensic.pth
+
+#use lmdb dataset
 uv run DeepfakeBench/training/finetune.py \
     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
-    --raw_data_dir /Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_dataset \
+    --lmdb_path /Volumes/Crucial/Large_Downloads/AI/DATASETS/lmdb/UADFV.lmdb \
     --pretrained_weights /Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_FaceForensic.pth
 
 # =============================================

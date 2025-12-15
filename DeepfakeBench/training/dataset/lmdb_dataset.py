@@ -68,14 +68,11 @@ class LMDBDataset(data.Dataset):
         self.with_landmark = config.get("with_landmark", False)
         self.use_data_augmentation = config.get("use_data_augmentation", True)
 
-        # Label mapping
-        self.label_dict = config.get(
-            "label_dict",
-            {
-                "real": 0,
-                "fake": 1,
-            },
-        )
+        # Label mapping - hardcoded for LMDB datasets which use "real"/"fake" categories
+        self.label_dict = {
+            "real": 0,
+            "fake": 1,
+        }
 
         # Initialize data structures
         self.image_list = []
@@ -204,16 +201,25 @@ class LMDBDataset(data.Dataset):
 
         # Try to find category in the path
         category = None
-        category_index = -1
 
-        # Look for "real" or "fake" in the path parts
-        for i, part in enumerate(parts):
-            if part.lower() in ["real", "fake"]:
-                category = part.lower()
-                category_index = i
-                break
+        # Special handling for UADFV LMDB format: find category after "UADFV"
+        if "UADFV" in parts:
+            uadfv_index = parts.index("UADFV")
+            if uadfv_index + 1 < len(parts):
+                next_part = parts[uadfv_index + 1]
+                if next_part.lower() in ["real", "fake"]:
+                    category = next_part.lower()
+        else:
+            # Legacy format: look for first occurrence of "real" or "fake"
+            for part in parts:
+                if part.lower() in ["real", "fake"]:
+                    category = part.lower()
+                    break
 
         if category is None or category not in self.label_dict:
+            logger.info(
+                f"Skipping LMDB key {key}: category '{category}' not in label_dict {self.label_dict}",
+            )
             return None
 
         label = self.label_dict[category]
@@ -419,6 +425,31 @@ class LMDBDataset(data.Dataset):
     def __len__(self) -> int:
         """Get dataset length."""
         return len(self.image_list)
+
+    def __getstate__(self):
+        """Custom pickle state to exclude unpickleable objects."""
+        logger.info("Excluding env and transform from LMDBDataset pickle state")
+        state = self.__dict__.copy()
+        # Exclude unpickleable objects
+        if "env" in state:
+            del state["env"]
+        if "transform" in state:
+            del state["transform"]
+        return state
+
+    def __setstate__(self, state):
+        """Custom unpickle state to recreate unpickleable objects."""
+        logger.info("Recreating env and transform in LMDBDataset worker process")
+        self.__dict__.update(state)
+        # Recreate LMDB environment
+        self.env = lmdb.open(
+            str(self.lmdb_path),
+            readonly=True,
+            lock=False,
+            subdir=True,
+        )
+        # Recreate transform
+        self.transform = self._init_data_aug_method()
 
     @staticmethod
     def collate_fn(batch: list[tuple]) -> dict[str, torch.Tensor]:

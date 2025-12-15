@@ -25,7 +25,7 @@ test_dataset: [UADFV]   # Use same dataset for evaluation during fine-tuning (us
 # raw_data_root: /path/to/raw_data  # Uncomment to use raw file processing mode
 
 # LMDB dataset configuration (alternative to JSON/raw file processing)
-lmdb_path: /Volumes/Crucial/Large_Downloads/AI/DATASETS/DFB/lmdb  # Uncomment to use LMDB dataset processing mode
+lmdb_path: /Volumes/Crucial/Large_Downloads/AI/DATASETS/lmdb  # Uncomment to use LMDB dataset processing mode
 
 compression: c23  # compression-level for videos
 train_batchSize: 16   # Smaller batch size for fine-tuning stability
