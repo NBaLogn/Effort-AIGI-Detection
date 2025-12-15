@@ -8,7 +8,6 @@ import logging
 import os
 import random
 from copy import deepcopy
-import re
 
 import cv2
 import numpy as np
@@ -33,63 +32,7 @@ class RawFileDataset(data.Dataset):
     - Standalone images in real/fake directories
     - Video frames in real/frames/video_name/ and fake/frames/video_name/ structures
     - Optional landmarks and masks directories
-    - Flexible directory naming with synonyms and partial matches
     """
-
-    # Directory name synonyms for real and fake classes
-    REAL_SYNONYMS = [
-        # Core terms
-        "real", "original", "natural",
-        # Variations with numbers
-        "0_real", "real_0", "0real", "real0",
-        "original_0", "natural_0",
-        # Common prefixes/suffixes
-        "0real", "real0", "real_", "_real",
-        "original", "original_", "_original",
-        "natural", "natural_", "_natural",
-        # Alternative terms
-        "authentic", "genuine", "true",
-        # Case variations
-        "Real", "REAL", "Original", "ORIGINAL", "Natural", "NATURAL",
-        "Authentic", "AUTHENTIC", "Genuine", "GENUINE", "True", "TRUE",
-        # Combined terms
-        "real_images", "original_images", "natural_images",
-        "real_data", "original_data", "natural_data",
-        "real_samples", "original_samples", "natural_samples",
-        "real_content", "original_content", "natural_content",
-    ]
-
-    FAKE_SYNONYMS = [
-        # Core terms
-        "fake", "synthetic", "ai", "generated",
-        # Variations with numbers
-        "1_fake", "fake_1", "1fake", "fake1",
-        "1_synthetic", "synthetic_1", "1synthetic", "synthetic1",
-        "1_ai", "ai_1", "1ai", "ai1",
-        "1_generated", "generated_1", "1generated", "generated1",
-        # Common prefixes/suffixes
-        "fake_", "_fake", "synthetic_", "_synthetic",
-        "ai_", "_ai", "generated_", "_generated",
-        # Alternative terms
-        "manipulated", "forged", "altered", "modified",
-        "deepfake", "generated", "synthesized",
-        # Case variations
-        "Fake", "FAKE", "Synthetic", "SYNTHETIC", "AI", "Artificial",
-        "Generated", "GENERATED", "Manipulated", "MANIPULATED",
-        "Forged", "FORGED", "Altered", "ALTERED", "Modified", "MODIFIED",
-        "Deepfake", "DEEPFAKE", "Synthesized", "SYNTHESIZED",
-        # Combined terms
-        "fake_images", "synthetic_images", "ai_images", "generated_images",
-        "fake_data", "synthetic_data", "ai_data", "generated_data",
-        "fake_samples", "synthetic_samples", "ai_samples", "generated_samples",
-        "fake_content", "synthetic_content", "ai_content", "generated_content",
-        "manipulated_content", "forged_content", "altered_content",
-        # Common dataset patterns
-        "fake", "fakes", "fake_images", "fake_videos",
-        "synthetic", "synthetics", "synthetic_images", "synthetic_videos",
-        "ai_generated", "ai_gen", "generated_ai",
-        "deepfake", "deepfakes",
-    ]
 
     def __init__(
         self,
@@ -210,57 +153,21 @@ class RawFileDataset(data.Dataset):
         except Exception as e:
             logger.warning(f"Could not list subdirectories: {e}")
 
-        # Find directories that match our synonyms
-        found_real_dirs = []
-        found_fake_dirs = []
+        # Check for at least one expected subdirectory
+        expected_dirs = ["real", "fake"]
+        found_dirs = []
+        for expected_dir in expected_dirs:
+            dir_path = os.path.join(self.raw_data_root, expected_dir)
+            if os.path.exists(dir_path) and os.path.isdir(dir_path):
+                found_dirs.append(expected_dir)
 
-        for subdir in all_subdirs:
-            if self._is_real_directory(subdir):
-                found_real_dirs.append(subdir)
-            elif self._is_fake_directory(subdir):
-                found_fake_dirs.append(subdir)
-
-        if not found_real_dirs and not found_fake_dirs:
+        if not found_dirs:
             raise ValueError(
                 f"No valid subdirectories found in {self.raw_data_root}. "
-                f"Expected directories containing real/fake synonyms. "
-                f"Found directories: {all_subdirs}. "
-                f"Real synonyms: {self.REAL_SYNONYMS[:5]}... "
-                f"Fake synonyms: {self.FAKE_SYNONYMS[:5]}..."
+                f"Expected at least one of: {expected_dirs}",
             )
 
-        logger.info(f"Found real directories: {found_real_dirs}")
-        logger.info(f"Found fake directories: {found_fake_dirs}")
-
-    def _is_real_directory(self, dir_name: str) -> bool:
-        """Check if directory name matches real synonyms."""
-        dir_lower = dir_name.lower()
-        
-        # Exact matches
-        if dir_lower in [s.lower() for s in self.REAL_SYNONYMS]:
-            return True
-        
-        # Partial matches - check if directory name contains any real synonym
-        for synonym in self.REAL_SYNONYMS:
-            if synonym.lower() in dir_lower:
-                return True
-        
-        return False
-
-    def _is_fake_directory(self, dir_name: str) -> bool:
-        """Check if directory name matches fake synonyms."""
-        dir_lower = dir_name.lower()
-        
-        # Exact matches
-        if dir_lower in [s.lower() for s in self.FAKE_SYNONYMS]:
-            return True
-        
-        # Partial matches - check if directory name contains any fake synonym
-        for synonym in self.FAKE_SYNONYMS:
-            if synonym.lower() in dir_lower:
-                return True
-        
-        return False
+        logger.info(f"Found valid subdirectories: {found_dirs}")
 
     def _discover_and_build_index(self):
         """Discover files and build dataset index with balanced class distribution."""
@@ -270,30 +177,15 @@ class RawFileDataset(data.Dataset):
         real_samples = []
         fake_samples = []
 
-        # Get all subdirectories
-        all_subdirs = [
-            d
-            for d in os.listdir(self.raw_data_root)
-            if os.path.isdir(os.path.join(self.raw_data_root, d))
-        ]
-
-        # Process each directory
-        for subdir in all_subdirs:
-            dir_path = os.path.join(self.raw_data_root, subdir)
-            
-            if self._is_real_directory(subdir):
-                label = 0
-                label_name = "real"
-                logger.info(f"Processing real directory: {subdir}")
-            elif self._is_fake_directory(subdir):
-                label = 1
-                label_name = "fake"
-                logger.info(f"Processing fake directory: {subdir}")
-            else:
-                logger.debug(f"Skipping non-matching directory: {subdir}")
+        # Process real and fake directories
+        for label_dir in ["real", "fake"]:
+            dir_path = os.path.join(self.raw_data_root, label_dir)
+            if not os.path.exists(dir_path):
+                logger.warning(f"Directory not found: {dir_path}")
                 continue
 
-            samples = self._process_directory_get_samples(dir_path, label, label_name)
+            label = self._get_label_for_directory(label_dir)
+            samples = self._process_directory_get_samples(dir_path, label, label_dir)
 
             if label == 0:  # real
                 real_samples.extend(samples)
@@ -317,13 +209,12 @@ class RawFileDataset(data.Dataset):
             if dir_name.lower() in key.lower():
                 return value
 
-        # Check our synonym lists
-        if self._is_real_directory(dir_name):
+        # Default labeling: real -> 0, fake -> 1
+        if "real" in dir_name.lower():
             return 0
-        elif self._is_fake_directory(dir_name):
+        if "fake" in dir_name.lower():
             return 1
-        else:
-            raise ValueError(f"Cannot determine label for directory: {dir_name}")
+        raise ValueError(f"Cannot determine label for directory: {dir_name}")
 
     def _process_directory_get_samples(
         self,

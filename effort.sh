@@ -21,8 +21,8 @@
 #use direct image loading instead of the processed images
 uv run DeepfakeBench/training/finetune.py \
     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
-    --raw_data_dir /Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_dataset \
-    --pretrained_weights /Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_FaceForensic.pth
+    --raw_data_dir /Volumes/Crucial/Large_Downloads/AI/DATASETS/Chameleon \
+    --pretrained_weights "/Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_chameleon.pth"
 
 # =============================================
 # 3. EVALUATION OF FINE-TUNED MODEL
@@ -39,8 +39,8 @@ uv run DeepfakeBench/training/finetune.py \
 # uv run DeepfakeBench/training/perf_final.py \
 #     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
 #     --landmark_model DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat \
-#     --weights ./training/weights/finetuned_effort_uadfv.pth \
-#     --image /Volumes/Crucial/Large_Downloads/AI/DATASETS/DFB/rgb/UADFV
+#     --weights /Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_chameleon.pth \
+#     --image /Volumes/Crucial/Large_Downloads/AI/DATASETS/Chameleon
 
 # =============================================
 # 5. ADVANCED FINE-TUNING WITH CUSTOM PARAMETERS

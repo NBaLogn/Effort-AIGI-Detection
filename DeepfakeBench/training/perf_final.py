@@ -41,6 +41,19 @@ LANDMARK_INDICES = {
 REAL_LABEL = 0
 FAKE_LABEL = 1
 
+# Keyword synonyms for flexible directory matching
+REAL_KEYWORDS = ["real", "original", "authentic", "genuine", "nature", "natural"]
+FAKE_KEYWORDS = [
+    "fake",
+    "synthetic",
+    "ai",
+    "artificial",
+    "manipulated",
+    "deepfake",
+    "faceswap",
+    "synthesis",
+]
+
 # Supported image extensions
 IMG_EXTS = {".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".webp"}
 
@@ -435,13 +448,11 @@ class LabelExtractor:
             [d.name for d in subdirs],
         )
 
-        real_dirs = [d for d in subdirs if "real" in d.name.lower()]
+        real_dirs = [
+            d for d in subdirs if any(kw in d.name.lower() for kw in REAL_KEYWORDS)
+        ]
         fake_dirs = [
-            d
-            for d in subdirs
-            if "fake" in d.name.lower()
-            or "synthetic" in d.name.lower()
-            or "faceswap" in d.name.lower()
+            d for d in subdirs if any(kw in d.name.lower() for kw in FAKE_KEYWORDS)
         ]
 
         logger.debug("Real directories found: %s", [d.name for d in real_dirs])
