@@ -38,8 +38,16 @@ def parse_arguments():
         default="/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/config/detector/effort_finetune.yaml",
         help="YAML configuration file path",
     )
-    parser.add_argument("--train_dataset", nargs="+", help="training dataset(s)")
-    parser.add_argument("--test_dataset", nargs="+", help="testing dataset(s)")
+    parser.add_argument(
+        "--train_dataset",
+        nargs="+",
+        help="training dataset path(s) - raw file directories",
+    )
+    parser.add_argument(
+        "--test_dataset",
+        nargs="+",
+        help="testing dataset path(s) - raw file directories",
+    )
     parser.add_argument(
         "--pretrained_weights",
         type=str,
@@ -84,14 +92,14 @@ def init_seed(config):
         torch.cuda.manual_seed_all(config["manualSeed"])
 
 
-def prepare_training_data(config, raw_data_root=None):
+def prepare_training_data(config, raw_data_paths=None):
     """Prepare training data loader with fine-tuning specific settings."""
     logging.info("Preparing training data for fine-tuning")
 
     train_set = DatasetFactory.create_dataset(
         config=config,
         mode="train",
-        raw_data_root=raw_data_root,
+        raw_data_root=raw_data_paths,
     )
 
     if config["ddp"]:
@@ -124,17 +132,18 @@ def prepare_training_data(config, raw_data_root=None):
     return train_data_loader
 
 
-def prepare_testing_data(config, raw_data_root=None):
+def prepare_testing_data(config, raw_data_paths=None):
     """Prepare testing data loaders."""
 
-    def get_test_data_loader(config, test_name, raw_data_root=None):
+    def get_test_data_loader(config, test_path, raw_data_paths=None):
         config_copy = config.copy()
-        config_copy["test_dataset"] = test_name
+        # For raw data paths, we don't need to set test_dataset in config
+        # The dataset factory will handle the raw_data_paths parameter
 
         test_set = DatasetFactory.create_dataset(
             config=config_copy,
             mode="test",
-            raw_data_root=raw_data_root,
+            raw_data_root=raw_data_paths,
         )
 
         test_data_loader = torch.utils.data.DataLoader(
@@ -143,18 +152,41 @@ def prepare_testing_data(config, raw_data_root=None):
             shuffle=False,
             num_workers=int(config["workers"]),
             collate_fn=test_set.collate_fn,
-            drop_last=(test_name == "DeepFakeDetection"),
+            drop_last=False,  # Not needed for raw file datasets
         )
 
         return test_data_loader
 
     test_data_loaders = {}
-    for test_name in config["test_dataset"]:
-        test_data_loaders[test_name] = get_test_data_loader(
+    if raw_data_paths:
+        # When using raw data paths, create a single combined test loader
+        test_data_loaders["combined_test"] = get_test_data_loader(
             config,
-            test_name,
-            raw_data_root,
+            None,  # Not used for raw data
+            raw_data_paths,
         )
+    else:
+        # Fallback to traditional JSON-based approach
+        for test_name in config["test_dataset"]:
+            config_copy = config.copy()
+            config_copy["test_dataset"] = test_name
+
+            test_set = DatasetFactory.create_dataset(
+                config=config_copy,
+                mode="test",
+                raw_data_root=None,
+            )
+
+            test_data_loader = torch.utils.data.DataLoader(
+                dataset=test_set,
+                batch_size=config["test_batchSize"],
+                shuffle=False,
+                num_workers=int(config["workers"]),
+                collate_fn=test_set.collate_fn,
+                drop_last=(test_name == "DeepFakeDetection"),
+            )
+
+            test_data_loaders[test_name] = test_data_loader
 
     logging.info(f"Prepared {len(test_data_loaders)} test data loaders")
     return test_data_loaders
@@ -349,20 +381,26 @@ def main():
     config["save_feat"] = args.save_feat
     config["ddp"] = args.ddp
 
-    # Override with command line arguments
+    # Set dataset paths from command line arguments
+    train_dataset_paths = None
+    test_dataset_paths = None
+
     if args.train_dataset:
-        config["train_dataset"] = args.train_dataset
+        train_dataset_paths = args.train_dataset
+        logging.info(f"Using train dataset paths: {train_dataset_paths}")
     if args.test_dataset:
-        config["test_dataset"] = args.test_dataset
+        test_dataset_paths = args.test_dataset
+        logging.info(f"Using test dataset paths: {test_dataset_paths}")
 
     # Set pretrained weights path
     if args.pretrained_weights:
         config["pretrained_checkpoint"] = args.pretrained_weights
 
-    # Set raw data root from command line or config file
+    # Set raw data root from command line or config file (for backward compatibility)
     raw_data_root = args.raw_data_dir or config.get("raw_data_root")
-    if raw_data_root:
+    if raw_data_root and not train_dataset_paths:
         logging.info(f"Using raw data mode with root: {raw_data_root}")
+        train_dataset_paths = [raw_data_root]
 
     # Create logger
     logger_path = config["log_dir"]
@@ -385,13 +423,24 @@ def main():
         logger.addFilter(RankFilter(0))
 
     # Prepare data loaders
-    dataset_class = DatasetFactory.get_dataset_class_name(config, raw_data_root)
-    logging.info(f"Using {dataset_class} for data loading")
-    if raw_data_root:
-        logging.info(f"Raw data directory: {raw_data_root}")
+    if train_dataset_paths:
+        dataset_class = DatasetFactory.get_dataset_class_name(
+            config,
+            train_dataset_paths,
+        )
+        logging.info(f"Using {dataset_class} for training data loading")
+        logging.info(f"Training dataset paths: {train_dataset_paths}")
 
-    train_data_loader = prepare_training_data(config, raw_data_root)
-    test_data_loaders = prepare_testing_data(config, raw_data_root)
+    if test_dataset_paths:
+        test_dataset_class = DatasetFactory.get_dataset_class_name(
+            config,
+            test_dataset_paths,
+        )
+        logging.info(f"Using {test_dataset_class} for testing data loading")
+        logging.info(f"Testing dataset paths: {test_dataset_paths}")
+
+    train_data_loader = prepare_training_data(config, train_dataset_paths)
+    test_data_loaders = prepare_testing_data(config, test_dataset_paths)
 
     # Initialize model
     logger.info("Initializing Effort model")

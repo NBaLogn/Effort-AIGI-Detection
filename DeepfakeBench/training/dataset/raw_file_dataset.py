@@ -8,7 +8,6 @@ import logging
 import os
 import random
 from copy import deepcopy
-import re
 
 import cv2
 import numpy as np
@@ -39,56 +38,154 @@ class RawFileDataset(data.Dataset):
     # Directory name synonyms for real and fake classes
     REAL_SYNONYMS = [
         # Core terms
-        "real", "original", "natural",
+        "real",
+        "original",
+        "natural",
         # Variations with numbers
-        "0_real", "real_0", "0real", "real0",
-        "original_0", "natural_0",
+        "0_real",
+        "real_0",
+        "0real",
+        "real0",
+        "original_0",
+        "natural_0",
         # Common prefixes/suffixes
-        "0real", "real0", "real_", "_real",
-        "original", "original_", "_original",
-        "natural", "natural_", "_natural",
+        "0real",
+        "real0",
+        "real_",
+        "_real",
+        "original",
+        "original_",
+        "_original",
+        "natural",
+        "natural_",
+        "_natural",
         # Alternative terms
-        "authentic", "genuine", "true",
+        "authentic",
+        "genuine",
+        "true",
         # Case variations
-        "Real", "REAL", "Original", "ORIGINAL", "Natural", "NATURAL",
-        "Authentic", "AUTHENTIC", "Genuine", "GENUINE", "True", "TRUE",
+        "Real",
+        "REAL",
+        "Original",
+        "ORIGINAL",
+        "Natural",
+        "NATURAL",
+        "Authentic",
+        "AUTHENTIC",
+        "Genuine",
+        "GENUINE",
+        "True",
+        "TRUE",
         # Combined terms
-        "real_images", "original_images", "natural_images",
-        "real_data", "original_data", "natural_data",
-        "real_samples", "original_samples", "natural_samples",
-        "real_content", "original_content", "natural_content",
+        "real_images",
+        "original_images",
+        "natural_images",
+        "real_data",
+        "original_data",
+        "natural_data",
+        "real_samples",
+        "original_samples",
+        "natural_samples",
+        "real_content",
+        "original_content",
+        "natural_content",
     ]
 
     FAKE_SYNONYMS = [
         # Core terms
-        "fake", "synthetic", "ai", "generated",
+        "fake",
+        "synthetic",
+        "ai",
+        "generated",
         # Variations with numbers
-        "1_fake", "fake_1", "1fake", "fake1",
-        "1_synthetic", "synthetic_1", "1synthetic", "synthetic1",
-        "1_ai", "ai_1", "1ai", "ai1",
-        "1_generated", "generated_1", "1generated", "generated1",
+        "1_fake",
+        "fake_1",
+        "1fake",
+        "fake1",
+        "1_synthetic",
+        "synthetic_1",
+        "1synthetic",
+        "synthetic1",
+        "1_ai",
+        "ai_1",
+        "1ai",
+        "ai1",
+        "1_generated",
+        "generated_1",
+        "1generated",
+        "generated1",
         # Common prefixes/suffixes
-        "fake_", "_fake", "synthetic_", "_synthetic",
-        "ai_", "_ai", "generated_", "_generated",
+        "fake_",
+        "_fake",
+        "synthetic_",
+        "_synthetic",
+        "ai_",
+        "_ai",
+        "generated_",
+        "_generated",
         # Alternative terms
-        "manipulated", "forged", "altered", "modified",
-        "deepfake", "generated", "synthesized",
+        "manipulated",
+        "forged",
+        "altered",
+        "modified",
+        "deepfake",
+        "generated",
+        "synthesized",
         # Case variations
-        "Fake", "FAKE", "Synthetic", "SYNTHETIC", "AI", "Artificial",
-        "Generated", "GENERATED", "Manipulated", "MANIPULATED",
-        "Forged", "FORGED", "Altered", "ALTERED", "Modified", "MODIFIED",
-        "Deepfake", "DEEPFAKE", "Synthesized", "SYNTHESIZED",
+        "Fake",
+        "FAKE",
+        "Synthetic",
+        "SYNTHETIC",
+        "AI",
+        "Artificial",
+        "Generated",
+        "GENERATED",
+        "Manipulated",
+        "MANIPULATED",
+        "Forged",
+        "FORGED",
+        "Altered",
+        "ALTERED",
+        "Modified",
+        "MODIFIED",
+        "Deepfake",
+        "DEEPFAKE",
+        "Synthesized",
+        "SYNTHESIZED",
         # Combined terms
-        "fake_images", "synthetic_images", "ai_images", "generated_images",
-        "fake_data", "synthetic_data", "ai_data", "generated_data",
-        "fake_samples", "synthetic_samples", "ai_samples", "generated_samples",
-        "fake_content", "synthetic_content", "ai_content", "generated_content",
-        "manipulated_content", "forged_content", "altered_content",
+        "fake_images",
+        "synthetic_images",
+        "ai_images",
+        "generated_images",
+        "fake_data",
+        "synthetic_data",
+        "ai_data",
+        "generated_data",
+        "fake_samples",
+        "synthetic_samples",
+        "ai_samples",
+        "generated_samples",
+        "fake_content",
+        "synthetic_content",
+        "ai_content",
+        "generated_content",
+        "manipulated_content",
+        "forged_content",
+        "altered_content",
         # Common dataset patterns
-        "fake", "fakes", "fake_images", "fake_videos",
-        "synthetic", "synthetics", "synthetic_images", "synthetic_videos",
-        "ai_generated", "ai_gen", "generated_ai",
-        "deepfake", "deepfakes",
+        "fake",
+        "fakes",
+        "fake_images",
+        "fake_videos",
+        "synthetic",
+        "synthetics",
+        "synthetic_images",
+        "synthetic_videos",
+        "ai_generated",
+        "ai_gen",
+        "generated_ai",
+        "deepfake",
+        "deepfakes",
     ]
 
     def __init__(
@@ -226,7 +323,7 @@ class RawFileDataset(data.Dataset):
                 f"Expected directories containing real/fake synonyms. "
                 f"Found directories: {all_subdirs}. "
                 f"Real synonyms: {self.REAL_SYNONYMS[:5]}... "
-                f"Fake synonyms: {self.FAKE_SYNONYMS[:5]}..."
+                f"Fake synonyms: {self.FAKE_SYNONYMS[:5]}...",
             )
 
         logger.info(f"Found real directories: {found_real_dirs}")
@@ -235,31 +332,31 @@ class RawFileDataset(data.Dataset):
     def _is_real_directory(self, dir_name: str) -> bool:
         """Check if directory name matches real synonyms."""
         dir_lower = dir_name.lower()
-        
+
         # Exact matches
         if dir_lower in [s.lower() for s in self.REAL_SYNONYMS]:
             return True
-        
+
         # Partial matches - check if directory name contains any real synonym
         for synonym in self.REAL_SYNONYMS:
             if synonym.lower() in dir_lower:
                 return True
-        
+
         return False
 
     def _is_fake_directory(self, dir_name: str) -> bool:
         """Check if directory name matches fake synonyms."""
         dir_lower = dir_name.lower()
-        
+
         # Exact matches
         if dir_lower in [s.lower() for s in self.FAKE_SYNONYMS]:
             return True
-        
+
         # Partial matches - check if directory name contains any fake synonym
         for synonym in self.FAKE_SYNONYMS:
             if synonym.lower() in dir_lower:
                 return True
-        
+
         return False
 
     def _discover_and_build_index(self):
@@ -280,7 +377,7 @@ class RawFileDataset(data.Dataset):
         # Process each directory
         for subdir in all_subdirs:
             dir_path = os.path.join(self.raw_data_root, subdir)
-            
+
             if self._is_real_directory(subdir):
                 label = 0
                 label_name = "real"
@@ -320,10 +417,9 @@ class RawFileDataset(data.Dataset):
         # Check our synonym lists
         if self._is_real_directory(dir_name):
             return 0
-        elif self._is_fake_directory(dir_name):
+        if self._is_fake_directory(dir_name):
             return 1
-        else:
-            raise ValueError(f"Cannot determine label for directory: {dir_name}")
+        raise ValueError(f"Cannot determine label for directory: {dir_name}")
 
     def _process_directory_get_samples(
         self,
@@ -759,4 +855,93 @@ class RawFileDataset(data.Dataset):
             "image_list": self.image_list,
             "label_list": self.label_list,
             "video_name_list": self.video_name_list,
+        }
+
+
+class MultiRawFileDataset(data.Dataset):
+    """Dataset class that combines multiple RawFileDataset instances.
+
+    This allows training/evaluation on multiple raw dataset directories simultaneously.
+    """
+
+    def __init__(
+        self,
+        config: dict,
+        mode: str,
+        raw_data_roots: list[str],
+    ):
+        """Initialize the MultiRawFileDataset.
+
+        Args:
+            config: Configuration dictionary
+            mode: "train" or "test" mode
+            raw_data_roots: List of paths to raw data directories
+        """
+        self.config = config
+        self.mode = mode
+        self.raw_data_roots = raw_data_roots
+
+        # Create individual datasets
+        self.datasets = []
+        self.cumulative_lengths = [0]
+
+        for root in raw_data_roots:
+            dataset = RawFileDataset(config, mode, root)
+            self.datasets.append(dataset)
+            self.cumulative_lengths.append(self.cumulative_lengths[-1] + len(dataset))
+
+        logger.info(
+            f"MultiRawFileDataset initialized with {len(self.datasets)} datasets "
+            f"and {len(self)} total samples",
+        )
+
+    def __len__(self) -> int:
+        """Get total dataset length."""
+        return self.cumulative_lengths[-1]
+
+    def __getitem__(self, index: int):
+        """Get item at index across all datasets."""
+        # Find which dataset this index belongs to
+        dataset_idx = 0
+        for i, cum_len in enumerate(self.cumulative_lengths[1:], 1):
+            if index < cum_len:
+                dataset_idx = i - 1
+                break
+
+        # Get the local index within that dataset
+        local_index = index - self.cumulative_lengths[dataset_idx]
+
+        return self.datasets[dataset_idx][local_index]
+
+    @staticmethod
+    def collate_fn(batch: list[tuple]) -> dict[str, torch.Tensor]:
+        """Collate function for DataLoader - delegate to RawFileDataset."""
+        return RawFileDataset.collate_fn(batch)
+
+    def get_dataset_info(self) -> dict:
+        """Get combined dataset information."""
+        total_samples = 0
+        total_real = 0
+        total_fake = 0
+        all_images = []
+        all_labels = []
+        all_video_names = []
+
+        for i, dataset in enumerate(self.datasets):
+            info = dataset.get_dataset_info()
+            total_samples += info["num_samples"]
+            total_real += info["num_real"]
+            total_fake += info["num_fake"]
+            all_images.extend(info["image_list"])
+            all_labels.extend(info["label_list"])
+            all_video_names.extend(info["video_name_list"])
+
+        return {
+            "num_samples": total_samples,
+            "num_real": total_real,
+            "num_fake": total_fake,
+            "image_list": all_images,
+            "label_list": all_labels,
+            "video_name_list": all_video_names,
+            "num_datasets": len(self.datasets),
         }

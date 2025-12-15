@@ -8,9 +8,10 @@ import logging
 from dataset.abstract_dataset import DeepfakeAbstractBaseDataset
 
 try:
-    from dataset.raw_file_dataset import RawFileDataset
+    from dataset.raw_file_dataset import MultiRawFileDataset, RawFileDataset
 except ImportError:
     RawFileDataset = None
+    MultiRawFileDataset = None
 
 logger = logging.getLogger(__name__)
 
@@ -22,14 +23,14 @@ class DatasetFactory:
     def create_dataset(
         config: dict,
         mode: str,
-        raw_data_root: str | None = None,
+        raw_data_root: str | list[str] | None = None,
     ) -> DeepfakeAbstractBaseDataset | RawFileDataset:
         """Create the appropriate dataset based on configuration and available data.
 
         Args:
             config: Configuration dictionary
             mode: "train" or "test" mode
-            raw_data_root: Optional path to raw data directory
+            raw_data_root: Optional path(s) to raw data directory/directories
 
         Returns:
             Appropriate dataset instance
@@ -48,6 +49,19 @@ class DatasetFactory:
                     msg,
                 )
 
+            # Handle multiple dataset paths
+            if isinstance(raw_data_root, list):
+                if len(raw_data_root) == 1:
+                    logger.info(
+                        "Using RawFileDataset with data from %s",
+                        raw_data_root[0],
+                    )
+                    return RawFileDataset(config, mode, raw_data_root[0])
+                logger.info(
+                    "Using MultiRawFileDataset with data from %s",
+                    raw_data_root,
+                )
+                return MultiRawFileDataset(config, mode, raw_data_root)
             logger.info("Using RawFileDataset with data from %s", raw_data_root)
             return RawFileDataset(config, mode, raw_data_root)
 
@@ -58,9 +72,11 @@ class DatasetFactory:
     @staticmethod
     def get_dataset_class_name(
         config: dict,
-        raw_data_root: str | None = None,
+        raw_data_root: str | list[str] | None = None,
     ) -> str:
         """Get the name of the dataset class that would be created."""
         if raw_data_root and RawFileDataset is not None:
+            if isinstance(raw_data_root, list) and len(raw_data_root) > 1:
+                return "MultiRawFileDataset"
             return "RawFileDataset"
         return "DeepfakeAbstractBaseDataset"

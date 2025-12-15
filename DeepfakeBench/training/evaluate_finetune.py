@@ -11,7 +11,7 @@ from datetime import datetime
 
 import torch
 import yaml
-from dataset.abstract_dataset import DeepfakeAbstractBaseDataset
+from dataset.factory import DatasetFactory
 from detectors import DETECTOR
 from logger import create_logger
 from metrics.base_metrics_class import calculate_metrics_for_train
@@ -40,7 +40,7 @@ def parse_arguments():
         "--test_dataset",
         nargs="+",
         required=True,
-        help="Test dataset(s)",
+        help="Test dataset path(s) - raw file directories",
     )
     parser.add_argument(
         "--output_dir",
@@ -116,39 +116,21 @@ def load_model(config, weights_path, device):
         raise
 
 
-def prepare_test_data(config, test_dataset, batch_size):
+def prepare_test_data(config, test_dataset_paths, batch_size):
     """Prepare test data loader."""
     # Update config for test dataset
     test_config = config.copy()
-    test_config["test_dataset"] = test_dataset
     test_config["test_batchSize"] = batch_size
 
-    logging.info(f"Preparing test data for {test_dataset}")
+    logging.info(f"Preparing test data for paths: {test_dataset_paths}")
 
-    # Add fallback for dataset_json_folder if not in config
-    if "dataset_json_folder" not in test_config:
-        test_config["dataset_json_folder"] = (
-            "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json"
-        )
+    # For raw file datasets, we don't need JSON folder or label_dict fallbacks
+    # The RawFileDataset will handle label inference automatically
 
-    # Add fallback for label_dict if not in config
-    if "label_dict" not in test_config:
-        # Add basic label_dict for common datasets
-        test_config["label_dict"] = {
-            "FF-real": 0,
-            "FF-F2F": 1,
-            "FF-DF": 1,
-            "FF-FS": 1,
-            "FF-NT": 1,
-            "CelebDFv2_real": 0,
-            "CelebDFv2_fake": 1,
-            "UADFV_Real": 0,
-            "UADFV_Fake": 1,
-        }
-
-    test_set = DeepfakeAbstractBaseDataset(
+    test_set = DatasetFactory.create_dataset(
         config=test_config,
         mode="test",
+        raw_data_root=test_dataset_paths,
     )
 
     test_loader = DataLoader(
@@ -275,8 +257,9 @@ def main():
     with open(args.detector_config) as f:
         config = yaml.safe_load(f)
 
-    # Update config with test datasets
-    config["test_dataset"] = args.test_dataset
+    # Store test dataset paths
+    test_dataset_paths = args.test_dataset
+    logging.info(f"Using test dataset paths: {test_dataset_paths}")
 
     # Create output directory
     output_dir = args.output_dir
@@ -298,22 +281,25 @@ def main():
     # Prepare test data and evaluate
     all_results = {}
 
-    for dataset in args.test_dataset:
+    # For multiple test datasets, evaluate each one separately
+    for i, dataset_path in enumerate(test_dataset_paths):
         try:
-            # Prepare test loader
-            test_loader = prepare_test_data(config, dataset, args.batch_size)
+            dataset_name = f"dataset_{i + 1}_{os.path.basename(dataset_path)}"
+
+            # Prepare test loader for this specific dataset
+            test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
 
             # Evaluate
-            metrics = evaluate_model(model, test_loader, device, dataset)
+            metrics = evaluate_model(model, test_loader, device, dataset_name)
 
             # Save results
-            save_results(metrics, dataset, output_dir, config)
+            save_results(metrics, dataset_name, output_dir, config)
 
             # Store results
-            all_results[dataset] = metrics
+            all_results[dataset_name] = metrics
 
         except Exception as e:
-            logger.exception(f"Failed to evaluate on {dataset}: {e}")
+            logger.exception(f"Failed to evaluate on {dataset_path}: {e}")
             continue
 
     # Save summary
