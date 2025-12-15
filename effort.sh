@@ -21,7 +21,7 @@
 #use direct image loading instead of the processed images
 uv run DeepfakeBench/training/finetune.py \
     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
-    --raw_data_dir /Volumes/Crucial/Large_Downloads/AI/DATASETS/Chameleon \
+    --raw_data_dir /Users/logan/Downloads/Chameleon \
     --pretrained_weights "/Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_chameleon.pth"
 
 # =============================================
