@@ -89,6 +89,7 @@ class RawFileDataset(data.Dataset):
         "real_content",
         "original_content",
         "natural_content",
+        "nature",
     ]
 
     FAKE_SYNONYMS = [

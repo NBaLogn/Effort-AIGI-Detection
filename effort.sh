@@ -19,19 +19,21 @@
 #     --pretrained_weights /Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort_clip_L14_trainOn_FaceForensic.pth
 
 #use direct image loading instead of the processed images
-uv run DeepfakeBench/training/finetune.py \
-    --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
-    --raw_data_dir /Users/logan/Downloads/Chameleon \
-    --pretrained_weights "/Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_chameleon.pth"
+#use direct paths
+# uv run DeepfakeBench/training/finetune.py \
+#     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
+#     --train_dataset "/Volumes/Crucial/Large_Downloads/AI/DATASETS/GenImage/BigGAN/imagenet_ai_0419_biggan/train" \
+#     --test_dataset "/Volumes/Crucial/Large_Downloads/AI/DATASETS/GenImage/BigGAN/imagenet_ai_0419_biggan/val" \
+#     --pretrained_weights "/Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_FaceForensic.pth"
 
 # =============================================
 # 3. EVALUATION OF FINE-TUNED MODEL
 # =============================================
-# uv run DeepfakeBench/training/evaluate_finetune.py \
-#     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
-#     --weights /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/effort_2025-12-11-08-19-01/test/UADFV/ckpt_best.pth \
-#     --test_dataset UADFV Celeb-DF-v2 FaceForensics++\
-#     --output_dir evaluation_results
+uv run DeepfakeBench/training/evaluate_finetune.py \
+    --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
+    --weights "/Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_FaceForensic.pth" \
+    --test_dataset "/Volumes/Crucial/Large_Downloads/AI/DATASETS/GenImage/BigGAN/imagenet_ai_0419_biggan/val" "/Volumes/Crucial/Large_Downloads/AI/DATASETS/GenImage/glide/imagenet_glide/val" \
+    --output_dir evaluation_results
 
 # =============================================
 # 4. INFERENCE WITH FINE-TUNED MODEL
