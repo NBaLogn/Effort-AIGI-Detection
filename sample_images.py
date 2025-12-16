@@ -77,55 +77,35 @@ def copy_images(sampled_images: list[Path], dest_dir: Path) -> None:
         dest_dir: Destination directory
     """
     for img_path in sampled_images:
-        # Calculate relative path from the category directory (ai or nature)
-        # Find the category directory (ai or nature) in the path
-        parts = img_path.parts
-        try:
-            category_index = (
-                parts.index("ai") if "ai" in parts else parts.index("nature")
-            )
-            relative_path = Path(*parts[category_index:])
-            dest_path = dest_dir / relative_path
-            dest_path.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(img_path, dest_path)
-            logger.debug("Copied %s to %s", img_path, dest_path)
-        except ValueError:
-            logger.exception("Could not determine category for %s", img_path)
-            continue
+        # For fake/real structure, just copy to the destination directory
+        dest_path = dest_dir / img_path.name
+        dest_path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(img_path, dest_path)
+        logger.debug("Copied %s to %s", img_path, dest_path)
 
 
-def process_method(method_dir: Path, sample_size: int, dest_root: Path) -> None:
-    """Process a single method directory.
+def process_dataset(source_dir: Path, sample_size: int, dest_dir: Path) -> None:
+    """Process a dataset with fake and real subfolders.
 
     Args:
-        method_dir: Path to method directory (e.g., Method1)
+        source_dir: Path to source directory containing fake and real subfolders
         sample_size: Number of images to sample per category
-        dest_root: Root destination directory
+        dest_dir: Destination directory
     """
-    method_name = method_dir.name
-    dest_method_dir = dest_root / method_name
-
-    for split in ["train", "val"]:
-        split_dir = method_dir / split
-        if not split_dir.exists():
-            logger.warning("Split directory %s does not exist", split_dir)
+    for category in ["fake", "real"]:
+        category_dir = source_dir / category
+        if not category_dir.exists():
+            logger.warning("Category directory %s does not exist", category_dir)
             continue
 
-        dest_split_dir = dest_method_dir / split
+        images = find_images(category_dir)
+        if not images:
+            logger.warning("No images found in %s", category_dir)
+            continue
 
-        for category in ["ai", "nature"]:
-            category_dir = split_dir / category
-            if not category_dir.exists():
-                logger.warning("Category directory %s does not exist", category_dir)
-                continue
-
-            images = find_images(category_dir)
-            if not images:
-                logger.warning("No images found in %s", category_dir)
-                continue
-
-            sampled_images = sample_images(images, sample_size)
-            copy_images(sampled_images, dest_split_dir)
+        sampled_images = sample_images(images, sample_size)
+        dest_category_dir = dest_dir / category
+        copy_images(sampled_images, dest_category_dir)
 
 
 def main() -> None:
@@ -162,15 +142,9 @@ def main() -> None:
     logger.info("Output directory: %s", dest_dir)
     logger.info("Sample size per category: %d", args.sample_size)
 
-    # Process each method
-    for method_num in range(1, 9):
-        method_name = f"Method{method_num}"
-        method_dir = source_dir / method_name
-        if method_dir.exists():
-            logger.info("Processing %s", method_name)
-            process_method(method_dir, args.sample_size, dest_dir)
-        else:
-            logger.warning("Method directory %s does not exist", method_dir)
+    # Process the dataset
+    logger.info("Processing %s", source_dir.name)
+    process_dataset(source_dir, args.sample_size, dest_dir)
 
     logger.info("Image sampling completed")
 
