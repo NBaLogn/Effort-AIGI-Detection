@@ -20,20 +20,20 @@
 
 #use direct image loading instead of the processed images
 #use direct paths
-# uv run DeepfakeBench/training/finetune.py \
-#     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
-#     --train_dataset "/Volumes/Crucial/Large_Downloads/SAMPLED/GenImage_sampled2/train" \
-#     --test_dataset "/Volumes/Crucial/Large_Downloads/SAMPLED/GenImage_sampled2/val" \
-#     --pretrained_weights "/Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_FaceForensic.pth"
+uv run DeepfakeBench/training/finetune.py \
+    --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
+    --train_dataset "/Volumes/Crucial/Large_Downloads/AI/DATASETS/Chameleon_retinafaces" \
+    --test_dataset "/Volumes/Crucial/Large_Downloads/SAMPLED/GenImage_sampled2/val" \
+    --pretrained_weights "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/effort_ff_12-16-15-57-38/test/avg/ckpt_best.pth"
 
 # =============================================
 # 3. EVALUATION OF FINE-TUNED MODEL
 # =============================================
-uv run DeepfakeBench/training/evaluate_finetune.py \
-    --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
-    --weights "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/effort_ff_12-16-15-57-38/test/avg/ckpt_best.pth" \
-    --test_dataset "/Volumes/Crucial/Large_Downloads/SAMPLED/GenImage_sampled2/val" \
-    --output_dir evaluation_results
+# uv run DeepfakeBench/training/evaluate_finetune.py \
+#     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
+#     --weights "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/effort_ff_12-16-15-57-38/test/avg/ckpt_best.pth" \
+#     --test_dataset "/Volumes/Crucial/Large_Downloads/SAMPLED/GenImage_sampled2/val" \
+#     --output_dir evaluation_results
 #     "/Volumes/Crucial/Large_Downloads/SAMPLED/df40/deepfacelab_sampled" \
 #     "/Volumes/Crucial/Large_Downloads/SAMPLED/df40/heygen_new_sampled" \
 #     "/Volumes/Crucial/Large_Downloads/SAMPLED/df40/MidJourney_sampled" \
