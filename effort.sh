@@ -22,8 +22,8 @@
 #use direct paths
 # uv run DeepfakeBench/training/finetune.py \
 #     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
-#     --train_dataset "/Volumes/Crucial/Large_Downloads/AI/DATASETS/GenImage/BigGAN/imagenet_ai_0419_biggan/train" \
-#     --test_dataset "/Volumes/Crucial/Large_Downloads/AI/DATASETS/GenImage/BigGAN/imagenet_ai_0419_biggan/val" \
+#     --train_dataset "/Volumes/Crucial/Large_Downloads/SAMPLED/GenImage_sampled2/train" \
+#     --test_dataset "/Volumes/Crucial/Large_Downloads/SAMPLED/GenImage_sampled2/val" \
 #     --pretrained_weights "/Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_FaceForensic.pth"
 
 # =============================================
@@ -32,7 +32,14 @@
 uv run DeepfakeBench/training/evaluate_finetune.py \
     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
     --weights "/Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_FaceForensic.pth" \
-    --test_dataset "/Volumes/Crucial/Large_Downloads/AI/DATASETS/GenImage/BigGAN/imagenet_ai_0419_biggan/val" "/Volumes/Crucial/Large_Downloads/AI/DATASETS/GenImage/glide/imagenet_glide/val" \
+    --test_dataset "/Volumes/Crucial/Large_Downloads/SAMPLED/df40/CollabDiff_sampled" \
+    "/Volumes/Crucial/Large_Downloads/SAMPLED/df40/deepfacelab_sampled" \
+    "/Volumes/Crucial/Large_Downloads/SAMPLED/df40/heygen_new_sampled" \
+    "/Volumes/Crucial/Large_Downloads/SAMPLED/df40/MidJourney_sampled" \
+    "/Volumes/Crucial/Large_Downloads/SAMPLED/df40/stargan_sampled" \
+    "/Volumes/Crucial/Large_Downloads/SAMPLED/df40/starganv2_sampled" \
+    "/Volumes/Crucial/Large_Downloads/SAMPLED/df40/styleclip_sampled" \
+    /Volumes/Crucial/Large_Downloads/SAMPLED/df40/whichfaceisreal_sampled \
     --output_dir evaluation_results
 
 # =============================================

@@ -1,0 +1,87 @@
+
+{
+  "__info": "model pretrained on ff, finetuned on genimage_s, evaluated on df40_s",
+  "datasets": {
+    "dataset_1_CollabDiff_sampled": {
+      "auc": 0.9380000000000001,
+      "eer": 0.062,
+      "accuracy": 0.998003992015968,
+      "ap": 0.03125,
+      "precision": 0.004310344827586207,
+      "recall": 1.0,
+      "f1": 0.008583690987124463,
+      "sample_count": 501
+    },
+    "dataset_2_deepfacelab_sampled": {
+      "auc": 0.7433578206305479,
+      "eer": 0.3074074074074074,
+      "accuracy": 0.52734375,
+      "ap": 0.6854351722054366,
+      "precision": 0.4869215291750503,
+      "recall": 1.0,
+      "f1": 0.6549391069012178,
+      "sample_count": 512
+    },
+    "dataset_3_heygen_new_sampled": {
+      "auc": 0.9752334152334152,
+      "eer": 0.08108108108108109,
+      "accuracy": 0.3592233009708738,
+      "ap": 0.9847948153292063,
+      "precision": 0.734966592427617,
+      "recall": 1.0,
+      "f1": 0.8472400513478819,
+      "sample_count": 515
+    },
+    "dataset_4_MidJourney_sampled": {
+      "auc": 0.7844277108433735,
+      "eer": 0.29,
+      "accuracy": 0.501002004008016,
+      "ap": 0.7049304727176502,
+      "precision": 0.6750348675034867,
+      "recall": 0.9718875502008032,
+      "f1": 0.7967078189300412,
+      "sample_count": 998
+    },
+    "dataset_5_stargan_sampled": {
+      "auc": 0.9540219999999999,
+      "eer": 0.104,
+      "accuracy": 0.5,
+      "ap": 0.9458843486279347,
+      "precision": 0.5482456140350878,
+      "recall": 1.0,
+      "f1": 0.7082152974504249,
+      "sample_count": 1000
+    },
+    "dataset_6_starganv2_sampled": {
+      "auc": 0.8153160027469769,
+      "eer": 0.2625250501002004,
+      "accuracy": 0.5,
+      "ap": 0.8119827890950447,
+      "precision": 0.5412147505422994,
+      "recall": 1.0,
+      "f1": 0.7023223082336383,
+      "sample_count": 998
+    },
+    "dataset_7_styleclip_sampled": {
+      "auc": 0.9896560000000001,
+      "eer": 0.042,
+      "accuracy": 0.5,
+      "ap": 0.988531629402283,
+      "precision": 0.6807639836289222,
+      "recall": 0.998,
+      "f1": 0.8094079480940795,
+      "sample_count": 1000
+    },
+    "dataset_8_whichfaceisreal_sampled": {
+      "auc": 0.869848,
+      "eer": 0.208,
+      "accuracy": 0.5,
+      "ap": 0.8437479994764714,
+      "precision": 0.6867647058823529,
+      "recall": 0.934,
+      "f1": 0.7915254237288135,
+      "sample_count": 1000
+    }
+  },
+  "timestamp": "2025-12-16T17:20:15.024816"
+}

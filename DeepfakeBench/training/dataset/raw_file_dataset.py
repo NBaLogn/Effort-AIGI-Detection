@@ -404,6 +404,9 @@ class RawFileDataset(data.Dataset):
         # Interleave real and fake samples for balanced batches
         self._interleave_samples(real_samples, fake_samples)
 
+        # Remove faulty images from the dataset
+        self._remove_faulty_images()
+
         logger.info(
             f"Dataset contains {len(real_samples)} real and {len(fake_samples)} fake samples",
         )
@@ -646,23 +649,58 @@ class RawFileDataset(data.Dataset):
             if real_idx >= len(real_samples) and fake_idx >= len(fake_samples):
                 break
 
+    def _remove_faulty_images(self):
+        """Remove images that cannot be loaded from the dataset."""
+        logger.info("Checking for faulty images...")
+
+        valid_indices = []
+        faulty_count = 0
+
+        for i, image_path in enumerate(self.image_list):
+            try:
+                # Try to load the image
+                self._load_rgb(image_path)
+                valid_indices.append(i)
+            except Exception as e:
+                logger.warning(f"Removing faulty image: {image_path} - {e}")
+                faulty_count += 1
+
+        if faulty_count > 0:
+            # Filter out faulty images
+            self.image_list = [self.image_list[i] for i in valid_indices]
+            self.label_list = [self.label_list[i] for i in valid_indices]
+            self.video_name_list = [self.video_name_list[i] for i in valid_indices]
+
+            logger.info(
+                f"Removed {faulty_count} faulty images. Remaining: {len(self.image_list)}",
+            )
+        else:
+            logger.info("No faulty images found.")
+
     def _load_rgb(self, file_path: str) -> Image.Image:
         """Load an RGB image from file path and resize."""
         try:
+            # Try OpenCV first
             img = cv2.imread(file_path)
-            if img is None:
-                img = Image.open(file_path)
-                img = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-                if img is None:
-                    raise ValueError(f"Loaded image is None: {file_path}")
+            if img is not None:
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+                img = cv2.resize(
+                    img,
+                    (self.resolution, self.resolution),
+                    interpolation=cv2.INTER_CUBIC,
+                )
+                return Image.fromarray(np.array(img, dtype=np.uint8))
 
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-            img = cv2.resize(
-                img,
-                (self.resolution, self.resolution),
-                interpolation=cv2.INTER_CUBIC,
-            )
-            return Image.fromarray(np.array(img, dtype=np.uint8))
+            # If OpenCV fails, try PIL
+            try:
+                img = Image.open(file_path)
+                img = img.convert("RGB")
+                img = img.resize((self.resolution, self.resolution), Image.BICUBIC)
+                return img
+            except Exception as pil_error:
+                logger.error(f"Error loading image {file_path}: {pil_error}")
+                raise ValueError(f"Cannot identify image file: {file_path}")
+
         except Exception as e:
             logger.error(f"Error loading image {file_path}: {e}")
             raise
@@ -675,13 +713,14 @@ class RawFileDataset(data.Dataset):
         try:
             mask = cv2.imread(file_path, 0)
             if mask is None:
+                logger.warning(f"Mask file exists but could not be read: {file_path}")
                 return np.zeros((self.resolution, self.resolution, 1))
             mask = cv2.resize(mask, (self.resolution, self.resolution)) / 255
             mask = np.expand_dims(mask, axis=2)
             return np.float32(mask)
         except Exception as e:
             logger.warning(f"Error loading mask {file_path}: {e}")
-            return None
+            return np.zeros((self.resolution, self.resolution, 1))
 
     def _load_landmark(self, file_path: str) -> np.ndarray | None:
         """Load 2D facial landmarks."""
@@ -740,68 +779,89 @@ class RawFileDataset(data.Dataset):
         index: int,
     ) -> tuple[torch.Tensor, int, np.ndarray | None, np.ndarray | None]:
         """Get item at index."""
-        image_path = self.image_list[index]
-        label = self.label_list[index]
+        # Try to get a valid image, skipping faulty ones
+        max_attempts = 5
+        attempt = 0
 
-        try:
-            # Load image
-            image = self._load_rgb(image_path)
-            image_np = np.array(image)
+        while attempt < max_attempts:
+            image_path = self.image_list[index]
+            label = self.label_list[index]
 
-            # Get corresponding mask and landmark paths
-            mask_path = None
-            landmark_path = None
+            try:
+                # Load image
+                image = self._load_rgb(image_path)
+                image_np = np.array(image)
 
-            if "frames" in image_path.split(os.sep):
-                # For video frames, look for landmarks and masks
-                frame_dir = os.path.dirname(image_path)
-                video_dir = os.path.basename(frame_dir)
-                parent_dir = os.path.dirname(frame_dir)
+                # Get corresponding mask and landmark paths
+                mask_path = None
+                landmark_path = None
 
-                # Check for landmarks directory
-                landmarks_dir = os.path.join(parent_dir, "landmarks", video_dir)
-                if os.path.exists(landmarks_dir):
-                    frame_name = os.path.splitext(os.path.basename(image_path))[0]
-                    landmark_path = os.path.join(landmarks_dir, f"{frame_name}.npy")
+                if "frames" in image_path.split(os.sep):
+                    # For video frames, look for landmarks and masks
+                    frame_dir = os.path.dirname(image_path)
+                    video_dir = os.path.basename(frame_dir)
+                    parent_dir = os.path.dirname(frame_dir)
 
-                # Check for masks directory
-                masks_dir = os.path.join(parent_dir, "masks", video_dir)
-                if os.path.exists(masks_dir):
-                    frame_name = os.path.splitext(os.path.basename(image_path))[0]
-                    mask_path = os.path.join(masks_dir, f"{frame_name}.png")
+                    # Check for landmarks directory
+                    landmarks_dir = os.path.join(parent_dir, "landmarks", video_dir)
+                    if os.path.exists(landmarks_dir):
+                        frame_name = os.path.splitext(os.path.basename(image_path))[0]
+                        landmark_path = os.path.join(landmarks_dir, f"{frame_name}.npy")
 
-            # Load mask and landmark if needed
-            mask = (
-                self._load_mask(mask_path)
-                if (self.mode == "train" and self.with_mask)
-                else None
-            )
-            landmarks = (
-                self._load_landmark(landmark_path) if self.with_landmark else None
-            )
+                    # Check for masks directory
+                    masks_dir = os.path.join(parent_dir, "masks", video_dir)
+                    if os.path.exists(masks_dir):
+                        frame_name = os.path.splitext(os.path.basename(image_path))[0]
+                        mask_path = os.path.join(masks_dir, f"{frame_name}.png")
 
-            # Data augmentation
-            if self.mode == "train" and self.use_data_augmentation:
-                image_aug, landmarks_aug, mask_aug = self._data_aug(
-                    image_np,
-                    landmarks,
-                    mask,
+                # Load mask and landmark if needed
+                mask = (
+                    self._load_mask(mask_path)
+                    if (self.mode == "train" and self.with_mask)
+                    else None
                 )
-            else:
-                image_aug, landmarks_aug, mask_aug = (
-                    deepcopy(image_np),
-                    deepcopy(landmarks),
-                    deepcopy(mask),
+                landmarks = (
+                    self._load_landmark(landmark_path) if self.with_landmark else None
                 )
 
-            # Convert to tensor and normalize
-            image_tensor = self._normalize(self._to_tensor(image_aug))
+                # Data augmentation
+                if self.mode == "train" and self.use_data_augmentation:
+                    image_aug, landmarks_aug, mask_aug = self._data_aug(
+                        image_np,
+                        landmarks,
+                        mask,
+                    )
+                else:
+                    image_aug, landmarks_aug, mask_aug = (
+                        deepcopy(image_np),
+                        deepcopy(landmarks),
+                        deepcopy(mask),
+                    )
 
-            return image_tensor, label, landmarks_aug, mask_aug
+                # Convert to tensor and normalize
+                image_tensor = self._normalize(self._to_tensor(image_aug))
 
-        except Exception as e:
-            logger.error(f"Error processing item at index {index} ({image_path}): {e}")
-            raise
+                return image_tensor, label, landmarks_aug, mask_aug
+
+            except Exception as e:
+                logger.error(
+                    f"Error processing item at index {index} ({image_path}): {e}",
+                )
+                attempt += 1
+
+                if attempt >= max_attempts:
+                    logger.error(
+                        f"Failed to load valid image after {max_attempts} attempts, skipping this sample",
+                    )
+                    # Return a zero tensor as fallback
+                    zero_image = torch.zeros(3, self.resolution, self.resolution)
+                    return zero_image, label, None, None
+
+                # Try next index
+                index = (index + 1) % len(self.image_list)
+                logger.warning(
+                    f"Retrying with next sample (attempt {attempt}/{max_attempts})",
+                )
 
     def __len__(self) -> int:
         """Get dataset length."""
@@ -912,7 +972,19 @@ class MultiRawFileDataset(data.Dataset):
         # Get the local index within that dataset
         local_index = index - self.cumulative_lengths[dataset_idx]
 
-        return self.datasets[dataset_idx][local_index]
+        try:
+            return self.datasets[dataset_idx][local_index]
+        except Exception as e:
+            logger.warning(
+                f"Error getting item {index} from dataset {dataset_idx}: {e}",
+            )
+            # Return a zero tensor as fallback
+            zero_image = torch.zeros(
+                3,
+                self.datasets[dataset_idx].resolution,
+                self.datasets[dataset_idx].resolution,
+            )
+            return zero_image, 0, None, None
 
     @staticmethod
     def collate_fn(batch: list[tuple]) -> dict[str, torch.Tensor]:

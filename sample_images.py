@@ -70,15 +70,46 @@ def sample_images(images: list[Path], sample_size: int) -> list[Path]:
 
 
 def copy_images(sampled_images: list[Path], dest_dir: Path) -> None:
-    """Copy sampled images to destination directory, preserving relative structure.
+    """Copy sampled images to destination directory, handling duplicate names.
 
     Args:
         sampled_images: List of image paths to copy
         dest_dir: Destination directory
     """
+    used_names = set()
+
     for img_path in sampled_images:
-        # For fake/real structure, just copy to the destination directory
-        dest_path = dest_dir / img_path.name
+        # Get the relative path from the category directory (fake/real)
+        # to preserve subdirectory structure in the filename
+        parts = img_path.parts
+        try:
+            # Find the category directory (fake or real) in the path
+            category_index = (
+                parts.index("fake") if "fake" in parts else parts.index("real")
+            )
+            # Create a name that includes parent directories to avoid conflicts
+            relative_parts = parts[category_index:]
+            # Join with underscores to create a unique filename
+            unique_name = "_".join(relative_parts)
+            dest_path = dest_dir / unique_name
+        except ValueError:
+            # Fallback if category not found
+            unique_name = img_path.name
+            dest_path = dest_dir / unique_name
+
+        # Handle duplicates by adding a suffix
+        original_dest_path = dest_path
+        counter = 1
+        while dest_path in used_names:
+            name_parts = unique_name.rsplit(".", 1)
+            if len(name_parts) == 2:
+                base_name, ext = name_parts
+                dest_path = dest_dir / f"{base_name}_{counter}.{ext}"
+            else:
+                dest_path = dest_dir / f"{unique_name}_{counter}"
+            counter += 1
+
+        used_names.add(dest_path)
         dest_path.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(img_path, dest_path)
         logger.debug("Copied %s to %s", img_path, dest_path)
