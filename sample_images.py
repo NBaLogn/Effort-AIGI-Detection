@@ -19,6 +19,7 @@ from pathlib import Path
 # Constants
 IMAGE_EXTENSIONS = ["*.png", "*.jpg", "*.jpeg", "*.JPG", "*.PNG", "*.JPEG"]
 SAMPLE_SIZE_DEFAULT = 500
+NAME_PARTS_COUNT = 2
 
 # Create a logger for this module
 logger = logging.getLogger(__name__)
@@ -98,11 +99,10 @@ def copy_images(sampled_images: list[Path], dest_dir: Path) -> None:
             dest_path = dest_dir / unique_name
 
         # Handle duplicates by adding a suffix
-        original_dest_path = dest_path
         counter = 1
         while dest_path in used_names:
             name_parts = unique_name.rsplit(".", 1)
-            if len(name_parts) == 2:
+            if len(name_parts) == NAME_PARTS_COUNT:
                 base_name, ext = name_parts
                 dest_path = dest_dir / f"{base_name}_{counter}.{ext}"
             else:
