@@ -68,12 +68,12 @@ class DeviceManager:
     @staticmethod
     def get_optimal_device() -> torch.device:
         """Get optimal device with priority: CUDA > MPS > CPU."""
-        if torch.cuda.is_available():
-            device = torch.device("cuda")
-            logger.info("Using CUDA (NVIDIA GPU)")
-        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        if torch.backends.mps.is_available():
             device = torch.device("mps")
             logger.info("Using MPS (Apple Silicon GPU)")
+        elif torch.cuda.is_available():
+            device = torch.device("cuda")
+            logger.info("Using CUDA (NVIDIA GPU)")
         else:
             device = torch.device("cpu")
             logger.info("Using CPU")

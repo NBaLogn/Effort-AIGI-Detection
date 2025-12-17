@@ -26,9 +26,12 @@ parser.add_argument("--weights_path", type=str, default="./weights/effort_ckpt.p
 # parser.add_argument("--lmdb", action='store_true', default=False)
 args = parser.parse_args()
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-on_2060 = torch.cuda.is_available() and "2060" in torch.cuda.get_device_name()
+if torch.backends.mps.is_available():
+    device = torch.device("mps")
+elif torch.cuda.is_available():
+    device = torch.device("cuda")
+else:
+    raise RuntimeError("No MPS or CUDA device found. CPU validation is not supported.")
 
 
 def init_seed(config):
@@ -163,13 +166,10 @@ def main():
     ) as f:
         config2 = yaml.safe_load(f)
     config.update(config2)
-    if on_2060:
-        config["lmdb_dir"] = r"/Volumes/Crucial/Large_Downloads/AI/DATASETS/DFB/lmdbs"
-        config["train_batchSize"] = 10
-        config["workers"] = 0
-    else:
-        config["workers"] = 8
-        config["lmdb_dir"] = r"/Volumes/Crucial/Large_Downloads/AI/DATASETS/DFB/lmdbs"
+    # on_2060 logic removed, using default paths but logging them
+    config["workers"] = 8
+    config["lmdb_dir"] = r"/Volumes/Crucial/Large_Downloads/AI/DATASETS/DFB/lmdbs"
+    print(f"[WARNING] Using hardcoded path for lmdb_dir: {config['lmdb_dir']}")
     weights_path = None
     # If arguments are provided, they will overwrite the yaml settings
     if args.test_dataset:
@@ -248,7 +248,7 @@ def main():
             #      new_key = new_key.replace('classifier.', 'head.')
             new_weights[new_key] = value
 
-        model.load_state_dict(new_weights, strict=True)
+        model.load_state_dict(new_weights, strict=True) # Normalized Strict loading
         print("===> Load checkpoint done!")
     else:
         print("Fail to load the pre-trained weights")

@@ -13,7 +13,9 @@ import torch.distributed as dist
 import torch.nn.parallel
 import torch.utils.data
 import yaml
-from dataset import *
+import secrets # Added for MPS seed
+from pathlib import Path # Added for robust path handling
+from dataset.abstract_dataset import DeepfakeAbstractBaseDataset
 from detectors import DETECTOR
 from logger import RankFilter, create_logger
 from metrics.utils import parse_metric_for_print
@@ -31,6 +33,7 @@ parser.add_argument(
     default="/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/config/detector/effort.yaml",
     help="path to detector YAML file",
 )
+print(f"[WARNING] Using hardcoded default path for detector_path: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/config/detector/effort.yaml")
 parser.add_argument("--train_dataset", nargs="+")
 parser.add_argument("--test_dataset", nargs="+")
 parser.add_argument(
@@ -46,16 +49,21 @@ parser.add_argument(
     default=True,
 )
 parser.add_argument("--ddp", action="store_true", default=False)
+parser.add_argument("--dry_run", action="store_true", default=False, help="Run a single epoch for testing")
 parser.add_argument("--local_rank", type=int, default=0)
 args = parser.parse_args()
-torch.cuda.set_device(args.local_rank)
+# torch.cuda.set_device(args.local_rank) # Removed hardcoded CUDA set_device
 
 
 def init_seed(config):
     if config["manualSeed"] is None:
-        config["manualSeed"] = random.randint(1, 10000)
+        config["manualSeed"] = 1 + secrets.randbelow(10000)
     random.seed(config["manualSeed"])
-    if config["cuda"]:
+    
+    if torch.backends.mps.is_available():
+        torch.manual_seed(config["manualSeed"])
+        torch.mps.manual_seed(config["manualSeed"])
+    elif config["cuda"]:
         torch.manual_seed(config["manualSeed"])
         torch.cuda.manual_seed_all(config["manualSeed"])
 
@@ -193,7 +201,12 @@ def main():
     # parse options and load config
     with open(args.detector_path) as f:
         config = yaml.safe_load(f)
-    with open("./training/config/train_config.yaml") as f:
+    
+    # Resolve train_config.yaml relative to this script
+    script_dir = Path(__file__).resolve().parent
+    train_config_path = script_dir / "config" / "train_config.yaml"
+    
+    with open(train_config_path) as f:
         config2 = yaml.safe_load(f)
     config.update(config2)
     config["local_rank"] = args.local_rank
@@ -205,12 +218,17 @@ def main():
         config["train_dataset"] = args.train_dataset
     if args.test_dataset:
         config["test_dataset"] = args.test_dataset
-    config["save_ckpt"] = args.save_ckpt
     config["save_feat"] = args.save_feat
+    if args.dry_run:
+        config["dry_run"] = True
+        config["nEpochs"] = 0
+        config["save_feat"] = False
+    
     if config["lmdb"]:
         config["dataset_json_folder"] = (
             "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json"
         )
+        print(f"[WARNING] Using hardcoded path for dataset_json_folder: {config['dataset_json_folder']}")
     # create logger
     logger_path = config["log_dir"]
     os.makedirs(logger_path, exist_ok=True)
@@ -228,12 +246,16 @@ def main():
     init_seed(config)
 
     # set cudnn benchmark if needed
-    if config["cudnn"]:
+    if config.get("cudnn", False):
         cudnn.benchmark = True
     if config["ddp"]:
         # dist.init_process_group(backend='gloo')
+        if torch.backends.mps.is_available():
+             backend = "gloo"
+        else:
+             backend = "nccl"
         dist.init_process_group(
-            backend="nccl",
+            backend=backend,
             timeout=timedelta(minutes=30),
         )
         logger.addFilter(RankFilter(0))

@@ -26,15 +26,16 @@ Usage:
 """
 
 # Check for GPU availability with priority: CUDA > MPS > CPU
-if torch.cuda.is_available():
-    device = torch.device("cuda")
-    print("Using CUDA (NVIDIA GPU)")
-elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+# Check for GPU availability with priority: MPS > CUDA > CPU
+if torch.backends.mps.is_available():
     device = torch.device("mps")
     print("Using MPS (Apple Silicon GPU)")
+elif torch.cuda.is_available():
+    device = torch.device("cuda")
+    print("Using CUDA (NVIDIA GPU)")
 else:
+    print("No MPS or CUDA device found. Using CPU (Warning: Slow)")
     device = torch.device("cpu")
-    print("Using CPU")
 
 
 @torch.no_grad()
@@ -264,7 +265,10 @@ def parse_args():
         default=False,
         help="dlib 81 landmarks dat 文件 / 如果不需要裁剪人脸就是False",
     )
-    return p.parse_args()
+    
+    args = p.parse_args()
+    print(f"[WARNING] Using default path for detector_config: {args.detector_config}")
+    return args
 
 
 def main():

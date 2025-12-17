@@ -8,10 +8,11 @@ from utils.registry import LOSSFUNC
 class ConsistencyCos(nn.Module):
     def __init__(self):
         super(ConsistencyCos, self).__init__()
-        # # CrossEntropy Loss
         # weight=torch.Tensor([4.0, 1.0])
         # if torch.cuda.is_available():
         #     weight = weight.cuda()
+        # elif torch.backends.mps.is_available():
+        #     weight = weight.to("mps")
         # self.loss_fn = nn.CrossEntropyLoss(weight)
         self.loss_fn = nn.CrossEntropyLoss()
         self.mse_fn = nn.MSELoss()
@@ -23,7 +24,9 @@ class ConsistencyCos(nn.Module):
 
         cos = torch.einsum('nc,nc->n', [feat_0, feat_1]).unsqueeze(-1)
         labels = torch.ones((cos.shape[0],1), dtype=torch.float, requires_grad=False)
-        if torch.cuda.is_available():
+        if torch.backends.mps.is_available():
+            labels = labels.to("mps")
+        elif torch.cuda.is_available():
             labels = labels.cuda()
         self.consistency_rate = 1.0
         loss = self.consistency_rate * self.mse_fn(cos, labels) + self.loss_fn(inputs, targets)

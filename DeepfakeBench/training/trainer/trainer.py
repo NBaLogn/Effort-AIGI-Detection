@@ -26,11 +26,15 @@ from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
 
 FFpp_pool = ["FaceForensics++", "FF-DF", "FF-F2F", "FF-FS", "FF-NT"]
-if not torch.backends.mps.is_available():
+FFpp_pool = ["FaceForensics++", "FF-DF", "FF-F2F", "FF-FS", "FF-NT"]
+if torch.backends.mps.is_available():
+    device = torch.device("mps")
+elif torch.cuda.is_available():
+    device = torch.device("cuda")
+else:
     raise RuntimeError(
-        "MPS is not available. This script requires Apple Silicon with MPS support.",
+        "No MPS or CUDA device found. CPU validation is not supported.",
     )
-device = torch.device("mps")
 
 
 class Trainer:
@@ -104,10 +108,11 @@ class Trainer:
     def speed_up(self):
         self.model.to(device)
         self.model.device = device
-        if self.config["ddp"] == True and device.type == "mps":
+        if self.config["ddp"] == True:
             self.model = DDP(
                 self.model,
                 find_unused_parameters=True,
+                device_ids=[self.config["local_rank"]] if device.type == "cuda" else None,
             )
 
     def setTrain(self):
