@@ -1,85 +1,15 @@
-{ "__info":"pretrained on ff, evaluated on df40_s",
+{
   "datasets": {
-    "dataset_1_CollabDiff_sampled": {
-      "auc": 0.625,
-      "eer": 0.376,
-      "accuracy": 0.998003992015968,
-      "ap": 0.005291005291005291,
-      "precision": 0.0,
-      "recall": 0.0,
-      "f1": 0.0,
-      "sample_count": 501
-    },
-    "dataset_2_deepfacelab_sampled": {
-      "auc": 0.8968319559228649,
-      "eer": 0.14814814814814814,
-      "accuracy": 0.52734375,
-      "ap": 0.918238879305323,
-      "precision": 0.7278911564625851,
-      "recall": 0.8842975206611571,
-      "f1": 0.7985074626865671,
-      "sample_count": 512
-    },
-    "dataset_3_heygen_new_sampled": {
-      "auc": 0.8216789516789517,
-      "eer": 0.24864864864864866,
-      "accuracy": 0.3592233009708738,
-      "ap": 0.9082161323319278,
-      "precision": 0.9011857707509882,
-      "recall": 0.6909090909090909,
-      "f1": 0.7821612349914236,
-      "sample_count": 515
-    },
-    "dataset_4_MidJourney_sampled": {
-      "auc": 0.5654156626506024,
-      "eer": 0.454,
-      "accuracy": 0.501002004008016,
-      "ap": 0.5235071955393631,
-      "precision": 0.43529411764705883,
-      "recall": 0.07429718875502007,
-      "f1": 0.1269296740994854,
-      "sample_count": 998
-    },
-    "dataset_5_stargan_sampled": {
-      "auc": 0.98853,
-      "eer": 0.052,
+    "dataset_1_val": {
+      "auc": 0.995953625,
+      "eer": 0.0325,
       "accuracy": 0.5,
-      "ap": 0.98614208492875,
-      "precision": 0.7507507507507507,
-      "recall": 1.0,
-      "f1": 0.8576329331046312,
-      "sample_count": 1000
-    },
-    "dataset_6_starganv2_sampled": {
-      "auc": 0.8601853004606408,
-      "eer": 0.20040080160320642,
-      "accuracy": 0.5,
-      "ap": 0.8821597326438803,
-      "precision": 0.791015625,
-      "recall": 0.811623246492986,
-      "f1": 0.8011869436201781,
-      "sample_count": 998
-    },
-    "dataset_7_styleclip_sampled": {
-      "auc": 0.89085,
-      "eer": 0.166,
-      "accuracy": 0.5,
-      "ap": 0.9144031856932266,
-      "precision": 0.8106060606060606,
-      "recall": 0.856,
-      "f1": 0.8326848249027238,
-      "sample_count": 1000
-    },
-    "dataset_8_whichfaceisreal_sampled": {
-      "auc": 0.551852,
-      "eer": 0.48,
-      "accuracy": 0.5,
-      "ap": 0.5551659433963352,
-      "precision": 0.5384615384615384,
-      "recall": 0.252,
-      "f1": 0.34332425068119893,
-      "sample_count": 1000
+      "ap": 0.9959568279659634,
+      "precision": 0.9797539723218862,
+      "recall": 0.95575,
+      "f1": 0.967603138445963,
+      "sample_count": 8000
     }
   },
-  "timestamp": "2025-12-17T08:18:35.933566"
+  "timestamp": "2025-12-17T10:16:18.455529"
 }

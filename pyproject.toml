@@ -3,7 +3,7 @@ name = "effort-aigi-detection"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.13"
 dependencies = [
     "albumentations>=2.0.8",
     "clip",
@@ -17,6 +17,7 @@ dependencies = [
     "imageio>=2.37.2",
     "imgaug>=0.4.0",
     "imutils>=0.5.4",
+    "insightface>=0.7.3",
     "kornia>=0.8.2",
     "logger>=1.4",
     "logging>=0.4.9.6",
@@ -25,6 +26,7 @@ dependencies = [
     "mlx>=0.30.0",
     "network>=0.1",
     "numpy>=2.3.5",
+    "onnxruntime>=1.23.2",
     "opencv-python>=4.11.0.86",
     "pandas>=2.3.3",
     "pillow>=12.0.0",

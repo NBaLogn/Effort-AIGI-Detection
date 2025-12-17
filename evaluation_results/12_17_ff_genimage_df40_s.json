@@ -1,36 +1,35 @@
-
 {
-  "__info": "model pretrained on ff, finetuned on genimage_s, evaluated on df40_s",
+  "__info": "pretrained on ff, finetuned on genimage_s, evaluated on df40_s",
   "datasets": {
     "dataset_1_CollabDiff_sampled": {
-      "auc": 0.9380000000000001,
-      "eer": 0.062,
-      "accuracy": 0.998003992015968,
-      "ap": 0.03125,
-      "precision": 0.004310344827586207,
-      "recall": 1.0,
-      "f1": 0.008583690987124463,
-      "sample_count": 501
+      "auc": 0.940078,
+      "eer": 0.138,
+      "accuracy": 0.5,
+      "ap": 0.9373509710459007,
+      "precision": 0.682825484764543,
+      "recall": 0.986,
+      "f1": 0.806873977086743,
+      "sample_count": 1000
     },
     "dataset_2_deepfacelab_sampled": {
-      "auc": 0.7433578206305479,
-      "eer": 0.3074074074074074,
-      "accuracy": 0.52734375,
-      "ap": 0.6854351722054366,
-      "precision": 0.4869215291750503,
+      "auc": 0.7725859999999999,
+      "eer": 0.304,
+      "accuracy": 0.5,
+      "ap": 0.7490247846275739,
+      "precision": 0.508646998982706,
       "recall": 1.0,
-      "f1": 0.6549391069012178,
-      "sample_count": 512
+      "f1": 0.6743088334457181,
+      "sample_count": 1000
     },
     "dataset_3_heygen_new_sampled": {
-      "auc": 0.9752334152334152,
-      "eer": 0.08108108108108109,
-      "accuracy": 0.3592233009708738,
-      "ap": 0.9847948153292063,
-      "precision": 0.734966592427617,
+      "auc": 0.953702,
+      "eer": 0.122,
+      "accuracy": 0.5,
+      "ap": 0.9518423610758935,
+      "precision": 0.5787037037037037,
       "recall": 1.0,
-      "f1": 0.8472400513478819,
-      "sample_count": 515
+      "f1": 0.7331378299120235,
+      "sample_count": 1000
     },
     "dataset_4_MidJourney_sampled": {
       "auc": 0.7844277108433735,
@@ -83,5 +82,5 @@
       "sample_count": 1000
     }
   },
-  "timestamp": "2025-12-16T17:20:15.024816"
+  "timestamp": "2025-12-17T09:37:29.170663"
 }
