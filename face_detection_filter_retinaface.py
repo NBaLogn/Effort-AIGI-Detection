@@ -24,16 +24,16 @@ import sys
 from pathlib import Path
 
 import cv2
-import insightface
 import numpy as np
 import torch
+from insightface.app import FaceAnalysis
 
 
 class RetinaFaceDetector:
-    """High-accuracy face detector using InsightFace RetinaFace with MPS support."""
+    """High-accuracy face detector using InsightFace with MPS support."""
 
     def __init__(self, confidence_threshold: float = 0.5, device: str | None = None):
-        """Initialize the RetinaFace detector.
+        """Initialize the face detector using FaceAnalysis.
 
         Args:
             confidence_threshold: Minimum confidence score for face detection (0.0-1.0)
@@ -45,45 +45,58 @@ class RetinaFaceDetector:
         if device is None:
             if torch.backends.mps.is_available():
                 self.device = "mps"
-                self.ctx_id = 0
             else:
                 self.device = "cpu"
-                self.ctx_id = -1
         else:
             self.device = device
-            self.ctx_id = 0 if device == "mps" else -1
 
         self.logger = logging.getLogger("RetinaFaceDetector")
-        self.logger.info(f"Initializing RetinaFace detector on {self.device}")
+        self.logger.info(f"Initializing FaceAnalysis detector on {self.device}")
 
-        # Load the RetinaFace model
+        # Load the model
         self.model = self._load_model()
 
         self.logger.info(
-            f"RetinaFace detector initialized successfully on {self.device}"
+            f"FaceAnalysis detector initialized successfully on {self.device}",
         )
         self.logger.info(f"Confidence threshold: {self.confidence_threshold}")
 
     def _load_model(self):
-        """Load the RetinaFace model with appropriate device configuration."""
+        """Load the FaceAnalysis model with appropriate device configuration."""
         try:
-            # Initialize the model
-            model = insightface.model_zoo.get_model("retinaface_r50_v1")
+            self.logger.debug("Attempting to load FaceAnalysis model...")
 
-            # Set device context
-            if self.ctx_id >= 0:
-                # MPS or GPU context
-                model.prepare(ctx_id=self.ctx_id, nms=0.4)
+            # Determine providers based on device
+            if self.device == "mps":
+                # CoreML for Apple Silicon
+                providers = ["CoreMLExecutionProvider", "CPUExecutionProvider"]
             else:
-                # CPU context
-                model.prepare(ctx_id=-1, nms=0.4)
+                # CPU only
+                providers = ["CPUExecutionProvider"]
 
+            self.logger.debug(f"Using providers: {providers}")
+
+            # Load FaceAnalysis with detection model
+            model = FaceAnalysis(
+                name="buffalo_l",
+                providers=providers,
+                allow_modules=["detection"],
+            )
+
+            # Prepare the detection model
+            # ctx_id=0 means GPU/accelerated, but with CoreML provider it will use appropriate backend
+            self.logger.debug(
+                f"Preparing detection model with det_thresh={self.confidence_threshold}"
+            )
+            model.prepare(ctx_id=0, det_thresh=self.confidence_threshold)
+
+            self.logger.debug("Model loaded and prepared successfully")
             return model
 
         except Exception as e:
-            self.logger.error(f"Failed to load RetinaFace model: {e}")
+            self.logger.error(f"Failed to load FaceAnalysis model: {e}")
             self.logger.error(
-                "Make sure insightface is installed: pip install insightface"
+                "Make sure insightface is installed: pip install insightface",
             )
             raise
 
@@ -118,7 +131,8 @@ class RetinaFaceDetector:
             return False
 
     def get_face_count_and_confidences(
-        self, image: np.ndarray
+        self,
+        image: np.ndarray,
     ) -> tuple[int, list[float]]:
         """Get the number of faces and their confidence scores.
 
@@ -277,7 +291,7 @@ class FaceDetectionFilter:
 
             if face_count > 0:
                 self.logger.debug(
-                    f"Faces detected in {image_path}: {face_count} (confidences: {[f'{c:.3f}' for c in confidences]})"
+                    f"Faces detected in {image_path}: {face_count} (confidences: {[f'{c:.3f}' for c in confidences]})",
                 )
 
             return face_count > 0, face_count, confidences
@@ -302,7 +316,7 @@ class FaceDetectionFilter:
 
         except Exception as e:
             self.logger.error(
-                f"Error copying file {source_path} to {destination_path}: {e}"
+                f"Error copying file {source_path} to {destination_path}: {e}",
             )
             raise
 
@@ -340,7 +354,7 @@ class FaceDetectionFilter:
 
                 # Check if file contains faces
                 has_faces, face_count, confidences = self._detect_faces_in_image(
-                    file_path
+                    file_path,
                 )
 
                 if has_faces:
@@ -353,13 +367,13 @@ class FaceDetectionFilter:
 
                     if dry_run:
                         self.logger.info(
-                            f"[DRY RUN] Would copy: {file_path} -> {destination_path} (faces: {face_count})"
+                            f"[DRY RUN] Would copy: {file_path} -> {destination_path} (faces: {face_count})",
                         )
                     else:
                         try:
                             self._copy_with_structure(file_path, destination_path)
                             self.logger.debug(
-                                f"Copied: {file_path} -> {destination_path} (faces: {face_count})"
+                                f"Copied: {file_path} -> {destination_path} (faces: {face_count})",
                             )
                         except Exception:
                             self.stats["errors"] += 1
