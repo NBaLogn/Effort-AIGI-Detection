@@ -3305,3 +3305,151 @@ FileNotFoundError: [Errno 2] No such file or directory: 'DeepfakeBench/training/
 2025-12-18 10:15:23,877 - INFO - Saved evaluation results to evaluation_results/dataset_1_quan_faceswap1000_eval_20251218_101523.json
 2025-12-18 10:15:23,877 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
 2025-12-18 10:15:23,877 - INFO - Fine-tuned model evaluation finished successfully
+2025-12-18 10:22:32,799 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-18 10:22:32,799 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-18 10:22:32,799 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-18 10:22:32,799 - INFO - pretrained: no need to provide this for the effort model
+2025-12-18 10:22:32,799 - INFO - model_name: effort
+2025-12-18 10:22:32,799 - INFO - backbone_name: vit
+2025-12-18 10:22:32,799 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-18 10:22:32,799 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-18 10:22:32,799 - INFO - train_dataset: ['UADFV']
+2025-12-18 10:22:32,799 - INFO - test_dataset: ['UADFV']
+2025-12-18 10:22:32,799 - INFO - compression: c23
+2025-12-18 10:22:32,799 - INFO - train_batchSize: 8
+2025-12-18 10:22:32,799 - INFO - test_batchSize: 8
+2025-12-18 10:22:32,799 - INFO - workers: 1
+2025-12-18 10:22:32,799 - INFO - frame_num: {'train': 4, 'test': 8}
+2025-12-18 10:22:32,799 - INFO - resolution: 224
+2025-12-18 10:22:32,799 - INFO - with_mask: False
+2025-12-18 10:22:32,799 - INFO - with_landmark: False
+2025-12-18 10:22:32,799 - INFO - use_data_augmentation: True
+2025-12-18 10:22:32,799 - INFO - data_aug: {'flip_prob': 0.3, 'rotate_prob': 0.2, 'rotate_limit': [-5, 5], 'blur_prob': 0.2, 'blur_limit': [3, 5], 'brightness_prob': 0.2, 'brightness_limit': [-0.05, 0.05], 'contrast_limit': [-0.05, 0.05], 'quality_lower': 60, 'quality_upper': 95}
+2025-12-18 10:22:32,799 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-18 10:22:32,799 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-18 10:22:32,799 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-18 10:22:32,799 - INFO - lr_scheduler: None
+2025-12-18 10:22:32,799 - INFO - nEpochs: 1
+2025-12-18 10:22:32,799 - INFO - start_epoch: 0
+2025-12-18 10:22:32,799 - INFO - save_epoch: 1
+2025-12-18 10:22:32,799 - INFO - rec_iter: 50
+2025-12-18 10:22:32,800 - INFO - logdir: ./logs
+2025-12-18 10:22:32,800 - INFO - manualSeed: 1024
+2025-12-18 10:22:32,800 - INFO - save_ckpt: True
+2025-12-18 10:22:32,800 - INFO - save_feat: True
+2025-12-18 10:22:32,800 - INFO - loss_func: cross_entropy
+2025-12-18 10:22:32,800 - INFO - losstype: None
+2025-12-18 10:22:32,800 - INFO - metric_scoring: auc
+2025-12-18 10:22:32,800 - INFO - fine_tune: True
+2025-12-18 10:22:32,800 - INFO - pretrained_checkpoint: None
+2025-12-18 10:22:32,800 - INFO - freeze_backbone: True
+2025-12-18 10:22:32,800 - INFO - train_classification_head: True
+2025-12-18 10:22:32,800 - INFO - train_svd_residuals: True
+2025-12-18 10:22:32,800 - INFO - save_avg: True
+2025-12-18 10:22:32,800 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2025-12-18 10:22:32,800 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2025-12-18 10:22:32,800 - INFO - Loading model from /Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_FaceForensic.pth
+2025-12-18 10:22:50,262 - INFO - Model loaded successfully
+2025-12-18 10:22:50,263 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_faceswap1000']
+2025-12-18 10:22:50,263 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_faceswap1000
+2025-12-18 10:22:50,283 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_faceswap1000
+2025-12-18 10:22:50,285 - INFO - All subdirectories found: ['real', 'fake']
+2025-12-18 10:22:50,285 - INFO - Found real directories: ['real']
+2025-12-18 10:22:50,285 - INFO - Found fake directories: ['fake']
+2025-12-18 10:22:50,285 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_faceswap1000
+2025-12-18 10:22:50,285 - INFO - Processing real directory: real
+2025-12-18 10:22:50,293 - INFO - Processing fake directory: fake
+2025-12-18 10:22:50,302 - INFO - Checking for faulty images...
+2025-12-18 10:23:01,749 - INFO - No faulty images found.
+2025-12-18 10:23:01,750 - INFO - Dataset contains 1000 real and 1000 fake samples
+2025-12-18 10:23:01,750 - INFO - RawFileDataset initialized with 2000 samples for test mode
+2025-12-18 10:23:01,752 - INFO - Test loader prepared with 125 batches
+2025-12-18 10:23:01,752 - INFO - Evaluating on dataset_1_quan_faceswap1000
+2025-12-18 10:23:56,886 - INFO - Processed batch 50/125
+2025-12-18 10:24:44,591 - INFO - Processed batch 100/125
+2025-12-18 10:25:13,560 - INFO - Evaluation results for dataset_1_quan_faceswap1000:
+2025-12-18 10:25:13,560 - INFO -   auc: 0.6865
+2025-12-18 10:25:13,560 - INFO -   eer: 0.3720
+2025-12-18 10:25:13,560 - INFO -   accuracy: 0.5000
+2025-12-18 10:25:13,560 - INFO -   ap: 0.6695
+2025-12-18 10:25:13,560 - INFO -   precision: 0.7242
+2025-12-18 10:25:13,560 - INFO -   recall: 0.2600
+2025-12-18 10:25:13,560 - INFO -   f1: 0.3826
+2025-12-18 10:25:13,560 - INFO -   sample_count: 2000.0000
+2025-12-18 10:25:13,561 - INFO - Saved evaluation results to evaluation_results/dataset_1_quan_faceswap1000_eval_20251218_102513.json
+2025-12-18 10:25:13,561 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-18 10:25:13,561 - INFO - Fine-tuned model evaluation finished successfully
+2025-12-18 10:27:48,965 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-18 10:27:48,966 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-18 10:27:48,966 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-18 10:27:48,966 - INFO - pretrained: no need to provide this for the effort model
+2025-12-18 10:27:48,966 - INFO - model_name: effort
+2025-12-18 10:27:48,966 - INFO - backbone_name: vit
+2025-12-18 10:27:48,966 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-18 10:27:48,966 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-18 10:27:48,966 - INFO - train_dataset: ['UADFV']
+2025-12-18 10:27:48,966 - INFO - test_dataset: ['UADFV']
+2025-12-18 10:27:48,966 - INFO - compression: c23
+2025-12-18 10:27:48,966 - INFO - train_batchSize: 8
+2025-12-18 10:27:48,966 - INFO - test_batchSize: 8
+2025-12-18 10:27:48,966 - INFO - workers: 1
+2025-12-18 10:27:48,966 - INFO - frame_num: {'train': 4, 'test': 8}
+2025-12-18 10:27:48,966 - INFO - resolution: 224
+2025-12-18 10:27:48,966 - INFO - with_mask: False
+2025-12-18 10:27:48,966 - INFO - with_landmark: False
+2025-12-18 10:27:48,966 - INFO - use_data_augmentation: True
+2025-12-18 10:27:48,966 - INFO - data_aug: {'flip_prob': 0.3, 'rotate_prob': 0.2, 'rotate_limit': [-5, 5], 'blur_prob': 0.2, 'blur_limit': [3, 5], 'brightness_prob': 0.2, 'brightness_limit': [-0.05, 0.05], 'contrast_limit': [-0.05, 0.05], 'quality_lower': 60, 'quality_upper': 95}
+2025-12-18 10:27:48,966 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-18 10:27:48,966 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-18 10:27:48,966 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-18 10:27:48,966 - INFO - lr_scheduler: None
+2025-12-18 10:27:48,966 - INFO - nEpochs: 1
+2025-12-18 10:27:48,966 - INFO - start_epoch: 0
+2025-12-18 10:27:48,966 - INFO - save_epoch: 1
+2025-12-18 10:27:48,966 - INFO - rec_iter: 50
+2025-12-18 10:27:48,966 - INFO - logdir: ./logs
+2025-12-18 10:27:48,966 - INFO - manualSeed: 1024
+2025-12-18 10:27:48,966 - INFO - save_ckpt: True
+2025-12-18 10:27:48,966 - INFO - save_feat: True
+2025-12-18 10:27:48,966 - INFO - loss_func: cross_entropy
+2025-12-18 10:27:48,966 - INFO - losstype: None
+2025-12-18 10:27:48,966 - INFO - metric_scoring: auc
+2025-12-18 10:27:48,966 - INFO - fine_tune: True
+2025-12-18 10:27:48,966 - INFO - pretrained_checkpoint: None
+2025-12-18 10:27:48,966 - INFO - freeze_backbone: True
+2025-12-18 10:27:48,966 - INFO - train_classification_head: True
+2025-12-18 10:27:48,966 - INFO - train_svd_residuals: True
+2025-12-18 10:27:48,966 - INFO - save_avg: True
+2025-12-18 10:27:48,966 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2025-12-18 10:27:48,966 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2025-12-18 10:27:48,966 - INFO - Loading model from /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/ff_genimage_ChameleonFaces-12-17-14-45/test/combined_test/ckpt_best.pth
+2025-12-18 10:28:05,490 - INFO - Model loaded successfully
+2025-12-18 10:28:05,491 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_faceswap1000']
+2025-12-18 10:28:05,491 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_faceswap1000
+2025-12-18 10:28:05,499 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_faceswap1000
+2025-12-18 10:28:05,499 - INFO - All subdirectories found: ['real', 'fake']
+2025-12-18 10:28:05,500 - INFO - Found real directories: ['real']
+2025-12-18 10:28:05,500 - INFO - Found fake directories: ['fake']
+2025-12-18 10:28:05,500 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_faceswap1000
+2025-12-18 10:28:05,500 - INFO - Processing real directory: real
+2025-12-18 10:28:05,505 - INFO - Processing fake directory: fake
+2025-12-18 10:28:05,510 - INFO - Checking for faulty images...
+2025-12-18 10:28:16,436 - INFO - No faulty images found.
+2025-12-18 10:28:16,436 - INFO - Dataset contains 1000 real and 1000 fake samples
+2025-12-18 10:28:16,436 - INFO - RawFileDataset initialized with 2000 samples for test mode
+2025-12-18 10:28:16,436 - INFO - Test loader prepared with 125 batches
+2025-12-18 10:28:16,436 - INFO - Evaluating on dataset_1_quan_faceswap1000
+2025-12-18 10:29:14,303 - INFO - Processed batch 50/125
+2025-12-18 10:30:02,431 - INFO - Processed batch 100/125
+2025-12-18 10:30:31,407 - INFO - Evaluation results for dataset_1_quan_faceswap1000:
+2025-12-18 10:30:31,407 - INFO -   auc: 0.2169
+2025-12-18 10:30:31,407 - INFO -   eer: 0.7080
+2025-12-18 10:30:31,407 - INFO -   accuracy: 0.5000
+2025-12-18 10:30:31,407 - INFO -   ap: 0.3469
+2025-12-18 10:30:31,407 - INFO -   precision: 0.3095
+2025-12-18 10:30:31,408 - INFO -   recall: 0.3340
+2025-12-18 10:30:31,408 - INFO -   f1: 0.3213
+2025-12-18 10:30:31,408 - INFO -   sample_count: 2000.0000
+2025-12-18 10:30:31,409 - INFO - Saved evaluation results to evaluation_results/dataset_1_quan_faceswap1000_eval_20251218_103031.json
+2025-12-18 10:30:31,410 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-18 10:30:31,410 - INFO - Fine-tuned model evaluation finished successfully

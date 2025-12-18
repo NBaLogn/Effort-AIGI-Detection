@@ -17,6 +17,7 @@ Usage:
 """
 
 import argparse
+import concurrent.futures
 import logging
 import os
 import shutil
@@ -27,6 +28,7 @@ import cv2
 import numpy as np
 import torch
 from insightface.app import FaceAnalysis
+from tqdm import tqdm
 
 
 class RetinaFaceDetector:
@@ -184,6 +186,7 @@ class FaceDetectionFilter:
         destination_dir: str,
         confidence_threshold: float = 0.5,
         device: str | None = None,
+        max_workers: int = 4,
         log_level: str = "INFO",
     ):
         """Initialize the face detection filter.
@@ -193,12 +196,14 @@ class FaceDetectionFilter:
             destination_dir: Destination directory for filtered images
             confidence_threshold: Minimum confidence for face detection (0.0-1.0)
             device: Device to use ('mps', 'cpu', or None for auto-detection)
+            max_workers: Number of worker threads for parallel processing
             log_level: Logging level (DEBUG, INFO, WARNING, ERROR)
         """
         self.source_dir = Path(source_dir)
         self.destination_dir = Path(destination_dir)
         self.confidence_threshold = confidence_threshold
         self.device = device
+        self.max_workers = max_workers
 
         # Initialize face detector
         self.detector = RetinaFaceDetector(
@@ -224,6 +229,7 @@ class FaceDetectionFilter:
         self.logger.info(f"  Destination: {self.destination_dir}")
         self.logger.info(f"  Confidence threshold: {self.confidence_threshold}")
         self.logger.info(f"  Device: {self.device or 'auto-detected'}")
+        self.logger.info(f"  Max workers: {self.max_workers}")
 
     def _setup_logging(self, log_level: str) -> None:
         """Set up comprehensive logging to file and console."""
@@ -320,6 +326,47 @@ class FaceDetectionFilter:
             )
             raise
 
+    def _process_single_file(self, file_path: Path, dry_run: bool) -> None:
+        """Process a single file: detect faces and copy if found.
+
+        Args:
+            file_path: Path to the image file to process
+            dry_run: Whether to perform a dry run
+        """
+        try:
+            self.stats["total_images"] += 1
+
+            # Check if file contains faces
+            has_faces, face_count, _ = self._detect_faces_in_image(
+                file_path,
+            )
+
+            if has_faces:
+                self.stats["images_with_faces"] += 1
+                self.stats["total_faces_detected"] += face_count
+
+                # Calculate destination path preserving structure
+                relative_path = file_path.relative_to(self.source_dir)
+                destination_path = self.destination_dir / relative_path
+
+                if dry_run:
+                    self.logger.info(
+                        f"[DRY RUN] Would copy: {file_path} -> {destination_path} (faces: {face_count})",
+                    )
+                else:
+                    self._copy_with_structure(file_path, destination_path)
+                    self.logger.debug(
+                        f"Copied: {file_path} -> {destination_path} (faces: {face_count})",
+                    )
+
+            else:
+                self.stats["images_without_faces"] += 1
+                self.logger.debug(f"No faces detected: {file_path}")
+
+        except Exception as e:
+            self.stats["errors"] += 1
+            self.logger.error(f"Error processing {file_path}: {e}")
+
     def process_directory(self, dry_run: bool = False) -> None:
         """Process all images in the source directory recursively.
 
@@ -331,6 +378,7 @@ class FaceDetectionFilter:
         self.logger.info(f"Destination directory: {self.destination_dir}")
         self.logger.info(f"Dry run mode: {dry_run}")
         self.logger.info(f"Using device: {self.detector.device}")
+        self.logger.info(f"Parallel workers: {self.max_workers}")
 
         if not self.source_dir.exists():
             self.logger.error(f"Source directory does not exist: {self.source_dir}")
@@ -340,48 +388,42 @@ class FaceDetectionFilter:
             self.logger.error(f"Source path is not a directory: {self.source_dir}")
             sys.exit(1)
 
-        # Process all files recursively
-        for root, dirs, files in os.walk(self.source_dir):
+        # Collect all image files first
+        image_files = []
+        self.logger.info("Scanning for image files...")
+        for root, _, files in os.walk(self.source_dir):
             for file_name in files:
                 file_path = Path(root) / file_name
-
-                # Skip if not an image file
-                if not self._is_image_file(file_path):
-                    self.stats["skipped_files"] += 1
-                    continue
-
-                self.stats["total_images"] += 1
-
-                # Check if file contains faces
-                has_faces, face_count, confidences = self._detect_faces_in_image(
-                    file_path,
-                )
-
-                if has_faces:
-                    self.stats["images_with_faces"] += 1
-                    self.stats["total_faces_detected"] += face_count
-
-                    # Calculate destination path preserving structure
-                    relative_path = file_path.relative_to(self.source_dir)
-                    destination_path = self.destination_dir / relative_path
-
-                    if dry_run:
-                        self.logger.info(
-                            f"[DRY RUN] Would copy: {file_path} -> {destination_path} (faces: {face_count})",
-                        )
-                    else:
-                        try:
-                            self._copy_with_structure(file_path, destination_path)
-                            self.logger.debug(
-                                f"Copied: {file_path} -> {destination_path} (faces: {face_count})",
-                            )
-                        except Exception:
-                            self.stats["errors"] += 1
-                            continue
-
+                if self._is_image_file(file_path):
+                    image_files.append(file_path)
                 else:
-                    self.stats["images_without_faces"] += 1
-                    self.logger.debug(f"No faces detected: {file_path}")
+                    self.stats["skipped_files"] += 1
+
+        total_files = len(image_files)
+        self.logger.info(f"Found {total_files} images to process")
+
+        # Process files in parallel
+        # Note: We use ThreadPoolExecutor because FaceAnalysis/ONNXRuntime often releases GIL
+        # during inference, allowing for parallelism.
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=self.max_workers
+        ) as executor:
+            # Create a partial function or lambda if needed, but simple loop works with submit
+            # We use list(tqdm(...)) to force iteration and display progress
+
+            futures = [
+                executor.submit(self._process_single_file, file_path, dry_run)
+                for file_path in image_files
+            ]
+
+            # Use tqdm to track completion of futures
+            for _ in tqdm(
+                concurrent.futures.as_completed(futures),
+                total=total_files,
+                desc="Processing Images",
+                unit="img",
+            ):
+                pass
 
         self._print_summary()
 
@@ -451,6 +493,12 @@ Examples:
         help="Logging level (default: INFO)",
     )
     parser.add_argument(
+        "--workers",
+        type=int,
+        default=4,
+        help="Number of parallel workers (default: 4)",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Show what would be done without actually copying files",
@@ -472,6 +520,7 @@ Examples:
         destination_dir=args.destination,
         confidence_threshold=args.confidence,
         device=device,
+        max_workers=args.workers,
         log_level=args.log_level,
     )
 

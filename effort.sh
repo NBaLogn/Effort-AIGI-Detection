@@ -31,7 +31,7 @@
 # =============================================
 uv run DeepfakeBench/training/evaluate_finetune.py \
     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
-    --weights "/Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_FaceForensic.pth" \
+    --weights "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/ff_genimage_ChameleonFaces-12-17-14-45/test/combined_test/ckpt_best.pth" \
     --test_dataset "/Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_faceswap1000" \
     --output_dir evaluation_results
     # "/Volumes/Crucial/Large_Downloads/SAMPLED/df40/deepfacelab_sampled" \

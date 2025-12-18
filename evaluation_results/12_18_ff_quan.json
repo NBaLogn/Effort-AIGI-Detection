@@ -1,6 +1,5 @@
 {
   "datasets": {
-    "__info": "pretrain on ff, eval on quan",
     "dataset_1_quan_dataset": {
       "auc": 0.8712082825682339,
       "eer": 0.22168963451168364,
