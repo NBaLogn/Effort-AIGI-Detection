@@ -1,0 +1,66 @@
+import os
+import shutil
+import random
+from pathlib import Path
+
+
+def split_dataset(base_path, split_ratio=0.7):
+    base_dir = Path(base_path)
+    classes = ["fake", "real"]
+
+    # Verify base directory exists
+    if not base_dir.exists():
+        print(f"Error: Base directory {base_dir} does not exist.")
+        return
+
+    # Create train and val directories
+    train_dir = base_dir / "train"
+    val_dir = base_dir / "val"
+
+    for cls in classes:
+        # Source directory for the class
+        src_cls_dir = base_dir / cls
+
+        if not src_cls_dir.exists():
+            print(f"Warning: Class directory {src_cls_dir} does not exist. Skipping.")
+            continue
+
+        files = [
+            f
+            for f in src_cls_dir.iterdir()
+            if f.is_file() and not f.name.startswith(".")
+        ]
+        random.shuffle(files)
+
+        split_idx = int(len(files) * split_ratio)
+        train_files = files[:split_idx]
+        val_files = files[split_idx:]
+
+        print(
+            f"Processing class '{cls}': Found {len(files)} files. Split: {len(train_files)} train, {len(val_files)} val."
+        )
+
+        # Create destination directories
+        (train_dir / cls).mkdir(parents=True, exist_ok=True)
+        (val_dir / cls).mkdir(parents=True, exist_ok=True)
+
+        # Move files
+        for f in train_files:
+            shutil.move(str(f), str(train_dir / cls / f.name))
+
+        for f in val_files:
+            shutil.move(str(f), str(val_dir / cls / f.name))
+
+        # Check if original directory is empty and remove it if so
+        remaining_files = list(src_cls_dir.iterdir())
+        if not remaining_files:
+            src_cls_dir.rmdir()
+            print(f"Removed empty source directory: {src_cls_dir}")
+        else:
+            print(
+                f"Source directory {src_cls_dir} not empty (contains {len(remaining_files)} items). Kept."
+            )
+
+
+if __name__ == "__main__":
+    split_dataset("/Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_dataset")

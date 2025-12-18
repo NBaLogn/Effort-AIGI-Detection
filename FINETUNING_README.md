@@ -11,7 +11,7 @@ uv run DeepfakeBench/training/finetune.py \
     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
     --train_dataset UADFV \
     --test_dataset UADFV \
-    --pretrained_weights /Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_UniversalFakeDetect.pth
+    --pretrained_weights DeepfakeBench/training/weights/effort_best.pth
 ```
 
 ### 2. Evaluation Command
@@ -28,7 +28,7 @@ uv run DeepfakeBench/training/evaluate_finetune.py \
 
 The fine-tuning configuration file (`effort_finetune.yaml`) includes optimized settings:
 
-### Key Parameters:
+### Key Parameters
 
 | Parameter | Value | Description |
 |-----------|-------|-------------|
@@ -40,7 +40,7 @@ The fine-tuning configuration file (`effort_finetune.yaml`) includes optimized s
 | `freeze_backbone` | true | Freeze SVD main components |
 | `train_svd_residuals` | true | Train SVD residual components |
 
-### Data Augmentation (Reduced for Fine-Tuning):
+### Data Augmentation (Reduced for Fine-Tuning)
 
 ```yaml
 data_aug:
@@ -206,10 +206,10 @@ uv run DeepfakeBench/training/finetune.py \
 
 The SVD decomposition is implemented in [`effort_detector.py`](DeepfakeBench/training/detectors/effort_detector.py):
 
-- **Line 337**: `torch.linalg.svd()` call
-- **Lines 343-364**: Component separation
-- **Lines 306-312**: Gradient configuration
-- **Lines 212-216**: Forward pass reconstruction
+- **SVD call**: `torch.linalg.svd()` in `replace_with_svd_residual()`
+- **Component separation**: Main vs Residual weight calculation in `replace_with_svd_residual()`
+- **Gradient configuration**: Set `requires_grad=True` for residuals in `apply_svd_residual_to_self_attn()`
+- **Forward pass reconstruction**: Combined weight calculation in `SVDResidualLinear.forward()`
 
 ### Memory Optimization
 
@@ -242,7 +242,7 @@ With proper fine-tuning, you should see:
 ## 📚 References
 
 - **Original Paper**: [Effort: Orthogonal Subspace Decomposition for Generalizable AI-Generated Image Detection](https://arxiv.org/abs/2411.15633)
-- **SVD Implementation**: [`effort_detector.py:316-378`](DeepfakeBench/training/detectors/effort_detector.py:316)
+- **SVD Implementation**: [`effort_detector.py`](DeepfakeBench/training/detectors/effort_detector.py)
 - **Training Infrastructure**: [`trainer/trainer.py`](DeepfakeBench/training/trainer/trainer.py)
 
 This fine-tuning implementation leverages the unique SVD decomposition approach of the Effort model to provide efficient, stable, and generalizable fine-tuning capabilities.
