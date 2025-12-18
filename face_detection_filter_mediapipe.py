@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
-"""Face Detection Filter Script using InsightFace RetinaFace.
+"""Face Detection Filter Script using MediaPipe.
 
-Recursively processes all images in a source directory, detects faces using InsightFace RetinaFace,
+Recursively processes all images in a source directory, detects faces using MediaPipe,
 and copies images containing faces to a destination directory while preserving the folder structure.
 
 Features:
-- High-accuracy face detection using RetinaFace (90.4% mAP on hard datasets)
-- MPS (Metal Performance Shaders) acceleration for Mac M1/M2 chips
+- Fast face detection using MediaPipe (optimized for Apple Silicon)
 - Configurable detection confidence thresholds
 - Comprehensive logging and progress tracking
 - Recursive directory processing with structure preservation
 
 Usage:
-    python face_detection_filter_retinaface.py --source /path/to/source --destination /path/to/destination
-    python face_detection_filter_retinaface.py -s /Users/name/Pictures -d /Users/name/Faces_Only --confidence 0.7
+    uv run face_detection_filter_mediapipe.py --source /path/to/source --destination /path/to/destination
+    uv run face_detection_filter_mediapipe.py -s /Users/name/Pictures -d /Users/name/Faces_Only --confidence 0.5
 """
 
 import argparse
 import concurrent.futures
+import datetime
 import logging
 import os
 import shutil
@@ -25,148 +25,110 @@ import sys
 from pathlib import Path
 
 import cv2
+import mediapipe as mp
 import numpy as np
-import torch
-from insightface.app import FaceAnalysis
+from mediapipe.tasks import python
+from mediapipe.tasks.python import vision
+from PIL import Image
 from tqdm import tqdm
 
 
-class RetinaFaceDetector:
-    """High-accuracy face detector using InsightFace with MPS support."""
+class MediaPipeFaceDetector:
+    """Fast face detector using MediaPipe."""
 
-    def __init__(self, confidence_threshold: float = 0.5, device: str | None = None):
-        """Initialize the face detector using FaceAnalysis.
+    def __init__(self, confidence_threshold: float = 0.5) -> None:
+        """Initialize the MediaPipe face detector.
 
         Args:
             confidence_threshold: Minimum confidence score for face detection (0.0-1.0)
-            device: Device to use ('mps', 'cpu', or None for auto-detection)
         """
         self.confidence_threshold = confidence_threshold
+        self.logger = logging.getLogger("MediaPipeFaceDetector")
 
-        # Determine device
-        if device is None:
-            if torch.backends.mps.is_available():
-                self.device = "mps"
-            else:
-                self.device = "cpu"
-        else:
-            self.device = device
+        # Download model if not present
+        model_path = self._get_model_path()
 
-        self.logger = logging.getLogger("RetinaFaceDetector")
-        self.logger.info(f"Initializing FaceAnalysis detector on {self.device}")
-
-        # Load the model
-        self.model = self._load_model()
-
-        self.logger.info(
-            f"FaceAnalysis detector initialized successfully on {self.device}",
+        # Initialize MediaPipe Face Detector using the new API
+        base_options = python.BaseOptions(model_asset_path=str(model_path))
+        options = vision.FaceDetectorOptions(
+            base_options=base_options,
+            min_detection_confidence=confidence_threshold,
         )
+        self.detector = vision.FaceDetector.create_from_options(options)
+
+        self.logger.info("MediaPipe Face Detection initialized")
         self.logger.info(f"Confidence threshold: {self.confidence_threshold}")
 
-    def _load_model(self):
-        """Load the FaceAnalysis model with appropriate device configuration."""
-        try:
-            self.logger.debug("Attempting to load FaceAnalysis model...")
+    def _get_model_path(self) -> Path:
+        """Download and return the path to the face detection model."""
+        import urllib.request
 
-            # Determine providers based on device
-            if self.device == "mps":
-                # CoreML for Apple Silicon
-                providers = ["CoreMLExecutionProvider", "CPUExecutionProvider"]
-            else:
-                # CPU only
-                providers = ["CPUExecutionProvider"]
+        model_dir = Path.home() / ".mediapipe" / "models"
+        model_dir.mkdir(parents=True, exist_ok=True)
+        model_path = model_dir / "face_detection_short_range.tflite"
 
-            self.logger.debug(f"Using providers: {providers}")
+        if not model_path.exists():
+            self.logger.info("Downloading MediaPipe face detection model...")
+            model_url = "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite"
+            urllib.request.urlretrieve(model_url, model_path)
+            self.logger.info(f"Model downloaded to: {model_path}")
 
-            # Load FaceAnalysis with detection model
-            model = FaceAnalysis(
-                name="buffalo_l",
-                providers=providers,
-                allow_modules=["detection"],
-            )
+        return model_path
 
-            # Prepare the detection model
-            # ctx_id=0 means GPU/accelerated, but with CoreML provider it will use appropriate backend
-            self.logger.debug(
-                f"Preparing detection model with det_thresh={self.confidence_threshold}",
-            )
-            model.prepare(ctx_id=0, det_thresh=self.confidence_threshold)
-
-            self.logger.debug("Model loaded and prepared successfully")
-            return model
-
-        except Exception as e:
-            self.logger.exception(f"Failed to load FaceAnalysis model: {e}")
-            self.logger.exception(
-                "Make sure insightface is installed: pip install insightface",
-            )
-            raise
-
-    def detect_faces(self, image: np.ndarray) -> bool:
+    def detect_faces(self, image) -> bool:
         """Detect faces in a single image.
 
         Args:
-            image: Input image as numpy array (BGR format)
+            image: Input image as numpy array (BGR format from cv2)
 
         Returns:
             True if faces are detected with sufficient confidence, False otherwise
         """
         try:
+            # Convert BGR to RGB (MediaPipe expects RGB)
+            image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+            # Create MediaPipe Image object
+            mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=image_rgb)
+
             # Run face detection
-            faces = self.model.get(image)
+            detection_result = self.detector.detect(mp_image)
 
-            # Check if any face meets the confidence threshold
-            for face in faces:
-                if hasattr(face, "det_score"):
-                    confidence = float(face.det_score)
-                else:
-                    # Fallback for different face object structure
-                    confidence = float(face[4]) if len(face) > 4 else 0.5
-
-                if confidence >= self.confidence_threshold:
-                    return True
-
-            return False
+            # Check if any faces were detected
+            return len(detection_result.detections) > 0
 
         except Exception as e:
             self.logger.warning(f"Error during face detection: {e}")
             return False
 
-    def get_face_count_and_confidences(
-        self,
-        image: np.ndarray,
-    ) -> tuple[int, list[float]]:
-        """Get the number of faces and their confidence scores.
+    def get_face_count(self, image) -> int:
+        """Get the number of faces detected.
 
         Args:
             image: Input image as numpy array (BGR format)
 
         Returns:
-            Tuple of (face_count, confidence_scores)
+            Number of faces detected
         """
         try:
-            faces = self.model.get(image)
-            confidences = []
+            image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=image_rgb)
+            detection_result = self.detector.detect(mp_image)
 
-            for face in faces:
-                if hasattr(face, "det_score"):
-                    confidence = float(face.det_score)
-                else:
-                    confidence = float(face[4]) if len(face) > 4 else 0.0
-                confidences.append(confidence)
-
-            # Count faces above threshold
-            face_count = sum(1 for c in confidences if c >= self.confidence_threshold)
-
-            return face_count, confidences
+            return len(detection_result.detections)
 
         except Exception as e:
             self.logger.warning(f"Error getting face count: {e}")
-            return 0, []
+            return 0
+
+    def __del__(self):
+        """Clean up MediaPipe resources."""
+        # New API handles cleanup automatically
+        pass
 
 
 class FaceDetectionFilter:
-    """Main class for filtering images based on RetinaFace detection."""
+    """Main class for filtering images based on MediaPipe face detection."""
 
     # Supported image file extensions
     IMAGE_EXTENSIONS = {
@@ -185,30 +147,29 @@ class FaceDetectionFilter:
         source_dir: str,
         destination_dir: str,
         confidence_threshold: float = 0.5,
-        device: str | None = None,
         max_workers: int = 4,
         log_level: str = "INFO",
-    ):
+    ) -> None:
         """Initialize the face detection filter.
 
         Args:
             source_dir: Source directory containing images
             destination_dir: Destination directory for filtered images
             confidence_threshold: Minimum confidence for face detection (0.0-1.0)
-            device: Device to use ('mps', 'cpu', or None for auto-detection)
             max_workers: Number of worker threads for parallel processing
             log_level: Logging level (DEBUG, INFO, WARNING, ERROR)
         """
         self.source_dir = Path(source_dir)
         self.destination_dir = Path(destination_dir)
         self.confidence_threshold = confidence_threshold
-        self.device = device
         self.max_workers = max_workers
 
+        # Initialize logging first
+        self._setup_logging(log_level)
+
         # Initialize face detector
-        self.detector = RetinaFaceDetector(
+        self.detector = MediaPipeFaceDetector(
             confidence_threshold=confidence_threshold,
-            device=device,
         )
 
         # Statistics
@@ -221,14 +182,10 @@ class FaceDetectionFilter:
             "total_faces_detected": 0,
         }
 
-        # Initialize logging
-        self._setup_logging(log_level)
-
-        self.logger.info("Initialized FaceDetectionFilter:")
+        self.logger.info("Initialized FaceDetectionFilter (MediaPipe):")
         self.logger.info(f"  Source: {self.source_dir}")
         self.logger.info(f"  Destination: {self.destination_dir}")
         self.logger.info(f"  Confidence threshold: {self.confidence_threshold}")
-        self.logger.info(f"  Device: {self.device or 'auto-detected'}")
         self.logger.info(f"  Max workers: {self.max_workers}")
 
     def _setup_logging(self, log_level: str) -> None:
@@ -238,10 +195,8 @@ class FaceDetectionFilter:
         log_dir.mkdir(exist_ok=True)
 
         # Generate log filename with timestamp
-        import datetime
-
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        log_file = log_dir / f"face_detection_retinaface_{timestamp}.log"
+        log_file = log_dir / f"face_detection_mediapipe_{timestamp}.log"
 
         # Configure logging
         numeric_level = getattr(logging, log_level.upper(), logging.INFO)
@@ -274,37 +229,49 @@ class FaceDetectionFilter:
         """Check if the file is an image based on its extension."""
         return file_path.suffix.lower() in self.IMAGE_EXTENSIONS
 
-    def _detect_faces_in_image(self, image_path: Path) -> tuple[bool, int, list[float]]:
+    def _detect_faces_in_image(self, image_path: Path) -> tuple[bool, int]:
         """Detect faces in a single image.
 
         Args:
             image_path: Path to the image file
 
         Returns:
-            Tuple of (has_faces, face_count, confidences)
+            Tuple of (has_faces, face_count)
         """
         try:
-            # Read image
+            # Try reading with OpenCV first
             image = cv2.imread(str(image_path))
 
+            # If OpenCV fails, try PIL as fallback
             if image is None:
-                self.logger.warning(f"Could not read image: {image_path}")
-                return False, 0, []
+                try:
+                    self.logger.debug(f"OpenCV failed, trying PIL for: {image_path}")
+                    pil_image = Image.open(image_path)
+
+                    # Convert PIL image to OpenCV format (BGR)
+                    # PIL images are RGB, OpenCV expects BGR
+                    image_rgb = np.array(pil_image.convert("RGB"))
+                    image = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2BGR)
+
+                    self.logger.debug(f"Successfully read with PIL: {image_path}")
+
+                except Exception as pil_error:
+                    self.logger.warning(
+                        f"Could not read image with OpenCV or PIL: {image_path} - {pil_error}"
+                    )
+                    return False, 0
 
             # Detect faces
-            has_faces, confidences = self.detector.get_face_count_and_confidences(image)
-            face_count = sum(1 for c in confidences if c >= self.confidence_threshold)
+            face_count = self.detector.get_face_count(image)
 
             if face_count > 0:
-                self.logger.debug(
-                    f"Faces detected in {image_path}: {face_count} (confidences: {[f'{c:.3f}' for c in confidences]})",
-                )
+                self.logger.debug(f"Faces detected in {image_path}: {face_count}")
 
-            return face_count > 0, face_count, confidences
+            return face_count > 0, face_count
 
         except Exception as e:
             self.logger.error(f"Error processing image {image_path}: {e}")
-            return False, 0, []
+            return False, 0
 
     def _copy_with_structure(self, source_path: Path, destination_path: Path) -> None:
         """Copy file to destination while preserving directory structure.
@@ -337,9 +304,7 @@ class FaceDetectionFilter:
             self.stats["total_images"] += 1
 
             # Check if file contains faces
-            has_faces, face_count, _ = self._detect_faces_in_image(
-                file_path,
-            )
+            has_faces, face_count = self._detect_faces_in_image(file_path)
 
             if has_faces:
                 self.stats["images_with_faces"] += 1
@@ -365,7 +330,7 @@ class FaceDetectionFilter:
 
         except Exception as e:
             self.stats["errors"] += 1
-            self.logger.error(f"Error processing {file_path}: {e}")
+            self.logger.exception(f"Error processing {file_path}: {e}")
 
     def process_directory(self, dry_run: bool = False) -> None:
         """Process all images in the source directory recursively.
@@ -377,7 +342,6 @@ class FaceDetectionFilter:
         self.logger.info(f"Source directory: {self.source_dir}")
         self.logger.info(f"Destination directory: {self.destination_dir}")
         self.logger.info(f"Dry run mode: {dry_run}")
-        self.logger.info(f"Using device: {self.detector.device}")
         self.logger.info(f"Parallel workers: {self.max_workers}")
 
         if not self.source_dir.exists():
@@ -403,14 +367,10 @@ class FaceDetectionFilter:
         self.logger.info(f"Found {total_files} images to process")
 
         # Process files in parallel
-        # Note: We use ThreadPoolExecutor because FaceAnalysis/ONNXRuntime often releases GIL
-        # during inference, allowing for parallelism.
+        # Note: MediaPipe is generally thread-safe for inference
         with concurrent.futures.ThreadPoolExecutor(
-            max_workers=self.max_workers,
+            max_workers=self.max_workers
         ) as executor:
-            # Create a partial function or lambda if needed, but simple loop works with submit
-            # We use list(tqdm(...)) to force iteration and display progress
-
             futures = [
                 executor.submit(self._process_single_file, file_path, dry_run)
                 for file_path in image_files
@@ -451,14 +411,14 @@ class FaceDetectionFilter:
 def main():
     """Main entry point for the script."""
     parser = argparse.ArgumentParser(
-        description="Recursively filter images containing human faces using InsightFace RetinaFace.",
+        description="Recursively filter images containing human faces using MediaPipe.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python face_detection_filter_retinaface.py -s /Users/name/Pictures -d /Users/name/Faces_Only
-  python face_detection_filter_retinaface.py -s /path/to/source -d /path/to/destination --confidence 0.7
-  python face_detection_filter_retinaface.py -s /path/to/source -d /path/to/destination --device cpu
-  python face_detection_filter_retinaface.py -s /path/to/source -d /path/to/destination --dry-run
+  uv run face_detection_filter_mediapipe.py -s /Users/name/Pictures -d /Users/name/Faces_Only
+  uv run face_detection_filter_mediapipe.py -s /path/to/source -d /path/to/destination --confidence 0.5
+  uv run face_detection_filter_mediapipe.py -s /path/to/source -d /path/to/destination --workers 8
+  uv run face_detection_filter_mediapipe.py -s /path/to/source -d /path/to/destination --dry-run
         """,
     )
 
@@ -479,12 +439,6 @@ Examples:
         type=float,
         default=0.5,
         help="Minimum confidence threshold for face detection (0.0-1.0, default: 0.5)",
-    )
-    parser.add_argument(
-        "--device",
-        choices=["auto", "mps", "cpu"],
-        default="auto",
-        help="Device to use for inference (auto, mps, cpu, default: auto)",
     )
     parser.add_argument(
         "--log-level",
@@ -511,21 +465,17 @@ Examples:
         print("Error: Confidence threshold must be between 0.0 and 1.0")
         sys.exit(1)
 
-    # Map 'auto' to None for automatic detection
-    device = None if args.device == "auto" else args.device
-
     # Create and run the face detection filter
-    filter = FaceDetectionFilter(
+    face_filter = FaceDetectionFilter(
         source_dir=args.source,
         destination_dir=args.destination,
         confidence_threshold=args.confidence,
-        device=device,
         max_workers=args.workers,
         log_level=args.log_level,
     )
 
     try:
-        filter.process_directory(dry_run=args.dry_run)
+        face_filter.process_directory(dry_run=args.dry_run)
         print("\n✅ Face detection filtering completed successfully!")
 
     except KeyboardInterrupt:

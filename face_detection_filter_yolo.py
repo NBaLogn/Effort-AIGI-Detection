@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
-"""Face Detection Filter Script using InsightFace RetinaFace.
+"""Face Detection Filter Script using Ultralytics YOLOv8-face.
 
-Recursively processes all images in a source directory, detects faces using InsightFace RetinaFace,
+Recursively processes all images in a source directory, detects faces using YOLOv8-face,
 and copies images containing faces to a destination directory while preserving the folder structure.
 
 Features:
-- High-accuracy face detection using RetinaFace (90.4% mAP on hard datasets)
-- MPS (Metal Performance Shaders) acceleration for Mac M1/M2 chips
+- Fast and accurate face detection using YOLOv8-face
 - Configurable detection confidence thresholds
 - Comprehensive logging and progress tracking
 - Recursive directory processing with structure preservation
 
 Usage:
-    python face_detection_filter_retinaface.py --source /path/to/source --destination /path/to/destination
-    python face_detection_filter_retinaface.py -s /Users/name/Pictures -d /Users/name/Faces_Only --confidence 0.7
+    uv run face_detection_filter_yolo.py --source /path/to/source --destination /path/to/destination
+    uv run face_detection_filter_yolo.py -s /Users/name/Pictures -d /Users/name/Faces_Only --confidence 0.5
 """
 
 import argparse
 import concurrent.futures
+import datetime
 import logging
 import os
 import shutil
@@ -25,148 +25,102 @@ import sys
 from pathlib import Path
 
 import cv2
-import numpy as np
-import torch
-from insightface.app import FaceAnalysis
 from tqdm import tqdm
+from ultralytics import YOLO
 
 
-class RetinaFaceDetector:
-    """High-accuracy face detector using InsightFace with MPS support."""
+class YOLOFaceDetector:
+    """Fast face detector using Ultralytics YOLOv8-face."""
 
-    def __init__(self, confidence_threshold: float = 0.5, device: str | None = None):
-        """Initialize the face detector using FaceAnalysis.
+    def __init__(
+        self, confidence_threshold: float = 0.5, model_size: str = "n"
+    ) -> None:
+        """Initialize the YOLO face detector.
 
         Args:
             confidence_threshold: Minimum confidence score for face detection (0.0-1.0)
-            device: Device to use ('mps', 'cpu', or None for auto-detection)
+            model_size: Model size ('n'=nano, 's'=small, 'm'=medium, 'l'=large)
         """
         self.confidence_threshold = confidence_threshold
+        self.model_size = model_size
+        self.logger = logging.getLogger("YOLOFaceDetector")
 
-        # Determine device
-        if device is None:
-            if torch.backends.mps.is_available():
-                self.device = "mps"
-            else:
-                self.device = "cpu"
-        else:
-            self.device = device
-
-        self.logger = logging.getLogger("RetinaFaceDetector")
-        self.logger.info(f"Initializing FaceAnalysis detector on {self.device}")
-
-        # Load the model
+        # Load YOLO model
         self.model = self._load_model()
 
-        self.logger.info(
-            f"FaceAnalysis detector initialized successfully on {self.device}",
-        )
+        self.logger.info("YOLO Face Detection initialized")
+        self.logger.info(f"Model size: {model_size}")
         self.logger.info(f"Confidence threshold: {self.confidence_threshold}")
 
-    def _load_model(self):
-        """Load the FaceAnalysis model with appropriate device configuration."""
+    def _load_model(self) -> YOLO:
+        """Load the YOLO face detection model."""
         try:
-            self.logger.debug("Attempting to load FaceAnalysis model...")
+            # Use YOLOv8 face detection model
+            # The model will be downloaded automatically if not present
+            model_name = f"yolov8{self.model_size}-face.pt"
+            self.logger.info(f"Loading YOLO model: {model_name}")
 
-            # Determine providers based on device
-            if self.device == "mps":
-                # CoreML for Apple Silicon
-                providers = ["CoreMLExecutionProvider", "CPUExecutionProvider"]
-            else:
-                # CPU only
-                providers = ["CPUExecutionProvider"]
+            # Try to load the model, fall back to regular YOLOv8 if face model not available
+            try:
+                model = YOLO(model_name)
+            except Exception:
+                self.logger.warning(
+                    f"Face-specific model not found, using standard YOLOv8{self.model_size}"
+                )
+                model = YOLO(f"yolov8{self.model_size}.pt")
 
-            self.logger.debug(f"Using providers: {providers}")
-
-            # Load FaceAnalysis with detection model
-            model = FaceAnalysis(
-                name="buffalo_l",
-                providers=providers,
-                allow_modules=["detection"],
-            )
-
-            # Prepare the detection model
-            # ctx_id=0 means GPU/accelerated, but with CoreML provider it will use appropriate backend
-            self.logger.debug(
-                f"Preparing detection model with det_thresh={self.confidence_threshold}",
-            )
-            model.prepare(ctx_id=0, det_thresh=self.confidence_threshold)
-
-            self.logger.debug("Model loaded and prepared successfully")
+            self.logger.info("Model loaded successfully")
             return model
 
         except Exception as e:
-            self.logger.exception(f"Failed to load FaceAnalysis model: {e}")
-            self.logger.exception(
-                "Make sure insightface is installed: pip install insightface",
-            )
+            self.logger.exception(f"Failed to load YOLO model: {e}")
             raise
 
-    def detect_faces(self, image: np.ndarray) -> bool:
+    def detect_faces(self, image) -> bool:
         """Detect faces in a single image.
 
         Args:
-            image: Input image as numpy array (BGR format)
+            image: Input image as numpy array (BGR format from cv2)
 
         Returns:
             True if faces are detected with sufficient confidence, False otherwise
         """
         try:
-            # Run face detection
-            faces = self.model.get(image)
+            # Run inference
+            results = self.model(image, verbose=False, conf=self.confidence_threshold)
 
-            # Check if any face meets the confidence threshold
-            for face in faces:
-                if hasattr(face, "det_score"):
-                    confidence = float(face.det_score)
-                else:
-                    # Fallback for different face object structure
-                    confidence = float(face[4]) if len(face) > 4 else 0.5
-
-                if confidence >= self.confidence_threshold:
-                    return True
-
+            # Check if any detections were made
+            if len(results) > 0 and len(results[0].boxes) > 0:
+                return True
             return False
 
         except Exception as e:
             self.logger.warning(f"Error during face detection: {e}")
             return False
 
-    def get_face_count_and_confidences(
-        self,
-        image: np.ndarray,
-    ) -> tuple[int, list[float]]:
-        """Get the number of faces and their confidence scores.
+    def get_face_count(self, image) -> int:
+        """Get the number of faces detected.
 
         Args:
             image: Input image as numpy array (BGR format)
 
         Returns:
-            Tuple of (face_count, confidence_scores)
+            Number of faces detected
         """
         try:
-            faces = self.model.get(image)
-            confidences = []
+            results = self.model(image, verbose=False, conf=self.confidence_threshold)
 
-            for face in faces:
-                if hasattr(face, "det_score"):
-                    confidence = float(face.det_score)
-                else:
-                    confidence = float(face[4]) if len(face) > 4 else 0.0
-                confidences.append(confidence)
-
-            # Count faces above threshold
-            face_count = sum(1 for c in confidences if c >= self.confidence_threshold)
-
-            return face_count, confidences
+            if len(results) > 0:
+                return len(results[0].boxes)
+            return 0
 
         except Exception as e:
             self.logger.warning(f"Error getting face count: {e}")
-            return 0, []
+            return 0
 
 
 class FaceDetectionFilter:
-    """Main class for filtering images based on RetinaFace detection."""
+    """Main class for filtering images based on YOLO face detection."""
 
     # Supported image file extensions
     IMAGE_EXTENSIONS = {
@@ -185,30 +139,33 @@ class FaceDetectionFilter:
         source_dir: str,
         destination_dir: str,
         confidence_threshold: float = 0.5,
-        device: str | None = None,
+        model_size: str = "n",
         max_workers: int = 4,
         log_level: str = "INFO",
-    ):
+    ) -> None:
         """Initialize the face detection filter.
 
         Args:
             source_dir: Source directory containing images
             destination_dir: Destination directory for filtered images
             confidence_threshold: Minimum confidence for face detection (0.0-1.0)
-            device: Device to use ('mps', 'cpu', or None for auto-detection)
+            model_size: YOLO model size ('n', 's', 'm', 'l')
             max_workers: Number of worker threads for parallel processing
             log_level: Logging level (DEBUG, INFO, WARNING, ERROR)
         """
         self.source_dir = Path(source_dir)
         self.destination_dir = Path(destination_dir)
         self.confidence_threshold = confidence_threshold
-        self.device = device
+        self.model_size = model_size
         self.max_workers = max_workers
 
+        # Initialize logging first
+        self._setup_logging(log_level)
+
         # Initialize face detector
-        self.detector = RetinaFaceDetector(
+        self.detector = YOLOFaceDetector(
             confidence_threshold=confidence_threshold,
-            device=device,
+            model_size=model_size,
         )
 
         # Statistics
@@ -221,14 +178,11 @@ class FaceDetectionFilter:
             "total_faces_detected": 0,
         }
 
-        # Initialize logging
-        self._setup_logging(log_level)
-
-        self.logger.info("Initialized FaceDetectionFilter:")
+        self.logger.info("Initialized FaceDetectionFilter (YOLO):")
         self.logger.info(f"  Source: {self.source_dir}")
         self.logger.info(f"  Destination: {self.destination_dir}")
         self.logger.info(f"  Confidence threshold: {self.confidence_threshold}")
-        self.logger.info(f"  Device: {self.device or 'auto-detected'}")
+        self.logger.info(f"  Model size: {self.model_size}")
         self.logger.info(f"  Max workers: {self.max_workers}")
 
     def _setup_logging(self, log_level: str) -> None:
@@ -238,10 +192,8 @@ class FaceDetectionFilter:
         log_dir.mkdir(exist_ok=True)
 
         # Generate log filename with timestamp
-        import datetime
-
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        log_file = log_dir / f"face_detection_retinaface_{timestamp}.log"
+        log_file = log_dir / f"face_detection_yolo_{timestamp}.log"
 
         # Configure logging
         numeric_level = getattr(logging, log_level.upper(), logging.INFO)
@@ -274,14 +226,14 @@ class FaceDetectionFilter:
         """Check if the file is an image based on its extension."""
         return file_path.suffix.lower() in self.IMAGE_EXTENSIONS
 
-    def _detect_faces_in_image(self, image_path: Path) -> tuple[bool, int, list[float]]:
+    def _detect_faces_in_image(self, image_path: Path) -> tuple[bool, int]:
         """Detect faces in a single image.
 
         Args:
             image_path: Path to the image file
 
         Returns:
-            Tuple of (has_faces, face_count, confidences)
+            Tuple of (has_faces, face_count)
         """
         try:
             # Read image
@@ -289,22 +241,19 @@ class FaceDetectionFilter:
 
             if image is None:
                 self.logger.warning(f"Could not read image: {image_path}")
-                return False, 0, []
+                return False, 0
 
             # Detect faces
-            has_faces, confidences = self.detector.get_face_count_and_confidences(image)
-            face_count = sum(1 for c in confidences if c >= self.confidence_threshold)
+            face_count = self.detector.get_face_count(image)
 
             if face_count > 0:
-                self.logger.debug(
-                    f"Faces detected in {image_path}: {face_count} (confidences: {[f'{c:.3f}' for c in confidences]})",
-                )
+                self.logger.debug(f"Faces detected in {image_path}: {face_count}")
 
-            return face_count > 0, face_count, confidences
+            return face_count > 0, face_count
 
         except Exception as e:
             self.logger.error(f"Error processing image {image_path}: {e}")
-            return False, 0, []
+            return False, 0
 
     def _copy_with_structure(self, source_path: Path, destination_path: Path) -> None:
         """Copy file to destination while preserving directory structure.
@@ -337,9 +286,7 @@ class FaceDetectionFilter:
             self.stats["total_images"] += 1
 
             # Check if file contains faces
-            has_faces, face_count, _ = self._detect_faces_in_image(
-                file_path,
-            )
+            has_faces, face_count = self._detect_faces_in_image(file_path)
 
             if has_faces:
                 self.stats["images_with_faces"] += 1
@@ -365,7 +312,7 @@ class FaceDetectionFilter:
 
         except Exception as e:
             self.stats["errors"] += 1
-            self.logger.error(f"Error processing {file_path}: {e}")
+            self.logger.exception(f"Error processing {file_path}: {e}")
 
     def process_directory(self, dry_run: bool = False) -> None:
         """Process all images in the source directory recursively.
@@ -377,7 +324,6 @@ class FaceDetectionFilter:
         self.logger.info(f"Source directory: {self.source_dir}")
         self.logger.info(f"Destination directory: {self.destination_dir}")
         self.logger.info(f"Dry run mode: {dry_run}")
-        self.logger.info(f"Using device: {self.detector.device}")
         self.logger.info(f"Parallel workers: {self.max_workers}")
 
         if not self.source_dir.exists():
@@ -403,14 +349,9 @@ class FaceDetectionFilter:
         self.logger.info(f"Found {total_files} images to process")
 
         # Process files in parallel
-        # Note: We use ThreadPoolExecutor because FaceAnalysis/ONNXRuntime often releases GIL
-        # during inference, allowing for parallelism.
         with concurrent.futures.ThreadPoolExecutor(
-            max_workers=self.max_workers,
+            max_workers=self.max_workers
         ) as executor:
-            # Create a partial function or lambda if needed, but simple loop works with submit
-            # We use list(tqdm(...)) to force iteration and display progress
-
             futures = [
                 executor.submit(self._process_single_file, file_path, dry_run)
                 for file_path in image_files
@@ -451,14 +392,14 @@ class FaceDetectionFilter:
 def main():
     """Main entry point for the script."""
     parser = argparse.ArgumentParser(
-        description="Recursively filter images containing human faces using InsightFace RetinaFace.",
+        description="Recursively filter images containing human faces using YOLOv8-face.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python face_detection_filter_retinaface.py -s /Users/name/Pictures -d /Users/name/Faces_Only
-  python face_detection_filter_retinaface.py -s /path/to/source -d /path/to/destination --confidence 0.7
-  python face_detection_filter_retinaface.py -s /path/to/source -d /path/to/destination --device cpu
-  python face_detection_filter_retinaface.py -s /path/to/source -d /path/to/destination --dry-run
+  uv run face_detection_filter_yolo.py -s /Users/name/Pictures -d /Users/name/Faces_Only
+  uv run face_detection_filter_yolo.py -s /path/to/source -d /path/to/destination --confidence 0.5
+  uv run face_detection_filter_yolo.py -s /path/to/source -d /path/to/destination --model-size m --workers 8
+  uv run face_detection_filter_yolo.py -s /path/to/source -d /path/to/destination --dry-run
         """,
     )
 
@@ -481,10 +422,10 @@ Examples:
         help="Minimum confidence threshold for face detection (0.0-1.0, default: 0.5)",
     )
     parser.add_argument(
-        "--device",
-        choices=["auto", "mps", "cpu"],
-        default="auto",
-        help="Device to use for inference (auto, mps, cpu, default: auto)",
+        "--model-size",
+        choices=["n", "s", "m", "l"],
+        default="n",
+        help="YOLO model size: n(ano), s(mall), m(edium), l(arge) (default: n)",
     )
     parser.add_argument(
         "--log-level",
@@ -511,21 +452,18 @@ Examples:
         print("Error: Confidence threshold must be between 0.0 and 1.0")
         sys.exit(1)
 
-    # Map 'auto' to None for automatic detection
-    device = None if args.device == "auto" else args.device
-
     # Create and run the face detection filter
-    filter = FaceDetectionFilter(
+    face_filter = FaceDetectionFilter(
         source_dir=args.source,
         destination_dir=args.destination,
         confidence_threshold=args.confidence,
-        device=device,
+        model_size=args.model_size,
         max_workers=args.workers,
         log_level=args.log_level,
     )
 
     try:
-        filter.process_directory(dry_run=args.dry_run)
+        face_filter.process_directory(dry_run=args.dry_run)
         print("\n✅ Face detection filtering completed successfully!")
 
     except KeyboardInterrupt:
