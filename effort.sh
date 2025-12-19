@@ -20,20 +20,26 @@
 
 #use direct image loading instead of the processed images
 #use direct paths
-# uv run DeepfakeBench/training/finetune.py \
-#     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
-#     --train_dataset "/Volumes/Crucial/Large_Downloads/AI/DATASETS/Chameleon_retinafaces" \
-#     --test_dataset "/Volumes/Crucial/Large_Downloads/SAMPLED/GenImage_sampled2/val" \
-#     --pretrained_weights "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/ff_12-16-15-57-38/test/avg/ckpt_best.pth"
+uv run DeepfakeBench/training/finetune.py \
+    --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
+    --train_dataset "/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/Chameleon_retinafaces/train" \
+    "/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/GenImageFaces_sampled_structured/train" \
+    "/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/quan_dataset_5000/train" \
+    "/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/quan_faceswap1000/train" \
+    --test_dataset "/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/Chameleon_retinafaces/val" \
+    "/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/GenImageFaces_sampled_structured/val" \
+    "/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/quan_dataset_5000/val" \
+    "/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/quan_faceswap1000/val" \
+    --pretrained_weights "/Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_FaceForensic.pth"
 
 # =============================================
 # 3. EVALUATION OF FINE-TUNED MODEL
 # =============================================
-uv run DeepfakeBench/training/evaluate_finetune.py \
-    --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
-    --weights "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/ff_genimage_ChameleonFaces-12-17-14-45/test/combined_test/ckpt_best.pth" \
-    --test_dataset "/Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_faceswap1000" \
-    --output_dir evaluation_results
+# uv run DeepfakeBench/training/evaluate_finetune.py \
+#     --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
+#     --weights "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/ff_genimage_ChameleonFaces-12-17-14-45/test/combined_test/ckpt_best.pth" \
+#     --test_dataset "/Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_faceswap1000" \
+#     --output_dir evaluation_results
     # "/Volumes/Crucial/Large_Downloads/SAMPLED/df40/deepfacelab_sampled" \
     # "/Volumes/Crucial/Large_Downloads/SAMPLED/df40/heygen_new_sampled" \
     # "/Volumes/Crucial/Large_Downloads/SAMPLED/df40/MidJourney_sampled" \
