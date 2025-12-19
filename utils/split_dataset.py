@@ -1,10 +1,10 @@
 import os
-import shutil
 import random
+import shutil
 from pathlib import Path
 
 
-def split_dataset(base_path, split_ratio=0.7):
+def split_dataset(base_path, split_ratio=0.7) -> None:
     base_dir = Path(base_path)
     classes = ["fake", "real"]
 
@@ -58,9 +58,9 @@ def split_dataset(base_path, split_ratio=0.7):
             print(f"Removed empty source directory: {src_cls_dir}")
         else:
             print(
-                f"Source directory {src_cls_dir} not empty (contains {len(remaining_files)} items). Kept."
+                f"Source directory {src_cls_dir} not empty (contains {len(remaining_files)} items). Kept.",
             )
 
 
 if __name__ == "__main__":
-    split_dataset("/Volumes/Crucial/Large_Downloads/AI/DATASETS/quan_dataset")
+    split_dataset("/Volumes/Crucial/Large_Downloads/AI/DATASETS/GenImageFaces")
