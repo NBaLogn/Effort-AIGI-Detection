@@ -951,10 +951,27 @@ class MultiRawFileDataset(data.Dataset):
             self.datasets.append(dataset)
             self.cumulative_lengths.append(self.cumulative_lengths[-1] + len(dataset))
 
+        # Create combined data_dict for compatibility with trainer
+        self._build_data_dict()
+
         logger.info(
             f"MultiRawFileDataset initialized with {len(self.datasets)} datasets "
             f"and {len(self)} total samples",
         )
+
+    def _build_data_dict(self):
+        """Build combined data_dict from all sub-datasets for trainer compatibility."""
+        all_images = []
+        all_labels = []
+
+        for dataset in self.datasets:
+            all_images.extend(dataset.image_list)
+            all_labels.extend(dataset.label_list)
+
+        self.data_dict = {
+            "image": all_images,
+            "label": all_labels,
+        }
 
     def __len__(self) -> int:
         """Get total dataset length."""
