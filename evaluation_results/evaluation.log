@@ -3453,3 +3453,689 @@ FileNotFoundError: [Errno 2] No such file or directory: 'DeepfakeBench/training/
 2025-12-18 10:30:31,409 - INFO - Saved evaluation results to evaluation_results/dataset_1_quan_faceswap1000_eval_20251218_103031.json
 2025-12-18 10:30:31,410 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
 2025-12-18 10:30:31,410 - INFO - Fine-tuned model evaluation finished successfully
+2025-12-19 14:23:12,293 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-19 14:23:12,293 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-19 14:23:12,293 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-19 14:23:12,293 - INFO - pretrained: no need to provide this for the effort model
+2025-12-19 14:23:12,293 - INFO - model_name: effort
+2025-12-19 14:23:12,293 - INFO - backbone_name: vit
+2025-12-19 14:23:12,293 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-19 14:23:12,293 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-19 14:23:12,293 - INFO - train_dataset: ['UADFV']
+2025-12-19 14:23:12,293 - INFO - test_dataset: ['UADFV']
+2025-12-19 14:23:12,293 - INFO - compression: c23
+2025-12-19 14:23:12,293 - INFO - train_batchSize: 8
+2025-12-19 14:23:12,293 - INFO - test_batchSize: 8
+2025-12-19 14:23:12,293 - INFO - workers: 1
+2025-12-19 14:23:12,293 - INFO - frame_num: {'train': 4, 'test': 8}
+2025-12-19 14:23:12,293 - INFO - resolution: 224
+2025-12-19 14:23:12,293 - INFO - with_mask: False
+2025-12-19 14:23:12,293 - INFO - with_landmark: False
+2025-12-19 14:23:12,293 - INFO - use_data_augmentation: True
+2025-12-19 14:23:12,293 - INFO - data_aug: {'flip_prob': 0.3, 'rotate_prob': 0.2, 'rotate_limit': [-5, 5], 'blur_prob': 0.2, 'blur_limit': [3, 5], 'brightness_prob': 0.2, 'brightness_limit': [-0.05, 0.05], 'contrast_limit': [-0.05, 0.05], 'quality_lower': 60, 'quality_upper': 95}
+2025-12-19 14:23:12,293 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-19 14:23:12,293 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-19 14:23:12,293 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-19 14:23:12,293 - INFO - lr_scheduler: None
+2025-12-19 14:23:12,293 - INFO - nEpochs: 1
+2025-12-19 14:23:12,294 - INFO - start_epoch: 0
+2025-12-19 14:23:12,294 - INFO - save_epoch: 1
+2025-12-19 14:23:12,294 - INFO - rec_iter: 50
+2025-12-19 14:23:12,294 - INFO - logdir: ./logs
+2025-12-19 14:23:12,294 - INFO - manualSeed: 1024
+2025-12-19 14:23:12,294 - INFO - save_ckpt: True
+2025-12-19 14:23:12,294 - INFO - save_feat: True
+2025-12-19 14:23:12,294 - INFO - loss_func: cross_entropy
+2025-12-19 14:23:12,294 - INFO - losstype: None
+2025-12-19 14:23:12,294 - INFO - metric_scoring: auc
+2025-12-19 14:23:12,294 - INFO - fine_tune: True
+2025-12-19 14:23:12,294 - INFO - pretrained_checkpoint: None
+2025-12-19 14:23:12,294 - INFO - freeze_backbone: True
+2025-12-19 14:23:12,294 - INFO - train_classification_head: True
+2025-12-19 14:23:12,294 - INFO - train_svd_residuals: True
+2025-12-19 14:23:12,294 - INFO - save_avg: True
+2025-12-19 14:23:12,294 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2025-12-19 14:23:12,294 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2025-12-19 14:23:12,294 - INFO - Loading model from DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/ckpt_best.pth
+2025-12-19 14:23:29,384 - INFO - Model loaded successfully
+2025-12-19 14:23:29,386 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/GenImageFaces_sampled_structured/val']
+2025-12-19 14:23:29,386 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/GenImageFaces_sampled_structured/val
+2025-12-19 14:23:29,399 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/GenImageFaces_sampled_structured/val
+2025-12-19 14:23:29,399 - INFO - All subdirectories found: ['real', 'fake']
+2025-12-19 14:23:29,400 - INFO - Found real directories: ['real']
+2025-12-19 14:23:29,400 - INFO - Found fake directories: ['fake']
+2025-12-19 14:23:29,400 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/GenImageFaces_sampled_structured/val
+2025-12-19 14:23:29,400 - INFO - Processing real directory: real
+2025-12-19 14:23:29,403 - INFO - Processing fake directory: fake
+2025-12-19 14:23:29,404 - INFO - Checking for faulty images...
+2025-12-19 14:23:31,120 - INFO - No faulty images found.
+2025-12-19 14:23:31,120 - INFO - Dataset contains 185 real and 181 fake samples
+2025-12-19 14:23:31,120 - INFO - RawFileDataset initialized with 366 samples for test mode
+2025-12-19 14:23:31,121 - INFO - Test loader prepared with 23 batches
+2025-12-19 14:23:31,121 - INFO - Evaluating on dataset_1_val
+2025-12-19 14:24:04,273 - INFO - Evaluation results for dataset_1_val:
+2025-12-19 14:24:04,274 - INFO -   auc: 0.9211
+2025-12-19 14:24:04,274 - INFO -   eer: 0.1405
+2025-12-19 14:24:04,274 - INFO -   accuracy: 0.5055
+2025-12-19 14:24:04,274 - INFO -   ap: 0.9182
+2025-12-19 14:24:04,274 - INFO -   precision: 0.8563
+2025-12-19 14:24:04,274 - INFO -   recall: 0.8232
+2025-12-19 14:24:04,274 - INFO -   f1: 0.8394
+2025-12-19 14:24:04,274 - INFO -   sample_count: 366.0000
+2025-12-19 14:24:04,275 - INFO - Saved evaluation results to evaluation_results/dataset_1_val_eval_20251219_142404.json
+2025-12-19 14:24:04,276 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-19 14:24:04,276 - INFO - Fine-tuned model evaluation finished successfully
+2025-12-19 14:28:49,282 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-19 14:28:49,282 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-19 14:28:49,282 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-19 14:28:49,282 - INFO - pretrained: no need to provide this for the effort model
+2025-12-19 14:28:49,282 - INFO - model_name: effort
+2025-12-19 14:28:49,282 - INFO - backbone_name: vit
+2025-12-19 14:28:49,282 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-19 14:28:49,282 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-19 14:28:49,282 - INFO - train_dataset: ['UADFV']
+2025-12-19 14:28:49,282 - INFO - test_dataset: ['UADFV']
+2025-12-19 14:28:49,282 - INFO - compression: c23
+2025-12-19 14:28:49,282 - INFO - train_batchSize: 8
+2025-12-19 14:28:49,283 - INFO - test_batchSize: 8
+2025-12-19 14:28:49,283 - INFO - workers: 1
+2025-12-19 14:28:49,283 - INFO - frame_num: {'train': 4, 'test': 8}
+2025-12-19 14:28:49,283 - INFO - resolution: 224
+2025-12-19 14:28:49,283 - INFO - with_mask: False
+2025-12-19 14:28:49,283 - INFO - with_landmark: False
+2025-12-19 14:28:49,283 - INFO - use_data_augmentation: True
+2025-12-19 14:28:49,283 - INFO - data_aug: {'flip_prob': 0.3, 'rotate_prob': 0.2, 'rotate_limit': [-5, 5], 'blur_prob': 0.2, 'blur_limit': [3, 5], 'brightness_prob': 0.2, 'brightness_limit': [-0.05, 0.05], 'contrast_limit': [-0.05, 0.05], 'quality_lower': 60, 'quality_upper': 95}
+2025-12-19 14:28:49,283 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-19 14:28:49,283 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-19 14:28:49,283 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-19 14:28:49,283 - INFO - lr_scheduler: None
+2025-12-19 14:28:49,283 - INFO - nEpochs: 1
+2025-12-19 14:28:49,283 - INFO - start_epoch: 0
+2025-12-19 14:28:49,283 - INFO - save_epoch: 1
+2025-12-19 14:28:49,283 - INFO - rec_iter: 50
+2025-12-19 14:28:49,283 - INFO - logdir: ./logs
+2025-12-19 14:28:49,283 - INFO - manualSeed: 1024
+2025-12-19 14:28:49,283 - INFO - save_ckpt: True
+2025-12-19 14:28:49,283 - INFO - save_feat: True
+2025-12-19 14:28:49,283 - INFO - loss_func: cross_entropy
+2025-12-19 14:28:49,283 - INFO - losstype: None
+2025-12-19 14:28:49,283 - INFO - metric_scoring: auc
+2025-12-19 14:28:49,283 - INFO - fine_tune: True
+2025-12-19 14:28:49,283 - INFO - pretrained_checkpoint: None
+2025-12-19 14:28:49,283 - INFO - freeze_backbone: True
+2025-12-19 14:28:49,283 - INFO - train_classification_head: True
+2025-12-19 14:28:49,283 - INFO - train_svd_residuals: True
+2025-12-19 14:28:49,283 - INFO - save_avg: True
+2025-12-19 14:28:49,283 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2025-12-19 14:28:49,283 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2025-12-19 14:28:49,283 - INFO - Loading model from DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/ckpt_best.pth
+2025-12-19 14:29:06,112 - INFO - Model loaded successfully
+2025-12-19 14:29:06,115 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/Chameleon_retinafaces/val']
+2025-12-19 14:29:06,116 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/Chameleon_retinafaces/val
+2025-12-19 14:29:06,149 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/Chameleon_retinafaces/val
+2025-12-19 14:29:06,150 - INFO - All subdirectories found: ['real', 'fake']
+2025-12-19 14:29:06,150 - INFO - Found real directories: ['real']
+2025-12-19 14:29:06,150 - INFO - Found fake directories: ['fake']
+2025-12-19 14:29:06,150 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/Chameleon_retinafaces/val
+2025-12-19 14:29:06,150 - INFO - Processing real directory: real
+2025-12-19 14:29:06,158 - INFO - Processing fake directory: fake
+2025-12-19 14:29:06,171 - INFO - Checking for faulty images...
+2025-12-19 14:29:18,289 - INFO - No faulty images found.
+2025-12-19 14:29:18,290 - INFO - Dataset contains 1028 real and 1805 fake samples
+2025-12-19 14:29:18,290 - INFO - RawFileDataset initialized with 2833 samples for test mode
+2025-12-19 14:29:18,291 - INFO - Test loader prepared with 178 batches
+2025-12-19 14:29:18,291 - INFO - Evaluating on dataset_1_val
+2025-12-19 14:30:12,458 - INFO - Processed batch 50/178
+2025-12-19 14:31:00,030 - INFO - Processed batch 100/178
+2025-12-19 14:31:47,691 - INFO - Processed batch 150/178
+2025-12-19 14:32:19,650 - INFO - Evaluation results for dataset_1_val:
+2025-12-19 14:32:19,651 - INFO -   auc: 0.9774
+2025-12-19 14:32:19,651 - INFO -   eer: 0.0739
+2025-12-19 14:32:19,651 - INFO -   accuracy: 0.3629
+2025-12-19 14:32:19,651 - INFO -   ap: 0.9883
+2025-12-19 14:32:19,651 - INFO -   precision: 0.9350
+2025-12-19 14:32:19,651 - INFO -   recall: 0.9485
+2025-12-19 14:32:19,651 - INFO -   f1: 0.9417
+2025-12-19 14:32:19,651 - INFO -   sample_count: 2833.0000
+2025-12-19 14:32:19,652 - INFO - Saved evaluation results to evaluation_results/dataset_1_val_eval_20251219_143219.json
+2025-12-19 14:32:19,652 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-19 14:32:19,652 - INFO - Fine-tuned model evaluation finished successfully
+2025-12-19 14:39:17,025 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-19 14:39:17,025 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-19 14:39:17,025 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-19 14:39:17,025 - INFO - pretrained: no need to provide this for the effort model
+2025-12-19 14:39:17,025 - INFO - model_name: effort
+2025-12-19 14:39:17,025 - INFO - backbone_name: vit
+2025-12-19 14:39:17,025 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-19 14:39:17,025 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-19 14:39:17,025 - INFO - train_dataset: ['UADFV']
+2025-12-19 14:39:17,025 - INFO - test_dataset: ['UADFV']
+2025-12-19 14:39:17,025 - INFO - compression: c23
+2025-12-19 14:39:17,025 - INFO - train_batchSize: 8
+2025-12-19 14:39:17,025 - INFO - test_batchSize: 8
+2025-12-19 14:39:17,025 - INFO - workers: 1
+2025-12-19 14:39:17,026 - INFO - frame_num: {'train': 4, 'test': 8}
+2025-12-19 14:39:17,026 - INFO - resolution: 224
+2025-12-19 14:39:17,026 - INFO - with_mask: False
+2025-12-19 14:39:17,026 - INFO - with_landmark: False
+2025-12-19 14:39:17,026 - INFO - use_data_augmentation: True
+2025-12-19 14:39:17,026 - INFO - data_aug: {'flip_prob': 0.3, 'rotate_prob': 0.2, 'rotate_limit': [-5, 5], 'blur_prob': 0.2, 'blur_limit': [3, 5], 'brightness_prob': 0.2, 'brightness_limit': [-0.05, 0.05], 'contrast_limit': [-0.05, 0.05], 'quality_lower': 60, 'quality_upper': 95}
+2025-12-19 14:39:17,026 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-19 14:39:17,026 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-19 14:39:17,026 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-19 14:39:17,026 - INFO - lr_scheduler: None
+2025-12-19 14:39:17,026 - INFO - nEpochs: 1
+2025-12-19 14:39:17,026 - INFO - start_epoch: 0
+2025-12-19 14:39:17,026 - INFO - save_epoch: 1
+2025-12-19 14:39:17,026 - INFO - rec_iter: 50
+2025-12-19 14:39:17,026 - INFO - logdir: ./logs
+2025-12-19 14:39:17,026 - INFO - manualSeed: 1024
+2025-12-19 14:39:17,026 - INFO - save_ckpt: True
+2025-12-19 14:39:17,026 - INFO - save_feat: True
+2025-12-19 14:39:17,026 - INFO - loss_func: cross_entropy
+2025-12-19 14:39:17,026 - INFO - losstype: None
+2025-12-19 14:39:17,026 - INFO - metric_scoring: auc
+2025-12-19 14:39:17,026 - INFO - fine_tune: True
+2025-12-19 14:39:17,026 - INFO - pretrained_checkpoint: None
+2025-12-19 14:39:17,026 - INFO - freeze_backbone: True
+2025-12-19 14:39:17,026 - INFO - train_classification_head: True
+2025-12-19 14:39:17,026 - INFO - train_svd_residuals: True
+2025-12-19 14:39:17,026 - INFO - save_avg: True
+2025-12-19 14:39:17,026 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2025-12-19 14:39:17,026 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2025-12-19 14:39:17,026 - INFO - Loading model from DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/ckpt_best.pth
+2025-12-19 14:39:33,365 - INFO - Model loaded successfully
+2025-12-19 14:39:33,366 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/GenImageFaces/val']
+2025-12-19 14:39:33,366 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/GenImageFaces/val
+2025-12-19 14:39:33,375 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/GenImageFaces/val
+2025-12-19 14:39:33,375 - INFO - All subdirectories found: ['real', 'fake']
+2025-12-19 14:39:33,375 - INFO - Found real directories: ['real']
+2025-12-19 14:39:33,375 - INFO - Found fake directories: ['fake']
+2025-12-19 14:39:33,375 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/GenImageFaces/val
+2025-12-19 14:39:33,375 - INFO - Processing real directory: real
+2025-12-19 14:39:33,438 - INFO - Processing fake directory: fake
+2025-12-19 14:39:33,513 - INFO - Checking for faulty images...
+2025-12-19 14:41:17,228 - INFO - No faulty images found.
+2025-12-19 14:41:17,229 - INFO - Dataset contains 10264 real and 11568 fake samples
+2025-12-19 14:41:17,231 - INFO - RawFileDataset initialized with 21832 samples for test mode
+2025-12-19 14:41:17,232 - INFO - Test loader prepared with 1365 batches
+2025-12-19 14:41:17,232 - INFO - Evaluating on dataset_1_val
+2025-12-19 14:42:12,291 - INFO - Processed batch 50/1365
+2025-12-19 14:43:00,878 - INFO - Processed batch 100/1365
+2025-12-19 14:43:48,806 - INFO - Processed batch 150/1365
+2025-12-19 14:44:40,817 - INFO - Processed batch 200/1365
+2025-12-19 14:45:31,718 - INFO - Processed batch 250/1365
+2025-12-19 14:46:21,124 - INFO - Processed batch 300/1365
+2025-12-19 14:47:08,570 - INFO - Processed batch 350/1365
+2025-12-19 14:47:56,032 - INFO - Processed batch 400/1365
+2025-12-19 14:48:43,894 - INFO - Processed batch 450/1365
+2025-12-19 14:49:32,340 - INFO - Processed batch 500/1365
+2025-12-19 14:50:19,965 - INFO - Processed batch 550/1365
+2025-12-19 14:51:07,873 - INFO - Processed batch 600/1365
+2025-12-19 14:51:56,121 - INFO - Processed batch 650/1365
+2025-12-19 14:52:43,629 - INFO - Processed batch 700/1365
+2025-12-19 14:53:31,356 - INFO - Processed batch 750/1365
+2025-12-19 14:54:19,053 - INFO - Processed batch 800/1365
+2025-12-19 14:55:06,766 - INFO - Processed batch 850/1365
+2025-12-19 14:55:54,241 - INFO - Processed batch 900/1365
+2025-12-19 14:56:42,112 - INFO - Processed batch 950/1365
+2025-12-19 14:57:29,904 - INFO - Processed batch 1000/1365
+2025-12-19 14:58:17,363 - INFO - Processed batch 1050/1365
+2025-12-19 14:59:04,662 - INFO - Processed batch 1100/1365
+2025-12-19 14:59:52,083 - INFO - Processed batch 1150/1365
+2025-12-19 15:00:39,474 - INFO - Processed batch 1200/1365
+2025-12-19 15:01:26,759 - INFO - Processed batch 1250/1365
+2025-12-19 15:02:14,405 - INFO - Processed batch 1300/1365
+2025-12-19 15:03:01,852 - INFO - Processed batch 1350/1365
+2025-12-19 15:03:20,802 - INFO - Evaluation results for dataset_1_val:
+2025-12-19 15:03:20,803 - INFO -   auc: 0.9236
+2025-12-19 15:03:20,803 - INFO -   eer: 0.1586
+2025-12-19 15:03:20,803 - INFO -   accuracy: 0.4701
+2025-12-19 15:03:20,803 - INFO -   ap: 0.9316
+2025-12-19 15:03:20,803 - INFO -   precision: 0.8734
+2025-12-19 15:03:20,803 - INFO -   recall: 0.8126
+2025-12-19 15:03:20,803 - INFO -   f1: 0.8419
+2025-12-19 15:03:20,803 - INFO -   sample_count: 21832.0000
+2025-12-19 15:03:20,805 - INFO - Saved evaluation results to evaluation_results/dataset_1_val_eval_20251219_150320.json
+2025-12-19 15:03:20,806 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-19 15:03:20,806 - INFO - Fine-tuned model evaluation finished successfully
+2025-12-19 15:17:59,869 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-19 15:17:59,869 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-19 15:17:59,869 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-19 15:17:59,869 - INFO - pretrained: no need to provide this for the effort model
+2025-12-19 15:17:59,869 - INFO - model_name: effort
+2025-12-19 15:17:59,869 - INFO - backbone_name: vit
+2025-12-19 15:17:59,869 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-19 15:17:59,869 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-19 15:17:59,869 - INFO - train_dataset: ['UADFV']
+2025-12-19 15:17:59,869 - INFO - test_dataset: ['UADFV']
+2025-12-19 15:17:59,869 - INFO - compression: c23
+2025-12-19 15:17:59,869 - INFO - train_batchSize: 8
+2025-12-19 15:17:59,869 - INFO - test_batchSize: 8
+2025-12-19 15:17:59,869 - INFO - workers: 1
+2025-12-19 15:17:59,869 - INFO - frame_num: {'train': 4, 'test': 8}
+2025-12-19 15:17:59,870 - INFO - resolution: 224
+2025-12-19 15:17:59,870 - INFO - with_mask: False
+2025-12-19 15:17:59,870 - INFO - with_landmark: False
+2025-12-19 15:17:59,870 - INFO - use_data_augmentation: True
+2025-12-19 15:17:59,870 - INFO - data_aug: {'flip_prob': 0.3, 'rotate_prob': 0.2, 'rotate_limit': [-5, 5], 'blur_prob': 0.2, 'blur_limit': [3, 5], 'brightness_prob': 0.2, 'brightness_limit': [-0.05, 0.05], 'contrast_limit': [-0.05, 0.05], 'quality_lower': 60, 'quality_upper': 95}
+2025-12-19 15:17:59,870 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-19 15:17:59,870 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-19 15:17:59,870 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-19 15:17:59,870 - INFO - lr_scheduler: None
+2025-12-19 15:17:59,870 - INFO - nEpochs: 1
+2025-12-19 15:17:59,870 - INFO - start_epoch: 0
+2025-12-19 15:17:59,870 - INFO - save_epoch: 1
+2025-12-19 15:17:59,870 - INFO - rec_iter: 50
+2025-12-19 15:17:59,870 - INFO - logdir: ./logs
+2025-12-19 15:17:59,870 - INFO - manualSeed: 1024
+2025-12-19 15:17:59,870 - INFO - save_ckpt: True
+2025-12-19 15:17:59,870 - INFO - save_feat: True
+2025-12-19 15:17:59,870 - INFO - loss_func: cross_entropy
+2025-12-19 15:17:59,870 - INFO - losstype: None
+2025-12-19 15:17:59,870 - INFO - metric_scoring: auc
+2025-12-19 15:17:59,870 - INFO - fine_tune: True
+2025-12-19 15:17:59,870 - INFO - pretrained_checkpoint: None
+2025-12-19 15:17:59,870 - INFO - freeze_backbone: True
+2025-12-19 15:17:59,870 - INFO - train_classification_head: True
+2025-12-19 15:17:59,870 - INFO - train_svd_residuals: True
+2025-12-19 15:17:59,870 - INFO - save_avg: True
+2025-12-19 15:17:59,870 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2025-12-19 15:17:59,870 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2025-12-19 15:17:59,870 - INFO - Loading model from DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/ckpt_best.pth
+2025-12-19 15:18:16,493 - INFO - Model loaded successfully
+2025-12-19 15:18:16,496 - INFO - Preparing test data for paths: ['/Voclumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40']
+2025-12-19 15:18:16,496 - INFO - Using RawFileDataset with data from /Voclumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40
+2025-12-19 15:18:16,497 - ERROR - Failed to evaluate on /Voclumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40: Raw data root directory not found: /Voclumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 290, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 130, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 213, in __init__
+    raise FileNotFoundError(
+        f"Raw data root directory not found: {self.raw_data_root}",
+    )
+FileNotFoundError: Raw data root directory not found: /Voclumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40
+2025-12-19 15:18:16,501 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-19 15:18:16,501 - INFO - Fine-tuned model evaluation finished successfully
+2025-12-19 15:22:18,760 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-19 15:22:18,760 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-19 15:22:18,760 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-19 15:22:18,760 - INFO - pretrained: no need to provide this for the effort model
+2025-12-19 15:22:18,760 - INFO - model_name: effort
+2025-12-19 15:22:18,760 - INFO - backbone_name: vit
+2025-12-19 15:22:18,760 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-19 15:22:18,760 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-19 15:22:18,760 - INFO - train_dataset: ['UADFV']
+2025-12-19 15:22:18,760 - INFO - test_dataset: ['UADFV']
+2025-12-19 15:22:18,760 - INFO - compression: c23
+2025-12-19 15:22:18,760 - INFO - train_batchSize: 8
+2025-12-19 15:22:18,760 - INFO - test_batchSize: 8
+2025-12-19 15:22:18,760 - INFO - workers: 1
+2025-12-19 15:22:18,761 - INFO - frame_num: {'train': 4, 'test': 8}
+2025-12-19 15:22:18,761 - INFO - resolution: 224
+2025-12-19 15:22:18,761 - INFO - with_mask: False
+2025-12-19 15:22:18,761 - INFO - with_landmark: False
+2025-12-19 15:22:18,761 - INFO - use_data_augmentation: True
+2025-12-19 15:22:18,761 - INFO - data_aug: {'flip_prob': 0.3, 'rotate_prob': 0.2, 'rotate_limit': [-5, 5], 'blur_prob': 0.2, 'blur_limit': [3, 5], 'brightness_prob': 0.2, 'brightness_limit': [-0.05, 0.05], 'contrast_limit': [-0.05, 0.05], 'quality_lower': 60, 'quality_upper': 95}
+2025-12-19 15:22:18,761 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-19 15:22:18,761 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-19 15:22:18,761 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-19 15:22:18,761 - INFO - lr_scheduler: None
+2025-12-19 15:22:18,761 - INFO - nEpochs: 1
+2025-12-19 15:22:18,761 - INFO - start_epoch: 0
+2025-12-19 15:22:18,761 - INFO - save_epoch: 1
+2025-12-19 15:22:18,761 - INFO - rec_iter: 50
+2025-12-19 15:22:18,761 - INFO - logdir: ./logs
+2025-12-19 15:22:18,761 - INFO - manualSeed: 1024
+2025-12-19 15:22:18,761 - INFO - save_ckpt: True
+2025-12-19 15:22:18,761 - INFO - save_feat: True
+2025-12-19 15:22:18,761 - INFO - loss_func: cross_entropy
+2025-12-19 15:22:18,761 - INFO - losstype: None
+2025-12-19 15:22:18,761 - INFO - metric_scoring: auc
+2025-12-19 15:22:18,761 - INFO - fine_tune: True
+2025-12-19 15:22:18,761 - INFO - pretrained_checkpoint: None
+2025-12-19 15:22:18,761 - INFO - freeze_backbone: True
+2025-12-19 15:22:18,761 - INFO - train_classification_head: True
+2025-12-19 15:22:18,761 - INFO - train_svd_residuals: True
+2025-12-19 15:22:18,761 - INFO - save_avg: True
+2025-12-19 15:22:18,761 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2025-12-19 15:22:18,761 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2025-12-19 15:22:18,761 - INFO - Loading model from DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/ckpt_best.pth
+2025-12-19 15:22:34,970 - INFO - Model loaded successfully
+2025-12-19 15:22:34,972 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff']
+2025-12-19 15:22:34,972 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff
+2025-12-19 15:22:34,978 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff
+2025-12-19 15:22:34,978 - INFO - All subdirectories found: ['real', 'fake']
+2025-12-19 15:22:34,979 - INFO - Found real directories: ['real']
+2025-12-19 15:22:34,979 - INFO - Found fake directories: ['fake']
+2025-12-19 15:22:34,979 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff
+2025-12-19 15:22:34,979 - INFO - Processing real directory: real
+2025-12-19 15:22:34,982 - INFO - Processing fake directory: fake
+2025-12-19 15:22:34,985 - INFO - Checking for faulty images...
+2025-12-19 15:22:38,782 - INFO - No faulty images found.
+2025-12-19 15:22:38,782 - INFO - Dataset contains 500 real and 500 fake samples
+2025-12-19 15:22:38,782 - INFO - RawFileDataset initialized with 1000 samples for test mode
+2025-12-19 15:22:38,784 - INFO - Test loader prepared with 63 batches
+2025-12-19 15:22:38,784 - INFO - Evaluating on dataset_1_CollabDiff
+2025-12-19 15:23:32,815 - INFO - Processed batch 50/63
+2025-12-19 15:23:49,760 - INFO - Evaluation results for dataset_1_CollabDiff:
+2025-12-19 15:23:49,761 - INFO -   auc: 0.9111
+2025-12-19 15:23:49,761 - INFO -   eer: 0.1600
+2025-12-19 15:23:49,761 - INFO -   accuracy: 0.5000
+2025-12-19 15:23:49,761 - INFO -   ap: 0.9197
+2025-12-19 15:23:49,761 - INFO -   precision: 0.7127
+2025-12-19 15:23:49,761 - INFO -   recall: 0.9180
+2025-12-19 15:23:49,761 - INFO -   f1: 0.8024
+2025-12-19 15:23:49,761 - INFO -   sample_count: 1000.0000
+2025-12-19 15:23:49,762 - INFO - Saved evaluation results to evaluation_results/dataset_1_CollabDiff_eval_20251219_152349.json
+2025-12-19 15:23:49,762 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/SAMPLED/df40/heygen_new']
+2025-12-19 15:23:49,762 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/SAMPLED/df40/heygen_new
+2025-12-19 15:23:49,762 - ERROR - Failed to evaluate on /Volumes/Crucial/Large_Downloads/SAMPLED/df40/heygen_new: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/heygen_new
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 290, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 130, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 213, in __init__
+    raise FileNotFoundError(
+        f"Raw data root directory not found: {self.raw_data_root}",
+    )
+FileNotFoundError: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/heygen_new
+2025-12-19 15:23:49,765 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/SAMPLED/df40/MidJourney']
+2025-12-19 15:23:49,765 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/SAMPLED/df40/MidJourney
+2025-12-19 15:23:49,765 - ERROR - Failed to evaluate on /Volumes/Crucial/Large_Downloads/SAMPLED/df40/MidJourney: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/MidJourney
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 290, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 130, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 213, in __init__
+    raise FileNotFoundError(
+        f"Raw data root directory not found: {self.raw_data_root}",
+    )
+FileNotFoundError: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/MidJourney
+2025-12-19 15:23:49,766 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/SAMPLED/df40/stargan']
+2025-12-19 15:23:49,766 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/SAMPLED/df40/stargan
+2025-12-19 15:23:49,766 - ERROR - Failed to evaluate on /Volumes/Crucial/Large_Downloads/SAMPLED/df40/stargan: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/stargan
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 290, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 130, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 213, in __init__
+    raise FileNotFoundError(
+        f"Raw data root directory not found: {self.raw_data_root}",
+    )
+FileNotFoundError: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/stargan
+2025-12-19 15:23:49,766 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/SAMPLED/df40/starganv2']
+2025-12-19 15:23:49,767 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/SAMPLED/df40/starganv2
+2025-12-19 15:23:49,767 - ERROR - Failed to evaluate on /Volumes/Crucial/Large_Downloads/SAMPLED/df40/starganv2: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/starganv2
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 290, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 130, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 213, in __init__
+    raise FileNotFoundError(
+        f"Raw data root directory not found: {self.raw_data_root}",
+    )
+FileNotFoundError: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/starganv2
+2025-12-19 15:23:49,767 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/SAMPLED/df40/styleclip']
+2025-12-19 15:23:49,767 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/SAMPLED/df40/styleclip
+2025-12-19 15:23:49,767 - ERROR - Failed to evaluate on /Volumes/Crucial/Large_Downloads/SAMPLED/df40/styleclip: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/styleclip
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 290, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 130, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 213, in __init__
+    raise FileNotFoundError(
+        f"Raw data root directory not found: {self.raw_data_root}",
+    )
+FileNotFoundError: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/styleclip
+2025-12-19 15:23:49,768 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/SAMPLED/df40/whichfaceisreal']
+2025-12-19 15:23:49,768 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/SAMPLED/df40/whichfaceisreal
+2025-12-19 15:23:49,768 - ERROR - Failed to evaluate on /Volumes/Crucial/Large_Downloads/SAMPLED/df40/whichfaceisreal: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/whichfaceisreal
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 290, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 130, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 213, in __init__
+    raise FileNotFoundError(
+        f"Raw data root directory not found: {self.raw_data_root}",
+    )
+FileNotFoundError: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/whichfaceisreal
+2025-12-19 15:23:49,769 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-19 15:23:49,769 - INFO - Fine-tuned model evaluation finished successfully
+2025-12-19 15:30:01,363 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-19 15:30:01,363 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-19 15:30:01,363 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-19 15:30:01,363 - INFO - pretrained: no need to provide this for the effort model
+2025-12-19 15:30:01,363 - INFO - model_name: effort
+2025-12-19 15:30:01,364 - INFO - backbone_name: vit
+2025-12-19 15:30:01,364 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-19 15:30:01,364 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-19 15:30:01,364 - INFO - train_dataset: ['UADFV']
+2025-12-19 15:30:01,364 - INFO - test_dataset: ['UADFV']
+2025-12-19 15:30:01,364 - INFO - compression: c23
+2025-12-19 15:30:01,364 - INFO - train_batchSize: 8
+2025-12-19 15:30:01,364 - INFO - test_batchSize: 8
+2025-12-19 15:30:01,364 - INFO - workers: 1
+2025-12-19 15:30:01,364 - INFO - frame_num: {'train': 4, 'test': 8}
+2025-12-19 15:30:01,364 - INFO - resolution: 224
+2025-12-19 15:30:01,364 - INFO - with_mask: False
+2025-12-19 15:30:01,365 - INFO - with_landmark: False
+2025-12-19 15:30:01,365 - INFO - use_data_augmentation: True
+2025-12-19 15:30:01,365 - INFO - data_aug: {'flip_prob': 0.3, 'rotate_prob': 0.2, 'rotate_limit': [-5, 5], 'blur_prob': 0.2, 'blur_limit': [3, 5], 'brightness_prob': 0.2, 'brightness_limit': [-0.05, 0.05], 'contrast_limit': [-0.05, 0.05], 'quality_lower': 60, 'quality_upper': 95}
+2025-12-19 15:30:01,365 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-19 15:30:01,365 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-19 15:30:01,365 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 0.0001, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 0.0001, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-19 15:30:01,365 - INFO - lr_scheduler: None
+2025-12-19 15:30:01,365 - INFO - nEpochs: 1
+2025-12-19 15:30:01,365 - INFO - start_epoch: 0
+2025-12-19 15:30:01,365 - INFO - save_epoch: 1
+2025-12-19 15:30:01,365 - INFO - rec_iter: 50
+2025-12-19 15:30:01,365 - INFO - logdir: ./logs
+2025-12-19 15:30:01,365 - INFO - manualSeed: 1024
+2025-12-19 15:30:01,365 - INFO - save_ckpt: True
+2025-12-19 15:30:01,365 - INFO - save_feat: True
+2025-12-19 15:30:01,365 - INFO - loss_func: cross_entropy
+2025-12-19 15:30:01,365 - INFO - losstype: None
+2025-12-19 15:30:01,365 - INFO - metric_scoring: auc
+2025-12-19 15:30:01,365 - INFO - fine_tune: True
+2025-12-19 15:30:01,365 - INFO - pretrained_checkpoint: None
+2025-12-19 15:30:01,365 - INFO - freeze_backbone: True
+2025-12-19 15:30:01,365 - INFO - train_classification_head: True
+2025-12-19 15:30:01,365 - INFO - train_svd_residuals: True
+2025-12-19 15:30:01,365 - INFO - save_avg: True
+2025-12-19 15:30:01,365 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2025-12-19 15:30:01,365 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2025-12-19 15:30:01,365 - INFO - Loading model from DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/ckpt_best.pth
+2025-12-19 15:30:21,704 - INFO - Model loaded successfully
+2025-12-19 15:30:21,707 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff']
+2025-12-19 15:30:21,707 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff
+2025-12-19 15:30:21,734 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff
+2025-12-19 15:30:21,735 - INFO - All subdirectories found: ['real', 'fake']
+2025-12-19 15:30:21,735 - INFO - Found real directories: ['real']
+2025-12-19 15:30:21,735 - INFO - Found fake directories: ['fake']
+2025-12-19 15:30:21,735 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff
+2025-12-19 15:30:21,736 - INFO - Processing real directory: real
+2025-12-19 15:30:21,739 - INFO - Processing fake directory: fake
+2025-12-19 15:30:21,744 - INFO - Checking for faulty images...
+2025-12-19 15:30:26,248 - INFO - No faulty images found.
+2025-12-19 15:30:26,255 - INFO - Dataset contains 500 real and 500 fake samples
+2025-12-19 15:30:26,255 - INFO - RawFileDataset initialized with 1000 samples for test mode
+2025-12-19 15:30:26,268 - INFO - Test loader prepared with 63 batches
+2025-12-19 15:30:26,268 - INFO - Evaluating on dataset_1_CollabDiff
+2025-12-19 15:31:38,417 - INFO - Processed batch 50/63
+2025-12-19 15:31:57,587 - INFO - Evaluation results for dataset_1_CollabDiff:
+2025-12-19 15:31:57,589 - INFO -   auc: 0.9111
+2025-12-19 15:31:57,589 - INFO -   eer: 0.1600
+2025-12-19 15:31:57,589 - INFO -   accuracy: 0.5000
+2025-12-19 15:31:57,589 - INFO -   ap: 0.9197
+2025-12-19 15:31:57,589 - INFO -   precision: 0.7127
+2025-12-19 15:31:57,589 - INFO -   recall: 0.9180
+2025-12-19 15:31:57,589 - INFO -   f1: 0.8024
+2025-12-19 15:31:57,589 - INFO -   sample_count: 1000.0000
+2025-12-19 15:31:57,590 - INFO - Saved evaluation results to evaluation_results/dataset_1_CollabDiff_eval_20251219_153157.json
+2025-12-19 15:31:57,591 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/SAMPLED/df40/heygen_new']
+2025-12-19 15:31:57,591 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/SAMPLED/df40/heygen_new
+2025-12-19 15:31:57,591 - ERROR - Failed to evaluate on /Volumes/Crucial/Large_Downloads/SAMPLED/df40/heygen_new: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/heygen_new
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 290, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 130, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 213, in __init__
+    raise FileNotFoundError(
+        f"Raw data root directory not found: {self.raw_data_root}",
+    )
+FileNotFoundError: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/heygen_new
+2025-12-19 15:31:57,593 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/SAMPLED/df40/MidJourney']
+2025-12-19 15:31:57,593 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/SAMPLED/df40/MidJourney
+2025-12-19 15:31:57,593 - ERROR - Failed to evaluate on /Volumes/Crucial/Large_Downloads/SAMPLED/df40/MidJourney: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/MidJourney
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 290, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 130, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 213, in __init__
+    raise FileNotFoundError(
+        f"Raw data root directory not found: {self.raw_data_root}",
+    )
+FileNotFoundError: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/MidJourney
+2025-12-19 15:31:57,594 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/SAMPLED/df40/stargan']
+2025-12-19 15:31:57,594 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/SAMPLED/df40/stargan
+2025-12-19 15:31:57,594 - ERROR - Failed to evaluate on /Volumes/Crucial/Large_Downloads/SAMPLED/df40/stargan: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/stargan
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 290, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 130, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 213, in __init__
+    raise FileNotFoundError(
+        f"Raw data root directory not found: {self.raw_data_root}",
+    )
+FileNotFoundError: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/stargan
+2025-12-19 15:31:57,595 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/SAMPLED/df40/starganv2']
+2025-12-19 15:31:57,595 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/SAMPLED/df40/starganv2
+2025-12-19 15:31:57,595 - ERROR - Failed to evaluate on /Volumes/Crucial/Large_Downloads/SAMPLED/df40/starganv2: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/starganv2
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 290, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 130, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 213, in __init__
+    raise FileNotFoundError(
+        f"Raw data root directory not found: {self.raw_data_root}",
+    )
+FileNotFoundError: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/starganv2
+2025-12-19 15:31:57,595 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/SAMPLED/df40/styleclip']
+2025-12-19 15:31:57,595 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/SAMPLED/df40/styleclip
+2025-12-19 15:31:57,595 - ERROR - Failed to evaluate on /Volumes/Crucial/Large_Downloads/SAMPLED/df40/styleclip: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/styleclip
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 290, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 130, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 213, in __init__
+    raise FileNotFoundError(
+        f"Raw data root directory not found: {self.raw_data_root}",
+    )
+FileNotFoundError: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/styleclip
+2025-12-19 15:31:57,596 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/SAMPLED/df40/whichfaceisreal']
+2025-12-19 15:31:57,596 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/SAMPLED/df40/whichfaceisreal
+2025-12-19 15:31:57,596 - ERROR - Failed to evaluate on /Volumes/Crucial/Large_Downloads/SAMPLED/df40/whichfaceisreal: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/whichfaceisreal
+Traceback (most recent call last):
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 290, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 130, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 213, in __init__
+    raise FileNotFoundError(
+        f"Raw data root directory not found: {self.raw_data_root}",
+    )
+FileNotFoundError: Raw data root directory not found: /Volumes/Crucial/Large_Downloads/SAMPLED/df40/whichfaceisreal
+2025-12-19 15:31:57,596 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-19 15:31:57,596 - INFO - Fine-tuned model evaluation finished successfully

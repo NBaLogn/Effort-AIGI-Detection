@@ -1,0 +1,170 @@
+[
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/acc/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.10",
+    "tag": "test_metrics/acc",
+    "step": 761,
+    "value": 0.9265862703323364,
+    "wall_time": 1766119423.409027
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/acc/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.10",
+    "tag": "test_metrics/acc",
+    "step": 1523,
+    "value": 0.9575248956680298,
+    "wall_time": 1766121383.886851
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/eer/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.12",
+    "tag": "test_metrics/eer",
+    "step": 761,
+    "value": 0.07531865686178207,
+    "wall_time": 1766119423.409746
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/eer/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.12",
+    "tag": "test_metrics/eer",
+    "step": 1523,
+    "value": 0.047508690506219864,
+    "wall_time": 1766121383.8868911
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/overall/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.7",
+    "tag": "test_losses/overall",
+    "step": 761,
+    "value": 0.2200290411710739,
+    "wall_time": 1766119423.404667
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/overall/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.7",
+    "tag": "test_losses/overall",
+    "step": 1523,
+    "value": 0.14303059875965118,
+    "wall_time": 1766121383.8799748
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/video_eer/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.15",
+    "tag": "test_metrics/video_eer",
+    "step": 761,
+    "value": 0.0,
+    "wall_time": 1766119423.410892
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/video_eer/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.15",
+    "tag": "test_metrics/video_eer",
+    "step": 1523,
+    "value": 0.0,
+    "wall_time": 1766121383.8869429
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/video_acc/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.16",
+    "tag": "test_metrics/video_acc",
+    "step": 761,
+    "value": 1.0,
+    "wall_time": 1766119423.411826
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/video_acc/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.16",
+    "tag": "test_metrics/video_acc",
+    "step": 1523,
+    "value": 1.0,
+    "wall_time": 1766121383.8873441
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/video_acc/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.16",
+    "tag": "test_metrics/acc_real",
+    "step": 761,
+    "value": 0.8771726489067078,
+    "wall_time": 1766119423.411903
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/video_acc/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.16",
+    "tag": "test_metrics/acc_real",
+    "step": 1523,
+    "value": 0.9246813654899597,
+    "wall_time": 1766121383.888012
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/video_acc/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.16",
+    "tag": "test_metrics/acc_fake",
+    "step": 761,
+    "value": 0.967432975769043,
+    "wall_time": 1766119423.411909
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/video_acc/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.16",
+    "tag": "test_metrics/acc_fake",
+    "step": 1523,
+    "value": 0.984674334526062,
+    "wall_time": 1766121383.888024
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/auc/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.11",
+    "tag": "test_metrics/auc",
+    "step": 761,
+    "value": 0.9779804348945618,
+    "wall_time": 1766119423.4093661
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/auc/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.11",
+    "tag": "test_metrics/auc",
+    "step": 1523,
+    "value": 0.9916090369224548,
+    "wall_time": 1766121383.8868742
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/real_loss/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.8",
+    "tag": "test_losses/real_loss",
+    "step": 761,
+    "value": 0.2376900017261505,
+    "wall_time": 1766119423.407296
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/real_loss/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.8",
+    "tag": "test_losses/real_loss",
+    "step": 1523,
+    "value": 0.17038021981716156,
+    "wall_time": 1766121383.885919
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/fake_loss/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.9",
+    "tag": "test_losses/fake_loss",
+    "step": 761,
+    "value": 0.18109431862831116,
+    "wall_time": 1766119423.408293
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/fake_loss/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.9",
+    "tag": "test_losses/fake_loss",
+    "step": 1523,
+    "value": 0.09768499433994293,
+    "wall_time": 1766121383.886466
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/video_auc/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.14",
+    "tag": "test_metrics/video_auc",
+    "step": 761,
+    "value": 1.0,
+    "wall_time": 1766119423.410508
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/video_auc/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.14",
+    "tag": "test_metrics/video_auc",
+    "step": 1523,
+    "value": 1.0,
+    "wall_time": 1766121383.886922
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/ap/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.13",
+    "tag": "test_metrics/ap",
+    "step": 761,
+    "value": 0.9824409484863281,
+    "wall_time": 1766119423.410068
+  },
+  {
+    "file": "DeepfakeBench/training/logs/batchedFaces2000/test/combined_test/ap/metric_board/events.out.tfevents.1766119423.miMBP.local.60604.13",
+    "tag": "test_metrics/ap",
+    "step": 1523,
+    "value": 0.9934253096580505,
+    "wall_time": 1766121383.8869052
+  }
+]

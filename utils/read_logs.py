@@ -14,7 +14,7 @@ from typing import Any, TextIO
 from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
 
 
-def process_pickle_file(file_path: Path, output_file: TextIO[str]) -> None:
+def process_pickle_file(file_path: Path, output_file: TextIO) -> None:
     """Process a single pickle file and write content to output."""
     try:
         with file_path.open("rb") as f:
@@ -28,7 +28,7 @@ def process_pickle_file(file_path: Path, output_file: TextIO[str]) -> None:
 
 def process_event_file(
     file_path: Path,
-    csv_writer: csv.DictWriter[str],
+    csv_writer: csv.DictWriter,
     json_data: list[dict[str, Any]],
 ) -> None:
     """Process a single TensorBoard event file and write data."""
@@ -58,6 +58,11 @@ def main() -> None:
         description="Read pickle and TensorBoard files from logs directory.",
     )
     parser.add_argument(
+        "logs_dir_pos",
+        nargs="?",
+        help="Directory containing logs (optional positional argument)",
+    )
+    parser.add_argument(
         "--logs_dir",
         type=str,
         default="DeepfakeBench/training/logs",
@@ -71,7 +76,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    logs_path = Path(args.logs_dir)
+    logs_path = Path(args.logs_dir_pos or args.logs_dir)
     output_path = Path(args.output_dir)
     output_path.mkdir(exist_ok=True)
 
