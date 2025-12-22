@@ -1,0 +1,30 @@
+PREDICTION SUMMARY
+================================================================================
+
+Total images processed: 1000
+Real images: 510
+Fake images: 490
+
+CORRECT PREDICTIONS:
+- Real images correctly classified: 405 (79.4%)
+- Fake images correctly classified: 471 (96.1%)
+
+INCORRECT PREDICTIONS:
+- Real images misclassified as Fake: 105 (20.6%)
+- Fake images misclassified as Real: 19 (3.9%)
+
+OVERALL ACCURACY: 87.6%
+- Total correct predictions: 876 out of 1000
+
+DETAILED BREAKDOWN:
+- True Positives (Fake correctly identified as Fake): 471
+- True Negatives (Real correctly identified as Real): 405  
+- False Positives (Real incorrectly identified as Fake): 105
+- False Negatives (Fake incorrectly identified as Real): 19
+
+PERFORMANCE METRICS:
+- AUC (Area Under ROC Curve): 0.9507
+- PR-AUC (Area Under Precision-Recall Curve): 0.9463
+
+The model demonstrates strong performance in detecting fake images (96.1% accuracy) 
+but has moderate performance in correctly identifying real images (79.4% accuracy).
