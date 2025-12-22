@@ -559,31 +559,39 @@ class ResultWriter:
     def write_results(
         self,
         results: list[dict[str, Any]],
+        weight_name: str,
         metrics: dict[str, Any] | None = None,
     ) -> None:
         """Write all results to output file."""
         output_path = Path(self.filename)
         with output_path.open("w") as f:
-            self._write_header(f)
+            self._write_header(f, weight_name)
 
             for result in results:
-                self._write_single_result(f, result)
+                self._write_single_result(f, result, weight_name)
 
             if metrics:
                 self._write_metrics_section(f, metrics)
 
-    def _write_header(self, f: IO) -> None:
+    def _write_header(self, f: IO, weight_name: str) -> None:
         """Write file header."""
         f.write("Deepfake Detection Results\n")
+        f.write(f"Weights: {weight_name}\n")
         f.write("=" * 80 + "\n\n")
 
-    def _write_single_result(self, f: IO[str], result: dict[str, Any]) -> None:
+    def _write_single_result(
+        self,
+        f: IO[str],
+        result: dict[str, Any],
+        weight_name: str,
+    ) -> None:
         """Write single result line."""
         f.write(
-            f"[{result['index']}/{result['total']}] {result['filename']:>30} | "
+            f"[{result['index']}/{result['total']}] "
+            f"Weight: {weight_name} | "
+            f"Image: {result['filename']} | "
             f"True: {result['true_label']:>4} | Pred: {result['prediction']} "
-            f"(0=Real, 1=Fake) | Prob: {result['probability']:.4f} | "
-            f"Path: {result['path']}\n",
+            f"(0=Real, 1=Fake) | Prob: {result['probability']:.4f}\n",
         )
 
     def _write_metrics_section(self, f: IO[str], metrics: dict[str, Any]) -> None:
@@ -606,7 +614,7 @@ class ResultWriter:
         f.write(
             f"PR-AUC (Area Under Precision-Recall Curve): {metrics['pr_auc']:.4f}\n",
         )
-        f.write(f"Accuracy: {metrics['accuracy']:.4f}\n")
+        f.write(f"Accuracy: {metrics['accuracy'] * 100:.2f}%\n")
         f.write(f"Precision: {metrics['precision']:.4f}\n")
         f.write(f"Recall: {metrics['recall']:.4f}\n")
         f.write(f"F1-Score: {metrics['f1']:.4f}\n")
@@ -725,8 +733,9 @@ def main() -> None:
                 logger.info(f"  F1-Score: {metrics['f1']:.4f}")
 
     # Write results
+    weight_name = Path(args.weights).name
     writer = ResultWriter()
-    writer.write_results(results, metrics)
+    writer.write_results(results, weight_name, metrics)
     logger.info("Results written to %s", writer.filename)
 
 
