@@ -553,18 +553,21 @@ class PerformanceCalculator:
 class ResultWriter:
     """Handles writing inference results to files."""
 
-    def __init__(self, filename: str = "inference_results.txt") -> None:
-        """Initialize result writer with output filename."""
-        self.filename = filename
+    def __init__(self, output_dir: str = "inference_results") -> None:
+        """Initialize result writer with output directory."""
+        self.output_dir = Path(output_dir)
+        self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def write_results(
         self,
         results: list[dict[str, Any]],
         weight_name: str,
+        image_save_name: str,
         metrics: dict[str, Any] | None = None,
     ) -> None:
         """Write all results to output file."""
-        output_path = Path(self.filename)
+        filename = f"{weight_name}-{image_save_name}.txt"
+        output_path = self.output_dir / filename
         with output_path.open("w") as f:
             self._write_header(f, weight_name)
 
@@ -573,6 +576,7 @@ class ResultWriter:
 
             if metrics:
                 self._write_metrics_section(f, metrics)
+        return output_path
 
     def _write_header(self, f: IO, weight_name: str) -> None:
         """Write file header."""
@@ -737,10 +741,20 @@ def main() -> None:
                 logger.info(f"  F1-Score: {metrics['f1']:.4f}")
 
     # Write results
-    weight_name = Path(args.weights).name
+    weight_stem = Path(args.weights).stem
+
+    # Extract last two parts of the image path for descriptive naming
+    image_path = Path(args.image)
+    path_parts = [p for p in image_path.parts if p and p not in ("/", "\\")]
+    image_save_name = (
+        "-".join(path_parts[-2:])
+        if len(path_parts) >= 2
+        else (path_parts[-1] if path_parts else "unknown")
+    )
+
     writer = ResultWriter()
-    writer.write_results(results, weight_name, metrics)
-    logger.info("Results written to %s", writer.filename)
+    output_path = writer.write_results(results, weight_stem, image_save_name, metrics)
+    logger.info("Results written to %s", output_path)
 
 
 if __name__ == "__main__":
