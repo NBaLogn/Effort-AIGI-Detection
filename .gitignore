@@ -10,5 +10,4 @@ logs
 *.jpg
 *.jpeg
 dataset*.json
-WEIGHTS
-weights
+facedata

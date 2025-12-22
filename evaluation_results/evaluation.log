@@ -5058,3 +5058,77 @@ ValueError: No valid images found in /Volumes/Crucial/Large_Downloads/AI/DATASET
 2025-12-22 10:53:03,693 - INFO - Saved evaluation results to evaluation_results/dataset_1_val_eval_20251222_105303.json
 2025-12-22 10:53:03,693 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
 2025-12-22 10:53:03,693 - INFO - Fine-tuned model evaluation finished successfully
+2025-12-22 13:44:24,348 - INFO - Evaluation log: evaluation_results/evaluation.log
+2025-12-22 13:44:24,348 - INFO - --------------- Evaluation Configuration ---------------
+2025-12-22 13:44:24,348 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2025-12-22 13:44:24,348 - INFO - pretrained: no need to provide this for the effort model
+2025-12-22 13:44:24,348 - INFO - model_name: effort
+2025-12-22 13:44:24,348 - INFO - backbone_name: vit
+2025-12-22 13:44:24,348 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2025-12-22 13:44:24,348 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2025-12-22 13:44:24,348 - INFO - train_dataset: ['UADFV']
+2025-12-22 13:44:24,348 - INFO - test_dataset: ['UADFV']
+2025-12-22 13:44:24,348 - INFO - train_batchSize: 16
+2025-12-22 13:44:24,348 - INFO - test_batchSize: 16
+2025-12-22 13:44:24,348 - INFO - workers: 4
+2025-12-22 13:44:24,348 - INFO - frame_num: {'train': 4, 'test': 8}
+2025-12-22 13:44:24,348 - INFO - resolution: 224
+2025-12-22 13:44:24,348 - INFO - with_mask: False
+2025-12-22 13:44:24,349 - INFO - with_landmark: False
+2025-12-22 13:44:24,349 - INFO - use_data_augmentation: True
+2025-12-22 13:44:24,349 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2025-12-22 13:44:24,349 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2025-12-22 13:44:24,349 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2025-12-22 13:44:24,349 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 5e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': False}, 'sgd': {'lr': 5e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2025-12-22 13:44:24,349 - INFO - lr_scheduler: cosine
+2025-12-22 13:44:24,349 - INFO - lr_T_max: 10
+2025-12-22 13:44:24,349 - INFO - lr_eta_min: 1e-06
+2025-12-22 13:44:24,349 - INFO - nEpochs: 10
+2025-12-22 13:44:24,349 - INFO - start_epoch: 0
+2025-12-22 13:44:24,349 - INFO - save_epoch: 1
+2025-12-22 13:44:24,349 - INFO - rec_iter: 50
+2025-12-22 13:44:24,349 - INFO - logdir: ./logs
+2025-12-22 13:44:24,349 - INFO - manualSeed: 1024
+2025-12-22 13:44:24,349 - INFO - save_ckpt: True
+2025-12-22 13:44:24,349 - INFO - save_feat: True
+2025-12-22 13:44:24,349 - INFO - loss_func: cross_entropy
+2025-12-22 13:44:24,349 - INFO - losstype: None
+2025-12-22 13:44:24,349 - INFO - metric_scoring: auc
+2025-12-22 13:44:24,349 - INFO - fine_tune: True
+2025-12-22 13:44:24,349 - INFO - pretrained_checkpoint: None
+2025-12-22 13:44:24,349 - INFO - freeze_backbone: True
+2025-12-22 13:44:24,349 - INFO - train_classification_head: True
+2025-12-22 13:44:24,349 - INFO - train_svd_residuals: True
+2025-12-22 13:44:24,349 - INFO - save_avg: True
+2025-12-22 13:44:24,349 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2025-12-22 13:44:24,349 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2025-12-22 13:44:24,349 - INFO - Loading model from DeepfakeBench/training/logs/batchFaces2000/test/combined_test/batchFaces2000.pth
+2025-12-22 13:44:41,172 - INFO - Model loaded successfully
+2025-12-22 13:44:41,173 - INFO - Preparing test data for paths: ['DeepfakeBench/facedata/quan_faceswap2000/train']
+2025-12-22 13:44:41,173 - INFO - Using RawFileDataset with data from DeepfakeBench/facedata/quan_faceswap2000/train
+2025-12-22 13:44:41,212 - INFO - Validating directory structure: DeepfakeBench/facedata/quan_faceswap2000/train
+2025-12-22 13:44:41,212 - INFO - All subdirectories found: ['real', 'fake']
+2025-12-22 13:44:41,213 - INFO - Found real directories: ['real']
+2025-12-22 13:44:41,213 - INFO - Found fake directories: ['fake']
+2025-12-22 13:44:41,213 - INFO - Discovering files in DeepfakeBench/facedata/quan_faceswap2000/train
+2025-12-22 13:44:41,213 - INFO - Processing real directory: real
+2025-12-22 13:44:41,226 - INFO - Processing fake directory: fake
+2025-12-22 13:44:41,245 - INFO - Checking for faulty images...
+2025-12-22 13:44:47,770 - INFO - No faulty images found.
+2025-12-22 13:44:47,771 - INFO - Dataset contains 700 real and 700 fake samples
+2025-12-22 13:44:47,771 - INFO - RawFileDataset initialized with 1400 samples for test mode
+2025-12-22 13:44:47,772 - INFO - Test loader prepared with 88 batches
+2025-12-22 13:44:47,772 - INFO - Evaluating on dataset_1_train
+2025-12-22 13:45:55,190 - INFO - Processed batch 50/88
+2025-12-22 13:46:51,419 - INFO - Evaluation results for dataset_1_train:
+2025-12-22 13:46:51,420 - INFO -   auc: 0.9986
+2025-12-22 13:46:51,420 - INFO -   eer: 0.0200
+2025-12-22 13:46:51,420 - INFO -   accuracy: 0.9821
+2025-12-22 13:46:51,420 - INFO -   ap: 0.9986
+2025-12-22 13:46:51,420 - INFO -   precision: 0.9760
+2025-12-22 13:46:51,420 - INFO -   recall: 0.9886
+2025-12-22 13:46:51,420 - INFO -   f1: 0.9823
+2025-12-22 13:46:51,420 - INFO -   sample_count: 1400.0000
+2025-12-22 13:46:51,422 - INFO - Saved evaluation results to evaluation_results/dataset_1_train_eval_20251222_134651.json
+2025-12-22 13:46:51,422 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-22 13:46:51,422 - INFO - Fine-tuned model evaluation finished successfully
