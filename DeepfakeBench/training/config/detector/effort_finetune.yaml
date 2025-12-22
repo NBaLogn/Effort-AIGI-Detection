@@ -24,28 +24,27 @@ test_dataset: [UADFV]   # Use same dataset for evaluation during fine-tuning (us
 # Raw data configuration (alternative to JSON-based dataset configuration)
 # raw_data_root: /path/to/raw_data  # Uncomment to use raw file processing mode
 
-compression: c23  # compression-level for videos
-train_batchSize: 8   # Smaller batch size for fine-tuning stability
-test_batchSize: 8   # Match training batch size
-workers: 1   # number of data loading workers
+train_batchSize: 16   # Optimized for M1 Pro stability
+test_batchSize: 16   # Match training batch size
+workers: 4   # Increased for faster data loading on M1 Pro
 frame_num: {'train': 4, 'test': 8}   # number of frames to use per video
 resolution: 224   # resolution of output image to network
 with_mask: false   # whether to include mask information in the input
 with_landmark: false   # whether to include facial landmark information in the input
 
-# data augmentation - Reduced for fine-tuning to avoid overfitting
+# data augmentation - Balanced for fine-tuning robustness
 use_data_augmentation: true
 data_aug:
-  flip_prob: 0.3  # Reduced from 0.5
-  rotate_prob: 0.2  # Reduced from 0.5
-  rotate_limit: [-5, 5]  # Reduced range
-  blur_prob: 0.2  # Reduced from 0.5
-  blur_limit: [3, 5]  # Tighter range
-  brightness_prob: 0.2  # Reduced from 0.5
-  brightness_limit: [-0.05, 0.05]  # Reduced range
-  contrast_limit: [-0.05, 0.05]  # Reduced range
-  quality_lower: 60  # Higher quality floor
-  quality_upper: 95  # Lower quality ceiling
+  flip_prob: 0.5  # Restored for better generalization
+  rotate_prob: 0.4  # Slightly reduced from original 0.5
+  rotate_limit: [-10, 10]  # Standard range
+  blur_prob: 0.3  # Moderate blur
+  blur_limit: [3, 7]  # Standard range
+  brightness_prob: 0.3  # Moderate brightness variation
+  brightness_limit: [-0.1, 0.1]  # Standard range
+  contrast_limit: [-0.1, 0.1]  # Standard range
+  quality_lower: 40  # Support lower quality samples
+  quality_upper: 100  # Full quality ceiling
 
 # mean and std for normalization (keep same as original training)
 mean: [0.48145466, 0.4578275, 0.40821073]
@@ -56,20 +55,22 @@ optimizer:
   # choose between 'adam' and 'sgd' - Adam works better for fine-tuning
   type: adam
   adam:
-    lr: 0.0001  # Lower learning rate for fine-tuning (1e-4)
-    beta1: 0.9  # beta1 for Adam optimizer
-    beta2: 0.999 # beta2 for Adam optimizer
-    eps: 0.00000001  # epsilon for Adam optimizer
-    weight_decay: 0.0001  # Reduced weight decay (1e-4)
+    lr: 0.00005  # Lowered for stable transformer fine-tuning (5e-5)
+    beta1: 0.9
+    beta2: 0.999
+    eps: 0.00000001
+    weight_decay: 0.0001
     amsgrad: false
   sgd:
-    lr: 0.0001  # Lower learning rate for fine-tuning
-    momentum: 0.9  # momentum for SGD optimizer
-    weight_decay: 0.0001  # Reduced weight decay
+    lr: 0.00005  # Lowered learning rate for fine-tuning
+    momentum: 0.9
+    weight_decay: 0.0001
 
 # training config - Fine-tuning specific settings
-lr_scheduler: null   # Start without scheduler, can add if needed
-nEpochs: 1   # 5-15 epochs typically sufficient for fine-tuning
+lr_scheduler: cosine   # Activated cosine scheduler
+lr_T_max: 10   # Same as nEpochs
+lr_eta_min: 0.000001   # Minimum decay (1e-6)
+nEpochs: 10   # 5-15 epochs typically sufficient for fine-tuning
 start_epoch: 0   # manual epoch number (useful for restarts)
 save_epoch: 1   # save checkpoint every epoch
 rec_iter: 50   # more frequent recording for fine-tuning monitoring
