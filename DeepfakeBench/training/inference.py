@@ -593,7 +593,6 @@ class ResultWriter:
         """Write single result line."""
         f.write(
             f"[{result['index']}/{result['total']}] "
-            f"Weight: {weight_name} | "
             f"Image: {result['filename']} | "
             f"True: {result['true_label']:>4} | Pred: {result['prediction']} "
             f"(0=Real, 1=Fake) | Prob: {result['probability']:.4f}\n",
