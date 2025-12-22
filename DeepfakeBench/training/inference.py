@@ -26,6 +26,7 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 from torchvision import transforms
+from tqdm import tqdm
 
 # Configuration constants
 DEFAULT_RESOLUTION = 224
@@ -674,7 +675,8 @@ def main() -> None:
     predictions = []
     probabilities = []
 
-    for idx, img_path in enumerate(img_paths, 1):
+    pbar = tqdm(enumerate(img_paths, 1), total=len(img_paths), desc="Inference")
+    for idx, img_path in pbar:
         img = cv2.imread(str(img_path))
         if img is None:
             logger.warning("Failed to load image, skipping: %s", img_path)
@@ -708,6 +710,8 @@ def main() -> None:
                 "path": img_path,
             },
         )
+
+        pbar.set_postfix({"img": img_path.name[:10]})
 
     # Calculate metrics
     metrics = None
