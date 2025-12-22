@@ -1,0 +1,75 @@
+"use client";
+
+import React, { useState } from 'react';
+import styles from './ResultCard.module.css';
+
+interface ResultCardProps {
+    filename: string;
+    originalImage: string; // URL or Base64
+    gradCamImage?: string; // Base64
+    label: string;
+    score: number;
+    reasoning?: string;
+}
+
+export default function ResultCard({ filename, originalImage, gradCamImage, label, score, reasoning }: ResultCardProps) {
+    const [showGradCam, setShowGradCam] = useState(false);
+
+    const isFake = label.toUpperCase() === 'FAKE';
+    const scorePercent = (score * 100).toFixed(1);
+
+    // Format score based on label. 
+    // If FAKE, strict score. If REAL, it's 1-score or similar.
+    // The backend returns Prob(Fake).
+    // So Score displayed should probably be "Probability of being FAKE"
+
+    return (
+        <div className={styles.card}>
+            <div className={styles.imageContainer} onMouseEnter={() => setShowGradCam(true)} onMouseLeave={() => setShowGradCam(false)}>
+                {/* We layer GradCAM on top with opacity transition */}
+                <img
+                    src={originalImage}
+                    alt={filename}
+                    className={styles.image}
+                />
+                {gradCamImage && (
+                    <img
+                        src={gradCamImage}
+                        alt="Grad-CAM"
+                        className={`${styles.overlay} ${showGradCam ? styles.visible : ''}`}
+                    />
+                )}
+                <div className={styles.hoverHint}>Hover to see Grad-CAM</div>
+            </div>
+
+            <div className={styles.info}>
+                <div className={styles.header}>
+                    <h3 className={styles.filename} title={filename}>{filename}</h3>
+                    <span className={`${styles.badge} ${isFake ? styles.fake : styles.real}`}>
+                        {label}
+                    </span>
+                </div>
+
+                <div className={styles.meterContainer}>
+                    <div className={styles.meterInfo}>
+                        <span className={styles.meterLabel}>Confidence (Fake)</span>
+                        <span className={styles.meterValue}>{scorePercent}%</span>
+                    </div>
+                    <div className={styles.meterTrack}>
+                        <div
+                            className={`${styles.meterFill} ${isFake ? styles.fillFake : styles.fillReal}`}
+                            style={{ width: `${scorePercent}%` }}
+                        />
+                    </div>
+                </div>
+
+                {reasoning && (
+                    <div className={styles.reasoning}>
+                        <span className={styles.reasoningLabel}>Analysis Explanation:</span>
+                        <p className={styles.reasoningText}>{reasoning}</p>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}

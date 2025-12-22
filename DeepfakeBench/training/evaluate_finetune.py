@@ -18,8 +18,8 @@ from dataset.factory import DatasetFactory
 from detectors import DETECTOR
 from logger import create_logger
 from metrics.utils import get_test_metrics
-from torch.utils.data import DataLoader
 from sklearn.metrics import f1_score, precision_score, recall_score
+from torch.utils.data import DataLoader
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)

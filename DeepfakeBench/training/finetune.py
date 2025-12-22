@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# author: Kilo Code
-# date: 2025-12-10
 # description: Fine-tuning script for Effort model with SVD decomposition
 
 import argparse
