@@ -1,4 +1,4 @@
-{"__info":"pretrained on sdv14, evaluated on df40_s",
+{
   "datasets": {
     "dataset_1_CollabDiff_sampled": {
       "auc": 0.9589319999999999,

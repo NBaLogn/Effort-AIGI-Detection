@@ -1,4 +1,4 @@
-{"__info":"pretrained on ff, evaluated on df40_s",
+{
   "datasets": {
     "dataset_1_CollabDiff_sampled": {
       "auc": 0.722694,

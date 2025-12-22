@@ -1,5 +1,4 @@
 {
-  "__info": "pretrained on ff, finetuned on genimage_s, evaluated on df40_s",
   "datasets": {
     "dataset_1_CollabDiff_sampled": {
       "auc": 0.940078,

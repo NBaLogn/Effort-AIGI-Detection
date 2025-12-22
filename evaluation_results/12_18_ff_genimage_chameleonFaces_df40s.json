@@ -1,6 +1,5 @@
 {
   "datasets": {
-    "__info": "pretrained on ff, finetuned on genimage_s+ChameleonFaces, evaluated on df40_s",
     "dataset_1_val": {
       "auc": 0.99362409375,
       "eer": 0.03725,
