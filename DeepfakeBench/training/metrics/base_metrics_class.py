@@ -27,8 +27,13 @@ def calculate_metrics_for_train(label, output):
         prob = output
 
     # Accuracy
-    _, prediction = torch.max(output, 1)
-    correct = (prediction == label).sum().item()
+    if output.size(1) == 2:
+        _, prediction = torch.max(output, 1)
+    else:
+        # For 1D or 1-column output, use a 0.5 threshold
+        prediction = (prob > 0.5).long().view(-1)
+
+    correct = (prediction == label.view(-1)).sum().item()
     accuracy = correct / prediction.size(0)
 
     # Average Precision

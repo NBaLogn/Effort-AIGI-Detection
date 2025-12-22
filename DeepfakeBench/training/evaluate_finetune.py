@@ -1,27 +1,31 @@
 #!/usr/bin/env python3
-# author: Kilo Code
-# date: 2025-12-10
-# description: Evaluation script for fine-tuned Effort models
+"""Evaluation script for fine-tuned deepfake detection models.
+
+Calculates frame-level and video-level metrics using predictions from the model.
+"""
 
 import argparse
 import json
 import logging
 import os
 from datetime import datetime
+from typing import Any
 
+import numpy as np
 import torch
 import yaml
 from dataset.factory import DatasetFactory
 from detectors import DETECTOR
 from logger import create_logger
-from metrics.base_metrics_class import calculate_metrics_for_train
+from metrics.utils import get_test_metrics
 from torch.utils.data import DataLoader
+from sklearn.metrics import f1_score, precision_score, recall_score
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
 
 
-def parse_arguments():
+def parse_arguments() -> argparse.Namespace:
     """Parse command line arguments for evaluation."""
     parser = argparse.ArgumentParser(description="Evaluate Fine-Tuned Effort Model")
 
@@ -64,7 +68,7 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def setup_device(device_arg):
+def setup_device(device_arg: str) -> torch.device:
     """Set up the appropriate device for evaluation."""
     if device_arg == "auto":
         if torch.cuda.is_available():
@@ -75,7 +79,9 @@ def setup_device(device_arg):
     return torch.device(device_arg)
 
 
-def load_model(config, weights_path, device):
+def load_model(
+    config: dict[str, Any], weights_path: str, device: torch.device
+) -> torch.nn.Module:
     """Load the fine-tuned model."""
     logging.info(f"Loading model from {weights_path}")
 
@@ -116,7 +122,9 @@ def load_model(config, weights_path, device):
         raise
 
 
-def prepare_test_data(config, test_dataset_paths, batch_size):
+def prepare_test_data(
+    config: dict[str, Any], test_dataset_paths: list[str], batch_size: int
+) -> DataLoader:
     """Prepare test data loader."""
     # Update config for test dataset
     test_config = config.copy()
@@ -146,14 +154,20 @@ def prepare_test_data(config, test_dataset_paths, batch_size):
     return test_loader
 
 
-def evaluate_model(model, test_loader, device, dataset_name):
+def evaluate_model(
+    model: torch.nn.Module,
+    test_loader: DataLoader,
+    device: torch.device,
+    dataset_name: str,
+) -> dict[str, Any]:
     """Evaluate model on test dataset."""
     logging.info(f"Evaluating on {dataset_name}")
 
     model.eval()
     all_labels = []
-    all_preds = []
+    all_logits = []
     all_probs = []
+    all_names = []
 
     with torch.no_grad():
         for batch_idx, data_dict in enumerate(test_loader):
@@ -170,32 +184,37 @@ def evaluate_model(model, test_loader, device, dataset_name):
 
             # Collect results
             labels = data_dict["label"].cpu()
-            preds = pred_dict["cls"].cpu()
+            logits = pred_dict["cls"].cpu()
             probs = pred_dict["prob"].cpu()
+            names = data_dict["image"]
 
             all_labels.extend(labels.tolist())
-            all_preds.extend(preds.argmax(dim=1).tolist())
+            all_logits.extend(logits.tolist())
             all_probs.extend(probs.tolist())
+            all_names.extend(names)
 
             if (batch_idx + 1) % 50 == 0:
                 logging.info(f"Processed batch {batch_idx + 1}/{len(test_loader)}")
 
-    # Calculate metrics
-    labels_tensor = torch.tensor(all_labels)
-    probs_tensor = torch.tensor(all_probs)
-
-    # Calculate comprehensive metrics
-    auc, eer, acc, ap = calculate_metrics_for_train(
-        labels_tensor,
-        probs_tensor.unsqueeze(1),
+    # Calculate comprehensive metrics using get_test_metrics
+    # This ensures consistency with the training/validation logic
+    metric_results = get_test_metrics(
+        y_pred=np.array(all_probs),
+        y_true=np.array(all_labels),
+        img_names=all_names,
     )
 
-    # Additional metrics
-    from sklearn.metrics import f1_score, precision_score, recall_score
+    # Extract primary metrics
+    auc = metric_results["auc"]
+    eer = metric_results["eer"]
+    acc = metric_results["acc"]
+    ap = metric_results.get("ap", 0.0)
 
-    precision = precision_score(all_labels, all_preds)
-    recall = recall_score(all_labels, all_preds)
-    f1 = f1_score(all_labels, all_preds)
+    # For sklearn metrics, we need discrete predictions
+    all_preds = (np.array(all_probs) > 0.5).astype(int)
+    precision = precision_score(all_labels, all_preds, zero_division=0)
+    recall = recall_score(all_labels, all_preds, zero_division=0)
+    f1 = f1_score(all_labels, all_preds, zero_division=0)
 
     metrics = {
         "auc": float(auc),
@@ -208,14 +227,27 @@ def evaluate_model(model, test_loader, device, dataset_name):
         "sample_count": len(all_labels),
     }
 
+    # Add video-level metrics if available
+    if "video_auc" in metric_results:
+        metrics["video_auc"] = float(metric_results["video_auc"])
+    if "video_eer" in metric_results:
+        metrics["video_eer"] = float(metric_results["video_eer"])
+    if "video_acc" in metric_results:
+        metrics["video_acc"] = float(metric_results["video_acc"])
+
     logging.info(f"Evaluation results for {dataset_name}:")
     for metric_name, metric_value in metrics.items():
-        logging.info(f"  {metric_name}: {metric_value:.4f}")
+        if isinstance(metric_value, (float, int)):
+            logging.info(f"  {metric_name}: {metric_value:.4f}")
+        else:
+            logging.info(f"  {metric_name}: {metric_value}")
 
     return metrics
 
 
-def save_results(metrics, dataset_name, output_dir, config):
+def save_results(
+    metrics: dict[str, Any], dataset_name: str, output_dir: str, config: dict[str, Any]
+) -> None:
     """Save evaluation results to file."""
     os.makedirs(output_dir, exist_ok=True)
 

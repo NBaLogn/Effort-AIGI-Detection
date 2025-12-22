@@ -18,7 +18,13 @@ from detectors import DETECTOR
 from imutils import face_utils
 from PIL import Image
 from skimage import transform as trans
-from sklearn.metrics import average_precision_score, roc_auc_score
+from sklearn.metrics import (
+    average_precision_score,
+    f1_score,
+    precision_score,
+    recall_score,
+    roc_auc_score,
+)
 from torchvision import transforms
 
 # Configuration constants
@@ -475,8 +481,7 @@ class LabelExtractor:
                 real_names,
                 fake_names,
             )
-            if label is not None:
-                labels.append(label)
+            labels.append(label)
 
         return labels
 
@@ -521,14 +526,26 @@ class PerformanceCalculator:
             auc_score = roc_auc_score(true_labels, probabilities)
             pr_auc_score = average_precision_score(true_labels, probabilities)
 
+            # Accuracy and other discrete metrics
+            pred_binary = (np.array(probabilities) > 0.5).astype(int)
+            acc = (pred_binary == np.array(true_labels)).mean()
+            prec = precision_score(true_labels, pred_binary, zero_division=0)
+            rec = recall_score(true_labels, pred_binary, zero_division=0)
+            f1 = f1_score(true_labels, pred_binary, zero_division=0)
+
             return {
                 "auc": auc_score,
                 "pr_auc": pr_auc_score,
-                "total_images": len(predictions),
+                "accuracy": acc,
+                "precision": prec,
+                "recall": rec,
+                "f1": f1,
+                "total_images": len(true_labels),
                 "real_count": sum(1 for label in true_labels if label == REAL_LABEL),
                 "fake_count": sum(1 for label in true_labels if label == FAKE_LABEL),
             }
         except Exception as e:  # noqa: BLE001
+            logger.exception("Error calculating metrics")
             return {"error": f"Error calculating metrics: {e}"}
 
 
@@ -589,6 +606,10 @@ class ResultWriter:
         f.write(
             f"PR-AUC (Area Under Precision-Recall Curve): {metrics['pr_auc']:.4f}\n",
         )
+        f.write(f"Accuracy: {metrics['accuracy']:.4f}\n")
+        f.write(f"Precision: {metrics['precision']:.4f}\n")
+        f.write(f"Recall: {metrics['recall']:.4f}\n")
+        f.write(f"F1-Score: {metrics['f1']:.4f}\n")
 
 
 def parse_args() -> argparse.Namespace:
@@ -683,21 +704,25 @@ def main() -> None:
     # Calculate metrics
     metrics = None
     if len(predictions) > 1 and true_labels:
-        valid_true_labels = [label for label in true_labels if label is not None]
-        if valid_true_labels:
+        valid_indices = [i for i, label in enumerate(true_labels) if label is not None]
+        if valid_indices:
+            valid_true_labels = [true_labels[i] for i in valid_indices]
+            valid_predictions = [predictions[i] for i in valid_indices]
+            valid_probabilities = [probabilities[i] for i in valid_indices]
+
             metrics = PerformanceCalculator.calculate_metrics(
                 valid_true_labels,
-                predictions,
-                probabilities,
+                valid_predictions,
+                valid_probabilities,
             )
 
             # Print metrics to console
             if "auc" in metrics:
-                logger.info("AUC (Area Under ROC Curve): %.4f", metrics["auc"])
-                logger.info(
-                    "PR-AUC (Area Under Precision-Recall Curve): %.4f",
-                    metrics["pr_auc"],
-                )
+                logger.info("Metrics Summary:")
+                logger.info(f"  AUC:      {metrics['auc']:.4f}")
+                logger.info(f"  PR-AUC:   {metrics['pr_auc']:.4f}")
+                logger.info(f"  Accuracy: {metrics['accuracy']:.4f}")
+                logger.info(f"  F1-Score: {metrics['f1']:.4f}")
 
     # Write results
     writer = ResultWriter()
