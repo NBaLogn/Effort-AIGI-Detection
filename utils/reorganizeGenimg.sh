@@ -1,1 +1,1 @@
-uv run utils/reorganize_genimage_dataset.py DeepfakeBench/facedata/Genimage 
+uv run utils/reorganize_genimage_dataset.py DeepfakeBench/facedata/Genimage_faces --dry-run
