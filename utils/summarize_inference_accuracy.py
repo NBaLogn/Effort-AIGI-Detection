@@ -1,5 +1,20 @@
 #!/usr/bin/env python3
-"""Script to summarize prediction accuracy from inference_results.txt"""
+"""Summarize Inference Prediction Accuracy.
+
+This script parses inference results from inference_results.txt and generates
+a comprehensive accuracy summary report. It calculates:
+- Overall accuracy (correct predictions / total predictions)
+- Per-class accuracy (real vs fake)
+- False positive and false negative rates
+- Detailed statistics for each class
+
+The input file should contain lines in the format:
+    [index] filename | True: REAL|FAKE | Pred: 0|1 (0=Real, 1=Fake) | ...
+
+Usage:
+    python summarize_inference_accuracy.py
+    # Reads inference_results.txt and writes prediction_summary.txt
+"""
 
 import re
 from pathlib import Path

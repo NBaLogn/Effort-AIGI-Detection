@@ -1,4 +1,13 @@
-"""Will unpickle logs."""
+"""Debug Script to Inspect Pickle Files.
+
+This is a simple debug utility to inspect the contents of pickle files
+from training logs. It loads and prints the Python object stored in a pickle file.
+
+Note: This is a debug script with a hardcoded path. Modify the path as needed.
+
+Usage:
+    python inspect_pickle_file.py
+"""
 
 import pickle
 from pathlib import Path

@@ -1,18 +1,28 @@
 #!/usr/bin/env python3
-"""Face Detection Filter Script using MediaPipe.
+"""Filter Images Containing Faces using MediaPipe Face Detection.
 
-Recursively processes all images in a source directory, detects faces using MediaPipe,
-and copies images containing faces to a destination directory while preserving the folder structure.
+This script recursively processes all images in a source directory, detects faces
+using Google's MediaPipe face detection model, and copies only images containing
+faces to a destination directory while preserving the folder structure.
+
+MediaPipe is optimized for speed and works well on Apple Silicon (M1/M2) chips.
+It's faster than RetinaFace but may be slightly less accurate.
 
 Features:
-- Fast face detection using MediaPipe (optimized for Apple Silicon)
+- Fast face detection using MediaPipe BlazeFace model
+- Optimized for Apple Silicon (MPS acceleration)
 - Configurable detection confidence thresholds
 - Comprehensive logging and progress tracking
 - Recursive directory processing with structure preservation
+- Parallel processing with configurable worker threads
 
 Usage:
-    uv run face_detection_filter_mediapipe.py --source /path/to/source --destination /path/to/destination
-    uv run face_detection_filter_mediapipe.py -s /Users/name/Pictures -d /Users/name/Faces_Only --confidence 0.5
+    uv run utils/face_detection_filter_mediapipe.py --source /path/to/source --destination /path/to/destination
+    uv run utils/face_detection_filter_mediapipe.py -s /path/to/images -d /path/to/faces_only --confidence 0.9
+
+See also:
+    - face_detection_filter_retinaface.py: Higher accuracy, slower
+    - face_detection_filter_yolo.py: Balanced speed/accuracy
 """
 
 import argparse

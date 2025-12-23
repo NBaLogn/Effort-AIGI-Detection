@@ -1,3 +1,20 @@
+#!/usr/bin/env python3
+"""Reorganize GenImageFaces Dataset Structure.
+
+This script reorganizes the GenImageFaces dataset from a generator-based structure
+to a standard train/val split structure. It flattens the directory hierarchy by:
+- Moving files from Generator/split/class_name to split/mapped_class_name
+- Mapping 'ai' -> 'fake' and 'nature' -> 'real'
+- Prefixing filenames with generator name to prevent collisions
+- Cleaning up empty directories after moving files
+
+Input structure: GeneratorName/train|val/ai|nature/image.jpg
+Output structure: train|val/fake|real/GeneratorName_image.jpg
+
+Usage:
+    uv run utils/reorganize_genimage_dataset.py /path/to/GenImageFaces --dry-run
+"""
+
 import os
 import shutil
 from pathlib import Path
@@ -5,7 +22,13 @@ import argparse
 from tqdm import tqdm
 
 
-def split_genimage_faces(base_path, dry_run=False):
+def reorganize_genimage_dataset(base_path, dry_run=False):
+    """Reorganize GenImageFaces dataset from generator-based to split-based structure.
+    
+    Args:
+        base_path: Path to the GenImageFaces dataset root directory
+        dry_run: If True, only show what would be done without moving files
+    """
     base_dir = Path(base_path)
 
     if not base_dir.exists():
@@ -104,7 +127,7 @@ def split_genimage_faces(base_path, dry_run=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Flatten GenImageFaces dataset structure."
+        description="Reorganize GenImageFaces dataset from generator-based to split-based structure."
     )
     parser.add_argument(
         "base_path",
@@ -122,4 +145,4 @@ if __name__ == "__main__":
     if args.dry_run:
         print("!!! DRY RUN MODE !!!")
 
-    split_genimage_faces(args.base_path, dry_run=args.dry_run)
+    reorganize_genimage_dataset(args.base_path, dry_run=args.dry_run)

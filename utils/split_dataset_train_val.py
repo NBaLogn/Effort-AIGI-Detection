@@ -1,3 +1,18 @@
+#!/usr/bin/env python3
+"""Split Dataset into Train/Val Directories.
+
+This script splits a dataset organized as base_path/fake/ and base_path/real/
+into train/val splits with a specified ratio. Files are randomly shuffled
+and moved (not copied) to the new structure.
+
+Input structure: base_path/fake/, base_path/real/
+Output structure: base_path/train/fake|real/, base_path/val/fake|real/
+
+Usage:
+    python split_dataset_train_val.py /path/to/dataset
+    # Default split ratio is 0.7 (70% train, 30% val)
+"""
+
 import os
 import random
 import shutil
@@ -5,6 +20,12 @@ from pathlib import Path
 
 
 def split_dataset(base_path, split_ratio=0.7) -> None:
+    """Split dataset into train/val directories with specified ratio.
+    
+    Args:
+        base_path: Path to dataset root containing 'fake' and 'real' subdirectories
+        split_ratio: Ratio for train split (default: 0.7 = 70% train, 30% val)
+    """
     base_dir = Path(base_path)
     classes = ["fake", "real"]
 

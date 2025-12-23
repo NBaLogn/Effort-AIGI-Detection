@@ -1,11 +1,16 @@
-"""Image Sampling Script for Deepfake Detection Dataset.
+"""Sample Images from Dataset (Flattening Directory Structure).
 
-This script samples a specified number of images from a source directory.
-It preserves the directory structure information by flattening the relative path
-into the filename (e.g., 'sub/dir/img.png' -> 'sub_dir_img.png').
+This script randomly samples a specified number of images from a dataset directory.
+Unlike sample_images_preserve_structure.py, this script FLATTENS the directory
+structure by encoding the relative path into the filename.
+
+Key differences:
+- Flattens paths: 'fake/subdir/img.png' -> 'fake_subdir_img.png'
+- Outputs all sampled images to a single directory (or per category if fake/real detected)
+- Useful when you need a flat structure but want to preserve some path information
 
 Usage:
-    python sample_images.py --source_dir /path/to/dataset --sample_size 500
+    uv run utils/sample_images_flatten_structure.py --source_dir /path/to/dataset --sample_size 500
 """
 
 import argparse

@@ -1,18 +1,28 @@
 #!/usr/bin/env python3
-"""Face Detection Filter Script using Ultralytics YOLOv8-face.
+"""Filter Images Containing Faces using YOLOv8-face Detection.
 
-Recursively processes all images in a source directory, detects faces using YOLOv8-face,
-and copies images containing faces to a destination directory while preserving the folder structure.
+This script recursively processes all images in a source directory, detects faces
+using Ultralytics YOLOv8-face model, and copies only images containing faces to
+a destination directory while preserving the folder structure.
+
+YOLOv8-face provides a good balance between speed and accuracy, making it suitable
+for processing large datasets efficiently.
 
 Features:
 - Fast and accurate face detection using YOLOv8-face
+- Multiple model sizes (nano, small, medium, large) for speed/accuracy tradeoff
 - Configurable detection confidence thresholds
 - Comprehensive logging and progress tracking
 - Recursive directory processing with structure preservation
+- Parallel processing with configurable worker threads
 
 Usage:
-    uv run face_detection_filter_yolo.py --source /path/to/source --destination /path/to/destination
-    uv run face_detection_filter_yolo.py -s /Users/name/Pictures -d /Users/name/Faces_Only --confidence 0.5
+    uv run utils/face_detection_filter_yolo.py --source /path/to/source --destination /path/to/destination
+    uv run utils/face_detection_filter_yolo.py -s /path/to/images -d /path/to/faces_only --confidence 0.5 --model-size m
+
+See also:
+    - face_detection_filter_mediapipe.py: Fastest, good for Apple Silicon
+    - face_detection_filter_retinaface.py: Highest accuracy, slower
 """
 
 import argparse

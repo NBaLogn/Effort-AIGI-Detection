@@ -1,10 +1,15 @@
-"""Structure-Preserving Image Sampling Script.
+"""Sample Images from Dataset (Preserving Directory Structure).
 
-This script samples a specified number of images from a source directory,
-copying them to an output directory while PRESERVING the original folder structure.
+This script randomly samples a specified number of images from a dataset directory
+while PRESERVING the complete original directory structure in the output.
+
+Key differences from sample_images_flatten_structure.py:
+- Preserves full directory structure: 'fake/subdir/img.png' -> 'fake/subdir/img.png'
+- Maintains relative paths exactly as they appear in source
+- Useful when you need to preserve the dataset structure for training/evaluation
 
 Usage:
-    uv run utils/sample_images_structured.py --source_dir /path/to/data --output_dir /path/to/output --sample_size 1000
+    uv run utils/sample_images_preserve_structure.py --source_dir /path/to/data --output_dir /path/to/output --sample_size 1000
 """
 
 import argparse

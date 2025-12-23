@@ -1,6 +1,17 @@
-"""Script to read pickle files and TensorBoard event files from logs directory.
+"""Extract and Process Training Logs.
 
-Outputs summaries to files in the specified output directory.
+This script extracts and processes training logs from the DeepfakeBench training logs directory.
+It handles two types of log files:
+1. Pickle files (*.pickle) - Extracts and pretty-prints Python objects
+2. TensorBoard event files (events.out.tfevents.*) - Extracts scalar metrics
+
+Outputs:
+- pickle_summaries.txt: Human-readable pickle file contents
+- metrics.csv: All scalar metrics in CSV format
+- metrics.json: All scalar metrics in JSON format
+
+Usage:
+    uv run utils/extract_training_logs.py --logs_dir DeepfakeBench/training/logs --output_dir logs_output
 """
 
 import argparse

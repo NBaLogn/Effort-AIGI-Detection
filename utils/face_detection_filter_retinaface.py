@@ -1,19 +1,28 @@
 #!/usr/bin/env python3
-"""Face Detection Filter Script using InsightFace RetinaFace.
+"""Filter Images Containing Faces using InsightFace RetinaFace Detection.
 
-Recursively processes all images in a source directory, detects faces using InsightFace RetinaFace,
-and copies images containing faces to a destination directory while preserving the folder structure.
+This script recursively processes all images in a source directory, detects faces
+using InsightFace RetinaFace model, and copies only images containing faces to
+a destination directory while preserving the folder structure.
+
+RetinaFace provides the highest accuracy (90.4% mAP on hard datasets) but is slower
+than MediaPipe or YOLO. Best for datasets where accuracy is critical.
 
 Features:
-- High-accuracy face detection using RetinaFace (90.4% mAP on hard datasets)
-- MPS (Metal Performance Shaders) acceleration for Mac M1/M2 chips
+- Highest accuracy face detection using RetinaFace (90.4% mAP on hard datasets)
+- CoreML acceleration for Apple Silicon (M1/M2/M3) chips
 - Configurable detection confidence thresholds
 - Comprehensive logging and progress tracking
 - Recursive directory processing with structure preservation
+- Parallel processing with configurable worker threads
 
 Usage:
-    python face_detection_filter_retinaface.py --source /path/to/source --destination /path/to/destination
-    python face_detection_filter_retinaface.py -s /Users/name/Pictures -d /Users/name/Faces_Only --confidence 0.7
+    uv run utils/face_detection_filter_retinaface.py --source /path/to/source --destination /path/to/destination
+    uv run utils/face_detection_filter_retinaface.py -s /path/to/images -d /path/to/faces_only --confidence 0.7
+
+See also:
+    - face_detection_filter_mediapipe.py: Fastest, good for Apple Silicon
+    - face_detection_filter_yolo.py: Balanced speed/accuracy
 """
 
 import argparse
