@@ -1,2 +1,2 @@
 
-uv run utils/face_detection_filter_mediapipe.py -s '/Volumes/Crucial/Large_Downloads/AI/DATASETS/GenImage/stable_diffusion_v_1_4' -d '/Volumes/Crucial/Large_Downloads/AI/DATASETS/GenImage/stable_diffusion_v_1_4_faces' --confidence 0.9
+uv run utils/face_detection_filter_mediapipe.py -s '/Volumes/Crucial/Large_Downloads/AI/DATASETS/GenImage/wukong' -d './DeepfakeBench/facedata/Genimage/wukong_faces' --confidence 0.9

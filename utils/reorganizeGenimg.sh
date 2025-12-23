@@ -1,0 +1,1 @@
+uv run utils/reorganize_genimage_dataset.py DeepfakeBench/facedata/Genimage 
