@@ -183,9 +183,9 @@ def evaluate_model(
                 pred_dict = model(data_dict, inference=True)
 
             # Collect results
-            labels = data_dict["label"].cpu()
-            logits = pred_dict["cls"].cpu()
-            probs = pred_dict["prob"].cpu()
+            labels = data_dict["label"].cpu().detach().numpy()
+            logits = pred_dict["cls"].cpu().detach().numpy()
+            probs = pred_dict["prob"].cpu().detach().numpy()
             names = data_dict["image"]
 
             all_labels.extend(labels.tolist())

@@ -5193,3 +5193,43 @@ ValueError: No valid images found in /Volumes/Crucial/Large_Downloads/AI/DATASET
 2025-12-25 14:12:16,967 - INFO - RawFileDataset initialized with 600 samples for test mode
 2025-12-25 14:12:16,967 - INFO - Test loader prepared with 38 batches
 2025-12-25 14:12:16,967 - INFO - Evaluating on dataset_1_val
+2025-12-25 14:13:20,650 - INFO - Evaluation results for dataset_1_val:
+2025-12-25 14:13:20,650 - INFO -   auc: 0.9998
+2025-12-25 14:13:20,650 - INFO -   eer: 0.0100
+2025-12-25 14:13:20,650 - INFO -   accuracy: 0.9833
+2025-12-25 14:13:20,650 - INFO -   ap: 0.9998
+2025-12-25 14:13:20,650 - INFO -   precision: 1.0000
+2025-12-25 14:13:20,650 - INFO -   recall: 0.9667
+2025-12-25 14:13:20,650 - INFO -   f1: 0.9831
+2025-12-25 14:13:20,650 - INFO -   sample_count: 600.0000
+2025-12-25 14:13:20,651 - INFO - Saved evaluation results to evaluation_results/dataset_1_val_eval_20251225_141320.json
+2025-12-25 14:13:20,652 - INFO - Preparing test data for paths: ['DeepfakeBench/facedata/Chameleon_retinafaces/val']
+2025-12-25 14:13:20,652 - INFO - Using RawFileDataset with data from DeepfakeBench/facedata/Chameleon_retinafaces/val
+2025-12-25 14:13:20,654 - INFO - Validating directory structure: DeepfakeBench/facedata/Chameleon_retinafaces/val
+2025-12-25 14:13:20,655 - INFO - All subdirectories found: ['real', 'fake']
+2025-12-25 14:13:20,655 - INFO - Found real directories: ['real']
+2025-12-25 14:13:20,655 - INFO - Found fake directories: ['fake']
+2025-12-25 14:13:20,655 - INFO - Discovering files in DeepfakeBench/facedata/Chameleon_retinafaces/val
+2025-12-25 14:13:20,655 - INFO - Processing real directory: real
+2025-12-25 14:13:20,661 - INFO - Processing fake directory: fake
+2025-12-25 14:13:20,673 - INFO - Checking for faulty images...
+2025-12-25 14:13:30,615 - INFO - No faulty images found.
+2025-12-25 14:13:30,615 - INFO - Dataset contains 1028 real and 1805 fake samples
+2025-12-25 14:13:30,615 - INFO - RawFileDataset initialized with 2833 samples for test mode
+2025-12-25 14:13:30,615 - INFO - Test loader prepared with 178 batches
+2025-12-25 14:13:30,616 - INFO - Evaluating on dataset_2_val
+2025-12-25 14:14:34,341 - INFO - Processed batch 50/178
+2025-12-25 14:15:23,099 - INFO - Processed batch 100/178
+2025-12-25 14:16:11,415 - INFO - Processed batch 150/178
+2025-12-25 14:16:57,657 - INFO - Evaluation results for dataset_2_val:
+2025-12-25 14:16:57,658 - INFO -   auc: 0.9962
+2025-12-25 14:16:57,658 - INFO -   eer: 0.0243
+2025-12-25 14:16:57,658 - INFO -   accuracy: 0.9756
+2025-12-25 14:16:57,658 - INFO -   ap: 0.9980
+2025-12-25 14:16:57,658 - INFO -   precision: 0.9876
+2025-12-25 14:16:57,658 - INFO -   recall: 0.9740
+2025-12-25 14:16:57,658 - INFO -   f1: 0.9808
+2025-12-25 14:16:57,658 - INFO -   sample_count: 2833.0000
+2025-12-25 14:16:57,662 - INFO - Saved evaluation results to evaluation_results/dataset_2_val_eval_20251225_141657.json
+2025-12-25 14:16:57,664 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2025-12-25 14:16:57,664 - INFO - Fine-tuned model evaluation finished successfully
