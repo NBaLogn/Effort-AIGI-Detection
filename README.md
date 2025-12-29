@@ -1,179 +1,122 @@
-# Effort: Orthogonal Subspace Decomposition for Generalizable AI-Generated Image Detection ([Paper](https://arxiv.org/abs/2411.15633); [Checkpoints](https://drive.google.com/drive/folders/19kQwGDjF18uk78EnnypxxOLaG4Aa4v1h?usp=sharing))
+# 🎯 Effort Model Fine-Tuning
 
-[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-brightgreen.svg)](https://creativecommons.org/licenses/by-nc/4.0/) ![Release .10](https://img.shields.io/badge/Release-1.0-brightgreen) ![PyTorch](https://img.shields.io/badge/PyTorch-1.11-brightgreen) ![Python](https://img.shields.io/badge/Python-3.7.2-brightgreen)
+This guide provides comprehensive instructions for fine-tuning the Effort model using the SVD decomposition approach.
 
-> 🎉🎉🎉 **Our paper has been accepted by ICML 2025 Oral 🏆!**
+## 🚀 Quick Start
 
-Welcome to our work **Effort**, for detecting AI-generated images (AIGIs).
+### Commands
 
-In this work, we propose: (1) a **very very easy and effective method** for generalization AIGI detection😀; and (2) a **novel analysis tool** for quantifying the "degree of model's overfitting"😊.
-
-
-The figure below provides a brief introduction to our method: our method can be **plug-and-play inserted** into *any* vit-based large models such as CLIP.
-
-<div style="text-align:center;">
-    <img src="figs/effort_pipeline.png" alt="Effort Pipeline" style="max-width:60%;">
-</div>
-
-
-If you want to know a **very high-level code implementation of our method**, see below.
-
-```python
-# 🟩 Perform SVD on the original weight
-U, S, Vh = torch.linalg.svd(module.weight.data, full_matrices=False)
-
-# 🟨 Keep top r singular components (main weight)
-U_r = U[:, :r]      # 🔵 Shape: (out_features, r)
-S_r = S[:r]         # 🔵 Shape: (r,)
-Vh_r = Vh[:r, :]    # 🔵 Shape: (r, in_features)
-
-# 🟪 Reconstruct the main weight (fixed)
-weight_main = U_r @ torch.diag(S_r) @ Vh_r
-
-# 🟥 Residual components (trainable)
-U_residual = U[:, r:]    # 🔵 Shape: (out_features, n - r)
-S_residual = S[r:]       # 🔵 Shape: (n - r,)
-Vh_residual = Vh[r:, :]  # 🔵 Shape: (n - r, in_features)
-```
-
-If you want to see **more method-specific implementation details**, please see the file [`effort_detector.py`](DeepfakeBench/training/detectors/effort_detector.py).
-
----
-
-The following two tables display the **partial results** of our method on **both the (face) deepfake detection benchmark and the (natural) AIGI detection benchmark**. Please refer to our paper for more results.
-
-<div style="text-align:center;">
-    <img src="figs/deepfake_tab1.png" alt="Deepfake Table 1" style="max-width:50%;">
-</div>
-
-
-
-<div style="text-align:center;">
-    <img src="figs/genimage_tab.png" alt="GenImage Table" style="max-width:50%;">
-</div>
-
----
-
-
-## ⏳ Quick Start (if you just want to do the *inference*)
-<a href="#top">[Back to top]</a>
-
-
-### 1. Installation
-Please run the following script to install the required libraries:
+### finetune.sh
 
 ```bash
-sh install.sh
+uv run 'DeepfakeBench/training/finetune.py' \
+    --detector_config 'DeepfakeBench/training/config/detector/effort_finetune.yaml' \
+    --train_dataset '[DATASET_PATH]' \
+    --test_dataset '[DATASET_PATH]' \
+    --pretrained_weights '[PATH_TO]/effort_clip_L14_trainOn_FaceForensic.pth'
 ```
 
-### 2. Download checkpoints
-If you are a deepfake player, more interested in face deepfake detection:
-- The checkpoint of "CLIP-L14 + our Effort" **training on FaceForensics++** is released at [Google Drive](https://drive.google.com/file/d/1m4fyJecABU-Yk3bJ4b1WhUwQa0xCkMLI/view?usp=drive_link).
-
-If you are interested in detecting general AI-generated images, we provide two checkpoints that are trained on GenImage and Chameleon datasets, respectively:
-- The checkpoint of "CLIP-L14 + our Effort" **training on GenImage (sdv1.4)** is released at [Google Drive](https://drive.google.com/file/d/1UXf1hC9FC1yV93uKwXSkdtepsgpIAU9d/view?usp=sharing).
-- The checkpoint of "CLIP-L14 + our Effort" **training on Chameleon (sdv1.4)** is released at [Google Drive](https://drive.google.com/file/d/1GlJ1y4xmTdqV0FfIcyBwNNU6cQird9DR/view?usp=sharing).
-
-
-### 3. Run demo
-You can then infer **one image *or* one folder with several images** using the pretrained weights. 
-
-Specifically, run the following line:
+### eval.sh
 
 ```bash
-cd DeepfakeBench/
-
-python3 training/demo.py --detector_config training/config/detector/effort.yaml --weights ./training/weights/{NAME_OF_THE_CKPT}.pth --image {IMAGE_PATH or IMAGE_FOLDER}
+uv run 'DeepfakeBench/training/evaluate_finetune.py' \
+    --detector_config 'DeepfakeBench/training/config/detector/effort_finetune.yaml' \
+    --weights '[PATH_TO_FINETUNED_WEIGHT]'\
+    --test_dataset '[DATASET_PATH]' '[DATASET_PATH]' \
+    --output_dir '[PATH_TO_OUTPUT_FOLDER]'
 ```
 
-After running the above line, you can obtain the prediction results (fake probabilities) for each image. 
-
-
-Note, you are processing a **face image**, please add the ``--landmark_model ./preprocessing/shape_predictor_81_face_landmarks.dat`` to **extract the facial region** for inference, as our model (trained on face deepfakes) used this face extractor for processing faces.
-
-
----
-
-
-## 💻 Reproduction and Benchmarking Evaluation
-
-<a href="#top">[Back to top]</a>
-
-Since I am the creator and developer of [DeepfakeBench](https://github.com/SCLBD/DeepfakeBench), the **data, codebase, and benchmarking protocols are mainly used from it**. If you are a researcher in (face) deepfake detection, I highly recommend you try DeepfakeBench.
-
-If you want to **try other codebases, such as UnivFD**, we plan to provide a folder `UniversalFakeDetect_Benchmark/` to reproduce and implement our method using its codebase. Using this codebase, you can then **reproduce the results of Table 2 of our manuscript**.
-
-Below, we provide the **detailed procedure to use DeepfakeBench to reproduce the results** of our paper, such as Table 1.
-
-
-### 1. Download datasets
-
-If you want to reproduce the results of each deepfake dataset, you can download the processed datasets (have already finished preprocessing such as frame extraction and face cropping) from [DeepfakeBench](https://github.com/SCLBD/DeepfakeBench). For evaluating more diverse fake methods (such as SimSwap, BlendFace, DeepFaceLab, etc), you are recommended to use the just-released [DF40 dataset](https://github.com/YZY-stack/DF40) (with 40 distinct forgery methods implemented).
-
-
-
-### 2. Preprocessing (**optional**)
-
-If you only want to use the processed data we provided, you can skip this step. 
-
-Otherwise, you need to use the following codes for doing **data preprocessing strictly following DeepfakeBench**.
-
-
-### 3. Rearrangement (**optional**)
-
-> "Rearrangement" here means that we need to **create a *JSON file* for each dataset for collecting all frames within different folders**. Please refer to **DeepfakeBench** and **DF40** for the provided JSON files for each dataset.
-
-After running the above line, you will obtain the JSON files for each dataset in the `./preprocessing/dataset_json` folder. The rearranged structure organizes the data in a hierarchical manner, grouping videos based on their labels and data splits (*i.e.,* train, test, validation). Each video is represented as a dictionary entry containing relevant metadata, including file paths, labels, compression levels (if applicable), *etc*. 
-
-
-
-### 4. Training
-
-First, you can run the following lines to train the model:
-
-- For multiple GPUs:
+### infer.sh
 
 ```bash
-python3 -m torch.distributed.run --nproc_per_node=4 training/train.py \
---detector_path ./training/config/detector/effort.yaml \
---train_dataset FaceForensics++ \
---test_dataset Celeb-DF-v2 \
---ddp
-```
-- For a single GPU:
-
-```bash
-python3 training/train.py \
---detector_path ./training/config/detector/effort.yaml \
---train_dataset FaceForensics++ \
---test_dataset Celeb-DF-v2 \
+uv run 'DeepfakeBench/training/inference.py' \
+    --detector_config \
+        'DeepfakeBench/training/config/detector/effort_finetune.yaml' \
+    --landmark_model \
+        '[PATH_TO]/shape_predictor_81_face_landmarks.dat' \
+    --weights \
+        '[PATH_TO_FINETUNED_WEIGHT]' \
+    --image \
+        '[PATH_TO_IMAGE_FILE_OR_FOLDER]'
 ```
 
-### 5. Testing
+## 📋 Fine-Tuning Configuration
 
-Once you finish training, you can test the model on several deepfake datasets such as DF40.
+The fine-tuning configuration file (`effort_finetune.yaml`) includes optimized settings:
 
-```bash
-python3 training/test.py \
---detector_path ./training/config/detector/effort.yaml \
---test_dataset simswap_ff blendface_ff uniface_ff fomm_ff deepfacelab \
---weights_path ./training/weights/{CKPT}.pth
+### Settings for batch2k
+
+Used effort_clip_L14_trainOn_FaceForensic.pth, used 2000 extracted faces from Chameleon, Genimage, quan and quanFaceSwap datasets, finetuned for 2 epochs.
+
+### Settings for batchAll
+
+Used effort_clip_L14_trainOn_FaceForensic.pth, used all the extracted faces from Chameleon, Genimage, quan and quanFaceSwap datasets, finetuned for 10 epochs.
+
+#### Current Fine-Tune Configuration
+
+```yaml
+# Fine-tuning specific settings
+fine_tune: true
+pretrained_checkpoint: null
+freeze_backbone: true
+train_classification_head: true
+train_svd_residuals: true
+
+# Training configuration
+nEpochs: 10
+lr_scheduler: cosine
+lr_T_max: 10
+lr_eta_min: 0.000001
+
+# Optimizer settings
+optimizer:
+  type: adam
+  adam:
+    lr: 0.00005
+    beta1: 0.9
+    beta2: 0.999
+    weight_decay: 0.0001
+
+# Data augmentation settings
+data_aug:
+  flip_prob: 0.5
+  rotate_prob: 0.4
+  rotate_limit: [-10, 10]
+  blur_prob: 0.3
+  brightness_prob: 0.3
+  brightness_limit: [-0.1, 0.1]
 ```
-Then, you can obtain similar evaluation results reported in our manuscript.
 
+## 🔧 How Fine-Tuning Works
 
----
+### SVD Decomposition Approach
 
-## 📕 Citation
-If you find our work helpful to your research, please consider citing our paper as follows:
+The Effort model uses **Orthogonal Subspace Decomposition** for efficient fine-tuning:
 
-```bibtex
-@article{yan2024effort,
-  title={Effort: Efficient Orthogonal Modeling for Generalizable AI-Generated Image Detection},
-  author={Yan, Zhiyuan and Wang, Jiangming and Wang, Zhendong and Jin, Peng and Zhang, Ke-Yue and Chen, Shen and Yao, Taiping and Ding, Shouhong and Wu, Baoyuan and Yuan, Li},
-  journal={arXiv preprint arXiv:2411.15633},
-  year={2024}
-}
-```
+1. **Original Weight Matrix**: `W = U @ Σ @ Vᵀ`
+2. **Fixed Main Components**: `W_main = U_r @ Σ_r @ V_rᵀ` (top r components)
+3. **Trainable Residuals**: `W_residual = U_residual @ Σ_residual @ V_residualᵀ` (remaining components)
+4. **Total Weight**: `W_total = W_main + W_residual`
 
+### Parameter Efficiency
 
+- **Fixed Parameters**: ~99% of original parameters (preserve pre-trained knowledge)
+- **Trainable Parameters**: ~1% of original parameters (SVD residuals + classification head)
+- **Total Trainable**: ~1-5% of model parameters
+
+## 📊 Evaluation Metrics
+
+The evaluation script provides comprehensive metrics:
+
+- **Primary Metrics**: AUC, EER, Accuracy, AP
+- **Additional Metrics**: Precision, Recall, F1 Score
+- **Detailed Logging**: Per-batch progress, final summary
+- **Result Formats**: JSON output for easy analysis
+
+## 🔍 Monitoring and Debugging
+
+### Logging
+
+- **Finetuning Logs**: `training/logs/finetuning.log`
+- **Evaluation Logs**: `evaluation_results/evaluation.log`
+- **TensorBoard**: Automatic logging of metrics
