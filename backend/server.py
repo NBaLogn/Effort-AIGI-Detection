@@ -1,5 +1,4 @@
 import sys
-import os
 from pathlib import Path
 
 # Add DeepfakeBench/training and backend to sys.path to allow imports
@@ -11,7 +10,6 @@ sys.path.insert(0, str(current_dir))
 import base64
 import logging
 from contextlib import asynccontextmanager, suppress
-from io import BytesIO
 
 import cv2
 import numpy as np
@@ -25,12 +23,10 @@ with suppress(ImportError):
     from detectors import DETECTOR
 
 import dlib
-from detectors.effort_detector import EffortDetector  # Ensure this is registered
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from gradcam_utils import reshape_transform
-from inference import DeviceManager, ImagePreprocessor, FaceAlignment
-from PIL import Image
+from inference import DeviceManager, FaceAlignment, ImagePreprocessor
 from pydantic import BaseModel
 
 # Import Grad-CAM
@@ -56,11 +52,10 @@ class ModelWrapper(torch.nn.Module):
 # Configuration
 CONFIG_PATH = deepfake_bench_path / "config" / "detector" / "effort_finetune.yaml"
 WEIGHTS_PATH = Path(
-    "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs/batchFaces2000/test/combined_test/batchFaces2000.pth",
-    # "/Volumes/Crucial/Large_Downloads/AI/WEIGHTS/effort/effort_clip_L14_trainOn_FaceForensic.pth",
+    "DeepfakeBench/training/weights/batchFacesAll.pth",
 )
 LANDMARK_MODEL_PATH = Path(
-    "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat",
+    "DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat",
 )
 
 DEVICE = None
@@ -116,7 +111,7 @@ async def lifespan(app: FastAPI):
         logger.error(f"Config not found at {CONFIG_PATH}")
         raise RuntimeError("Config file not found")
 
-    with open(CONFIG_PATH, "r") as f:
+    with open(CONFIG_PATH) as f:
         config = yaml.safe_load(f)
 
     # Load Model
@@ -138,7 +133,7 @@ async def lifespan(app: FastAPI):
         MODEL.load_state_dict(state_dict, strict=False)
     else:
         logger.warning(
-            "No checkpoint found! Using random initialization (Expect poor results)"
+            "No checkpoint found! Using random initialization (Expect poor results)",
         )
 
     MODEL.eval()
@@ -250,7 +245,7 @@ def analyze_heatmap_regions(mask: np.ndarray, landmarks: np.ndarray) -> str:
     }
 
     return descriptions.get(
-        top_region, f"The model is focused on the {top_region} region."
+        top_region, f"The model is focused on the {top_region} region.",
     )
 
 
@@ -278,7 +273,7 @@ async def predict(file: UploadFile = File(...)):
             logger.info("Face aligned for %s", file.filename)
         else:
             logger.warning(
-                "No face detected in %s, using original image", file.filename
+                "No face detected in %s, using original image", file.filename,
             )
 
     # Just resize to 224x224 for the model input
@@ -298,7 +293,7 @@ async def predict(file: UploadFile = File(...)):
     # 1. Prediction
     with torch.no_grad():
         pred_dict = MODEL(
-            {"image": input_tensor, "label": torch.tensor([0]).to(DEVICE)}
+            {"image": input_tensor, "label": torch.tensor([0]).to(DEVICE)},
         )  # Mock label
         prob = pred_dict["prob"].item()
         # prob is probability of FAKE (1).

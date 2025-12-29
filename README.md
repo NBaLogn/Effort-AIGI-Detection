@@ -120,3 +120,146 @@ The evaluation script provides comprehensive metrics:
 - **Finetuning Logs**: `training/logs/finetuning.log`
 - **Evaluation Logs**: `evaluation_results/evaluation.log`
 - **TensorBoard**: Automatic logging of metrics
+
+## 🛠️ Installation
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/your-repo/effort-aigi-detection.git
+cd effort-aigi-detection
+```
+
+### 2. Set Up Python Environment
+```bash
+# Install Python dependencies using uv
+uv sync
+```
+
+This will install all Python dependencies listed in `pyproject.toml`, including:
+- FastAPI and Uvicorn for the backend server
+- PyTorch and related ML libraries
+- OpenCV, dlib, and other computer vision tools
+- Deepfake detection model dependencies
+
+### 3. Set Up Frontend
+```bash
+cd frontend
+npm install
+# or
+uv run npm install
+```
+
+This will install Next.js and React dependencies.
+
+### 4. Download Required Models
+The application requires specific model files:
+
+#### Landmark Detection Model
+Download the 81-landmark face shape predictor at https://github.com/codeniko/shape_predictor_81_face_landmarks
+
+#### Deepfake Detection Weights
+You need pretrained Effort model weights. Place them in the appropriate location. The file server.py looks for the weight file and landmark file, you must change the path.
+
+## 🚀 Running the Application
+
+### Development Mode
+
+#### 1. Start the Backend Server
+```bash
+# From the project root
+uv run backend/server.py
+```
+
+The backend will start on `http://0.0.0.0:8000` with:
+- FastAPI REST API for deepfake detection
+- CORS enabled for frontend communication
+- Automatic model loading and Grad-CAM visualization
+- Health check endpoint at `/health`
+
+#### 2. Start the Frontend Development Server
+```bash
+cd frontend
+npm run dev
+# or
+uv run npm run dev
+```
+
+The frontend will start on `http://localhost:3000` with:
+- Hot module replacement for instant updates
+- Interactive deepfake detection interface
+- Image upload and analysis capabilities
+- Visual Grad-CAM explanations
+
+## 📊 API Endpoints
+
+### POST /predict
+Upload an image for deepfake detection:
+
+**Request:**
+```bash
+curl -X POST -F "file=@test_image.jpg" http://localhost:8000/predict
+```
+
+**Response:**
+```json
+{
+  "label": "FAKE",
+  "score": 0.95,
+  "reasoning": "Suspicious textures detected around the eyes",
+  "grad_cam_image": "data:image/jpeg;base64,..."
+}
+```
+
+### GET /health
+Check if the backend is running:
+```bash
+curl http://localhost:8000/health
+```
+
+## 🎯 Usage
+
+1. **Upload Images**: Drag and drop images or use the file picker
+2. **View Results**: See real-time deepfake detection results
+3. **Analyze Heatmaps**: Visual Grad-CAM explanations show which facial regions triggered the detection
+4. **Batch Processing**: Upload multiple images for batch analysis
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**CUDA not available:**
+```bash
+# Check CUDA availability
+python -c "import torch; print(torch.cuda.is_available())"
+```
+
+**Missing dlib dependencies:**
+```bash
+# On macOS
+brew install cmake
+# On Ubuntu
+sudo apt-get install build-essential cmake
+```
+
+**Port conflicts:**
+```bash
+# Change backend port by modifying server.py line 337
+uvicorn.run(app, host="0.0.0.0", port=8001)
+```
+
+## 📁 Project Structure
+
+```
+effort-aigi-detection/
+├── backend/                  # FastAPI backend
+│   ├── server.py             # Main backend application
+│   └── gradcam_utils.py      # Grad-CAM utilities
+├── frontend/                 # Next.js frontend
+│   ├── app/                  # Application pages
+│   ├── components/           # React components
+│   └── public/               # Static assets
+├── DeepfakeBench/            # Core detection logic
+│   ├── training/             # Training scripts
+│   └── preprocessing/        # Data preprocessing
+└── README.md                 # This file
+```
