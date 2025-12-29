@@ -1,8 +1,14 @@
 import base64
 import logging
 import sys
-from contextlib import asynccontextmanager, suppress
+from contextlib import asynccontextmanager
 from pathlib import Path
+
+# Add DeepfakeBench and backend to sys.path to allow imports
+current_dir = Path(__file__).resolve().parent
+root_dir = current_dir.parent
+sys.path.insert(0, str(root_dir))
+sys.path.insert(0, str(current_dir))
 
 import cv2
 import dlib
@@ -12,31 +18,19 @@ import uvicorn
 import yaml
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from gradcam_utils import reshape_transform
 from pydantic import BaseModel
 
 # Import Grad-CAM
 from pytorch_grad_cam import GradCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
 
+from DeepfakeBench.training.detectors import DETECTOR
 from DeepfakeBench.training.inference import (
     DeviceManager,
     FaceAlignment,
     ImagePreprocessor,
 )
-
-from .gradcam_utils import reshape_transform
-
-# Add DeepfakeBench/training and backend to sys.path to allow imports
-current_dir = Path(__file__).resolve().parent
-deepfake_bench_path = current_dir.parent / "DeepfakeBench" / "training"
-sys.path.insert(0, str(deepfake_bench_path))
-sys.path.insert(0, str(current_dir))
-
-
-# Import DeepfakeBench modules
-# We explicitly check if we are importing the local one
-with suppress(ImportError):
-    from DeepfakeBench.training.detectors import DETECTOR
 
 # Logging setup
 logging.basicConfig(level=logging.INFO)
@@ -55,7 +49,9 @@ class ModelWrapper(torch.nn.Module):
 
 
 # Configuration
-CONFIG_PATH = deepfake_bench_path / "config" / "detector" / "effort_finetune.yaml"
+CONFIG_PATH = Path(
+    "DeepfakeBench/training/config/detector/effort_finetune.yaml",
+)
 WEIGHTS_PATH = Path(
     "DeepfakeBench/training/weights/batchFacesAll.pth",
 )
@@ -88,7 +84,7 @@ def find_best_weights():
 
     # Attempt to find the best weights in the logs directory
     # Only looking at 'effort' related folders
-    logs_dir = deepfake_bench_path / "logs"
+    logs_dir = Path("DeepfakeBench/training/logs")
     if not logs_dir.exists():
         return None
 

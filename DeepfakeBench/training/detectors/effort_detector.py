@@ -3,10 +3,11 @@ import math
 
 import torch
 import torch.nn.functional as F
-from detectors import DETECTOR
 from metrics.base_metrics_class import calculate_metrics_for_train
 from torch import nn
 from transformers import CLIPModel
+
+from DeepfakeBench.training.utils.registry import DETECTOR
 
 logger = logging.getLogger(__name__)
 

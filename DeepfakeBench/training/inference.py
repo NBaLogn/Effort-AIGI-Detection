@@ -14,7 +14,6 @@ import dlib
 import numpy as np
 import torch
 import yaml
-from detectors import DETECTOR
 from imutils import face_utils
 from PIL import Image
 from skimage import transform as trans
@@ -27,6 +26,8 @@ from sklearn.metrics import (
 )
 from torchvision import transforms
 from tqdm import tqdm
+
+from DeepfakeBench.training.detectors import DETECTOR
 
 # Configuration constants
 DEFAULT_RESOLUTION = 224
@@ -545,7 +546,7 @@ class PerformanceCalculator:
                 "real_count": sum(1 for label in true_labels if label == REAL_LABEL),
                 "fake_count": sum(1 for label in true_labels if label == FAKE_LABEL),
             }
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             logger.exception("Error calculating metrics")
             return {"error": f"Error calculating metrics: {e}"}
 

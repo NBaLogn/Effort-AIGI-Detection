@@ -36,6 +36,7 @@ dependencies = [
     "opencv-python>=4.11.0.86",
     "pandas>=2.3.3",
     "pillow>=12.0.0",
+    "python-multipart>=0.0.21",
     "pyyaml>=6.0.3",
     "scikit-image>=0.25.2",
     "scikit-learn>=1.7.2",
