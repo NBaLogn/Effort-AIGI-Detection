@@ -1,12 +1,12 @@
-# 🎯 Effort Model Fine-Tuning 
+# 🎯 Effort Model Fine-Tuning
 
 This guide provides comprehensive instructions for fine-tuning the Effort model using the SVD decomposition approach.
 
 ## 🚀 Quick Start
 
-### COMMANDS
+### Commands
 
-## finetune.sh
+### finetune.sh
 
 ```bash
 uv run 'DeepfakeBench/training/finetune.py' \
@@ -16,7 +16,7 @@ uv run 'DeepfakeBench/training/finetune.py' \
     --pretrained_weights '[PATH_TO]/effort_clip_L14_trainOn_FaceForensic.pth'
 ```
 
-## eval.sh
+### eval.sh
 
 ```bash
 uv run 'DeepfakeBench/training/evaluate_finetune.py' \
@@ -24,8 +24,10 @@ uv run 'DeepfakeBench/training/evaluate_finetune.py' \
     --weights '[PATH_TO_FINETUNED_WEIGHT]'\
     --test_dataset '[DATASET_PATH]' '[DATASET_PATH]' \
     --output_dir '[PATH_TO_OUTPUT_FOLDER]'
-```  
-## infer.sh
+```
+
+### infer.sh
+
 ```bash
 uv run 'DeepfakeBench/training/inference.py' \
     --detector_config \
@@ -42,33 +44,48 @@ uv run 'DeepfakeBench/training/inference.py' \
 
 The fine-tuning configuration file (`effort_finetune.yaml`) includes optimized settings:
 
-# settings for batch2k
-Used effort_clip_L14_trainOn_FaceForensic.pth, finetuned on 2000 extracted faces from Chameleon, Genimage, quan and quanFaceSwap datasets. The key params was changed below:
-### Key Parameters
+### Settings for batch2k
 
-| Parameter | Value | Description |
-|-----------|-------|-------------|
-| `train_batchSize` | 8 | Smaller batch size for stability |
-| `optimizer.lr` | 0.0001 | Lower learning rate for fine-tuning |
-| `weight_decay` | 0.0001 | Reduced regularization |
-| `nEpochs` | 10 | 5-15 epochs typically sufficient |
-| `rec_iter` | 50 | Frequent progress logging |
-| `freeze_backbone` | true | Freeze SVD main components |
-| `train_svd_residuals` | true | Train SVD residual components |
+Used effort_clip_L14_trainOn_FaceForensic.pth, used 2000 extracted faces from Chameleon, Genimage, quan and quanFaceSwap datasets, finetuned for 2 epochs.
 
-### Data Augmentation (Reduced for Fine-Tuning)
+### Settings for batchAll
+
+Used effort_clip_L14_trainOn_FaceForensic.pth, used all the extracted faces from Chameleon, Genimage, quan and quanFaceSwap datasets, finetuned for 10 epochs.
+
+#### Current Fine-Tune Configuration
 
 ```yaml
+# Fine-tuning specific settings
+fine_tune: true
+pretrained_checkpoint: null
+freeze_backbone: true
+train_classification_head: true
+train_svd_residuals: true
+
+# Training configuration
+nEpochs: 10
+lr_scheduler: cosine
+lr_T_max: 10
+lr_eta_min: 0.000001
+
+# Optimizer settings
+optimizer:
+  type: adam
+  adam:
+    lr: 0.00005
+    beta1: 0.9
+    beta2: 0.999
+    weight_decay: 0.0001
+
+# Data augmentation settings
 data_aug:
-  flip_prob: 0.3          # Reduced from 0.5
-  rotate_prob: 0.2        # Reduced from 0.5
-  rotate_limit: [-5, 5]   # Reduced range
-  blur_prob: 0.2          # Reduced from 0.5
-  brightness_limit: [-0.05, 0.05]  # Reduced range
+  flip_prob: 0.5
+  rotate_prob: 0.4
+  rotate_limit: [-10, 10]
+  blur_prob: 0.3
+  brightness_prob: 0.3
+  brightness_limit: [-0.1, 0.1]
 ```
-#### settings for batchAll
-Used effort_clip_L14_trainOn_FaceForensic.pth, finetuned on all the extracted faces from Chameleon, Genimage, quan and quanFaceSwap datasets. 
-TODO: insert current finetune config
 
 ## 🔧 How Fine-Tuning Works
 
