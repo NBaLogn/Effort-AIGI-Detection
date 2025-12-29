@@ -223,31 +223,7 @@ curl http://localhost:8000/health
 3. **Analyze Heatmaps**: Visual Grad-CAM explanations show which facial regions triggered the detection
 4. **Batch Processing**: Upload multiple images for batch analysis
 
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**CUDA not available:**
-```bash
-# Check CUDA availability
-python -c "import torch; print(torch.cuda.is_available())"
-```
-
-**Missing dlib dependencies:**
-```bash
-# On macOS
-brew install cmake
-# On Ubuntu
-sudo apt-get install build-essential cmake
-```
-
-**Port conflicts:**
-```bash
-# Change backend port by modifying server.py line 337
-uvicorn.run(app, host="0.0.0.0", port=8001)
-```
-
-## 📁 Project Structure
+##  Project Structure
 
 ```
 effort-aigi-detection/
