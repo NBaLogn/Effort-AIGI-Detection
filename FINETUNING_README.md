@@ -119,15 +119,4 @@ The evaluation script provides comprehensive metrics:
 
 - **Finetuning Logs**: `training/logs/finetuning.log`
 - **Evaluation Logs**: `evaluation_results/evaluation.log`
-- **TensorBoard**: Automatic logging of loss and metrics
-
-## 🔧 Technical Details
-
-### Memory Optimization
-
-The fine-tuning script includes:
-
-- **Automatic device selection** (CUDA/MPS/CPU)
-- **Efficient data loading** with proper batching
-- **Memory monitoring** for MPS devices
-- **Mixed precision support** via `torch.autocast`
+- **TensorBoard**: Automatic logging of metrics
