@@ -1,5 +1,30 @@
+import base64
+import logging
 import sys
+from contextlib import asynccontextmanager, suppress
 from pathlib import Path
+
+import cv2
+import dlib
+import numpy as np
+import torch
+import uvicorn
+import yaml
+from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+# Import Grad-CAM
+from pytorch_grad_cam import GradCAM
+from pytorch_grad_cam.utils.image import show_cam_on_image
+
+from DeepfakeBench.training.inference import (
+    DeviceManager,
+    FaceAlignment,
+    ImagePreprocessor,
+)
+
+from .gradcam_utils import reshape_transform
 
 # Add DeepfakeBench/training and backend to sys.path to allow imports
 current_dir = Path(__file__).resolve().parent
@@ -7,31 +32,11 @@ deepfake_bench_path = current_dir.parent / "DeepfakeBench" / "training"
 sys.path.insert(0, str(deepfake_bench_path))
 sys.path.insert(0, str(current_dir))
 
-import base64
-import logging
-from contextlib import asynccontextmanager, suppress
-
-import cv2
-import numpy as np
-import torch
-import uvicorn
-import yaml
 
 # Import DeepfakeBench modules
 # We explicitly check if we are importing the local one
 with suppress(ImportError):
-    from detectors import DETECTOR
-
-import dlib
-from fastapi import FastAPI, File, HTTPException, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
-from gradcam_utils import reshape_transform
-from inference import DeviceManager, FaceAlignment, ImagePreprocessor
-from pydantic import BaseModel
-
-# Import Grad-CAM
-from pytorch_grad_cam import GradCAM
-from pytorch_grad_cam.utils.image import show_cam_on_image
+    from DeepfakeBench.training.detectors import DETECTOR
 
 # Logging setup
 logging.basicConfig(level=logging.INFO)
@@ -41,7 +46,7 @@ logger = logging.getLogger(__name__)
 class ModelWrapper(torch.nn.Module):
     """Wrapper to make EffortDetector compatible with Grad-CAM."""
 
-    def __init__(self, model):
+    def __init__(self, model) -> None:
         super().__init__()
         self.model = model
 

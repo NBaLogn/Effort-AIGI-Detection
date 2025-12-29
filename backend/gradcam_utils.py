@@ -1,11 +1,9 @@
 import cv2
 import numpy as np
-import torch
 
 
 def reshape_transform(tensor, height=None, width=None):
-    """
-    Reshape the tensor from (Batch, Seq, Channels) to (Batch, Channels, Height, Width)
+    """Reshape the tensor from (Batch, Seq, Channels) to (Batch, Channels, Height, Width)
     for ViT Grad-CAM.
     """
     # Exclude the class token (first token)
@@ -33,8 +31,7 @@ def show_cam_on_image(
     use_rgb: bool = False,
     colormap: int = cv2.COLORMAP_JET,
 ) -> np.ndarray:
-    """
-    Overlays the CAM mask on the image.
+    """Overlays the CAM mask on the image.
 
     Args:
         img: The base image (float32, [0, 1]).
@@ -44,6 +41,7 @@ def show_cam_on_image(
 
     Returns:
         The image with the CAM overlay (uint8, [0, 255]).
+
     """
     heatmap = cv2.applyColorMap(np.uint8(255 * mask), colormap)
     if use_rgb:
