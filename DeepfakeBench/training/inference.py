@@ -6,8 +6,14 @@ Follows context7 and ruff best practices for maintainable code.
 import argparse
 import logging
 import random
+import sys
 from pathlib import Path
 from typing import IO, Any
+
+# Add DeepfakeBench to sys.path to allow imports
+current_dir = Path(__file__).resolve().parent
+root_dir = current_dir.parent.parent
+sys.path.insert(0, str(root_dir))
 
 import cv2
 import dlib

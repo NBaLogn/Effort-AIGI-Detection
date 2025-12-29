@@ -148,7 +148,7 @@ The project supports both face deepfake detection and general AI-generated image
 
 **Dataset Structure:**
 - Datasets organized with JSON manifests in `DeepfakeBench/preprocessing/dataset_json/`
-- Face data stored in `DeepfakeBench/facedata/` with subdirectories per dataset
+- Face data stored in `DeepfakeBench/training/facedata/` with subdirectories per dataset
 - Train/val/test splits maintained per dataset
 
 **Model Architecture:**
