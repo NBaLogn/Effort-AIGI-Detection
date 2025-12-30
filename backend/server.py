@@ -1,8 +1,15 @@
+"""Deepfake Detection Server.
+ 
+This module provides a FastAPI server for deepfake detection using the Effort model.
+It includes endpoints for health checks and image prediction with Grad-CAM visualization.
+"""
+
 import base64
 import logging
 import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import Any, ClassVar
 
 # Add DeepfakeBench and backend to sys.path to allow imports
 current_dir = Path(__file__).resolve().parent
@@ -40,46 +47,95 @@ logger = logging.getLogger(__name__)
 class ModelWrapper(torch.nn.Module):
     """Wrapper to make EffortDetector compatible with Grad-CAM."""
 
-    def __init__(self, model) -> None:
+    def __init__(self, model: torch.nn.Module) -> None:
+        """Initialize ModelWrapper.
+        
+        Args:
+            model: The model to wrap for Grad-CAM compatibility.
+
+        """
         super().__init__()
         self.model = model
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Forward pass for Grad-CAM.
+        
+        Args:
+            x: Input tensor.
+        
+        Returns:
+            Output tensor from the model.
+
+        """
         return self.model({"image": x})["cls"]
 
 
-# Configuration
-CONFIG_PATH = Path(
-    "DeepfakeBench/training/config/detector/effort_finetune.yaml",
-)
-WEIGHTS_PATH = Path(
-    "DeepfakeBench/training/finetuned_weights/",
-)
-LANDMARK_MODEL_PATH = Path(
-    "DeepfakeBench/preprocessing/",
-)
+# Configuration constants
+class Config:
+    """Configuration constants for the server."""
 
-DEVICE = None
-FACE_DETECTOR = None
+    CONFIG_PATH = Path(
+        "DeepfakeBench/training/config/detector/effort_finetune.yaml",
+    )
+    WEIGHTS_PATH = Path(
+        "DeepfakeBench/training/finetuned_weights/batchFacesAll.pth",
+    )
+    LANDMARK_MODEL_PATH = Path(
+        "DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat",
+    )
 
-# Landmark group indices for 81-landmark model
-LANDMARK_GROUPS = {
-    "eyes": list(range(36, 48)),
-    "nose": list(range(27, 36)),
-    "mouth": list(range(48, 68)),
-    "forehead": list(range(68, 81)),
-}
+    # Landmark group indices for 81-landmark model
+    LANDMARK_GROUPS: ClassVar[dict[str, list]] = {
+        "eyes": list(range(36, 48)),
+        "nose": list(range(27, 36)),
+        "mouth": list(range(48, 68)),
+        "forehead": list(range(68, 81)),
+    }
+
+    # Threshold constants
+    SUBTLE_FEATURES_THRESHOLD: ClassVar[float] = 0.2
+    FAKE_PROBABILITY_THRESHOLD: ClassVar[float] = 0.5
 
 
-def find_best_weights():
+class ServerState:
+    """Global server state management."""
+
+    def __init__(self) -> None:
+        """Initialize server state."""
+        self.device = None
+        self.model = None
+        self.cam = None
+        self.face_detector = None
+
+    def cleanup(self) -> None:
+        """Clean up resources."""
+        if hasattr(self, "model") and self.model is not None:
+            del self.model
+        if hasattr(self, "cam") and self.cam is not None:
+            del self.cam
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+
+
+# Global server state
+server_state = ServerState()
+
+
+def find_best_weights() -> Path | None:
+    """Find the best available model weights.
+    
+    Returns:
+        Path to the best weights file, or None if not found.
+
+    """
     # Use the hardcoded path requested by the user
-    if WEIGHTS_PATH.exists():
-        logger.info("Found weights at requested path: %s", WEIGHTS_PATH)
-        return WEIGHTS_PATH
+    if Config.WEIGHTS_PATH.exists():
+        logger.info("Found weights at requested path: %s", Config.WEIGHTS_PATH)
+        return Config.WEIGHTS_PATH
 
     logger.warning(
         "Requested weights not found at %s. Falling back to search.",
-        WEIGHTS_PATH,
+        Config.WEIGHTS_PATH,
     )
 
     # Attempt to find the best weights in the logs directory
@@ -95,116 +151,125 @@ def find_best_weights():
 
     # Sort by modification time, newest first
     candidates.sort(key=lambda x: x.stat().st_mtime, reverse=True)
-    logger.info(f"Found weights: {[str(c) for c in candidates]}")
+    logger.info("Found weights: %s", [str(c) for c in candidates])
     return candidates[0]
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    global MODEL, CAM, DEVICE
+def load_model_config() -> dict[str, Any]:
+    """Load model configuration from YAML file.
+    
+    Returns:
+        Parsed configuration dictionary.
+    
+    Raises:
+        RuntimeError: If config file is not found.
 
-    # Load Device
-    DEVICE = DeviceManager.get_optimal_device()
-    logger.info("Using device: %s", DEVICE)
-
-    # Load Config
-    if not CONFIG_PATH.exists():
-        logger.error(f"Config not found at {CONFIG_PATH}")
+    """
+    if not Config.CONFIG_PATH.exists():
+        config_error_msg = f"Config not found at {Config.CONFIG_PATH}"
+        logger.error(config_error_msg)
         raise RuntimeError("Config file not found")
 
-    with open(CONFIG_PATH) as f:
-        config = yaml.safe_load(f)
+    with Config.CONFIG_PATH.open() as f:
+        return yaml.safe_load(f)
 
-    # Load Model
-    # We need to manually instantiate because we might not have the original training strict structure
+
+def load_model(config: dict[str, Any], device: torch.device) -> torch.nn.Module:
+    """Load and initialize the deepfake detection model.
+    
+    Args:
+        config: Model configuration dictionary.
+        device: Target device for the model.
+    
+    Returns:
+        Initialized model.
+    
+    Raises:
+        RuntimeError: If model definition is not found.
+
+    """
     try:
-        MODEL = DETECTOR[config["model_name"]](config).to(DEVICE)
+        return DETECTOR[config["model_name"]](config).to(device)
     except KeyError as e:
-        logger.error("Model %s not found in DETECTOR registry", config["model_name"])
-        raise RuntimeError("Model definition not found") from e
+        logger.exception("Model %s not found in DETECTOR registry", config["model_name"])
+        model_error_msg = "Model definition not found"
+        raise RuntimeError(model_error_msg) from e
 
-    # Load Weights
-    weights_path = find_best_weights()
-    if weights_path:
-        logger.info(f"Loading weights from {weights_path}")
-        ckpt = torch.load(weights_path, map_location=DEVICE)
-        state_dict = ckpt.get("state_dict", ckpt)
-        # Remove module. prefix if present
-        state_dict = {k.replace("module.", ""): v for k, v in state_dict.items()}
-        MODEL.load_state_dict(state_dict, strict=False)
-    else:
-        logger.warning(
-            "No checkpoint found! Using random initialization (Expect poor results)",
-        )
 
-    MODEL.eval()
+def load_model_weights(model: torch.nn.Module, weights_path: Path) -> None:
+    """Load model weights from checkpoint file.
+    
+    Args:
+        model: Model to load weights into.
+        weights_path: Path to weights file.
 
-    # Setup Grad-CAM
+    """
+    logger.info("Loading weights from %s", weights_path)
+    ckpt = torch.load(weights_path, map_location=server_state.device)
+    state_dict = ckpt.get("state_dict", ckpt)
+    # Remove module. prefix if present
+    state_dict = {k.replace("module.", ""): v for k, v in state_dict.items()}
+    model.load_state_dict(state_dict, strict=False)
+
+
+def setup_grad_cam(model: torch.nn.Module) -> GradCAM:
+    """Set up Grad-CAM for model visualization.
+    
+    Args:
+        model: Model to set up Grad-CAM for.
+    
+    Returns:
+        Configured Grad-CAM instance.
+
+    """
     # Target layer for ViT backbone in Effort model
     # Backbone is clip_model.vision_model
     # We target the last layer norm of the encoder
-    target_layers = [MODEL.backbone.encoder.layers[-1].layer_norm1]
+    target_layers = [model.backbone.encoder.layers[-1].layer_norm1]
 
     # Wrap model for Grad-CAM
-    wrapped_model = ModelWrapper(MODEL)
+    wrapped_model = ModelWrapper(model)
 
-    CAM = GradCAM(
+    return GradCAM(
         model=wrapped_model,
         target_layers=target_layers,
         reshape_transform=reshape_transform,
     )
 
-    # Load Face Detector
-    global FACE_DETECTOR
-    if LANDMARK_MODEL_PATH.exists():
-        logger.info("Loading landmark model from %s", LANDMARK_MODEL_PATH)
+
+def load_face_detector() -> FaceAlignment | None:
+    """Load face detector for face alignment.
+    
+    Returns:
+        FaceAlignment instance if landmark model is found, None otherwise.
+
+    """
+    if Config.LANDMARK_MODEL_PATH.exists():
+        logger.info("Loading landmark model from %s", Config.LANDMARK_MODEL_PATH)
         face_det = dlib.get_frontal_face_detector()
-        shape_predictor = dlib.shape_predictor(str(LANDMARK_MODEL_PATH))
-        FACE_DETECTOR = FaceAlignment(face_det, shape_predictor)
-    else:
-        logger.warning(
-            "Landmark model not found at %s. Face alignment disabled.",
-            LANDMARK_MODEL_PATH,
-        )
-
-    yield
-
-    # Clean up
-    del MODEL
-    del CAM
-    if torch.cuda.is_available():
-        torch.cuda.empty_cache()
-
-
-app = FastAPI(lifespan=lifespan)
-
-# CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-
-class PredictionResponse(BaseModel):
-    label: str
-    score: float
-    reasoning: str | None = None
-    grad_cam_image: str  # Base64 encoded image
-
-
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
+        shape_predictor = dlib.shape_predictor(str(Config.LANDMARK_MODEL_PATH))
+        return FaceAlignment(face_det, shape_predictor)
+    logger.warning(
+        "Landmark model not found at %s. Face alignment disabled.",
+        Config.LANDMARK_MODEL_PATH,
+    )
+    return None
 
 
 def analyze_heatmap_regions(mask: np.ndarray, landmarks: np.ndarray) -> str:
-    """Analyze which facial regions are most affected by the heatmap."""
+    """Analyze which facial regions are most affected by the heatmap.
+    
+    Args:
+        mask: Grad-CAM heatmap mask.
+        landmarks: Facial landmarks array.
+    
+    Returns:
+        String describing the analysis result.
+
+    """
     region_scores = {}
 
-    for name, indices in LANDMARK_GROUPS.items():
+    for name, indices in Config.LANDMARK_GROUPS.items():
         # Filter indices to ensure they exist in the landmark set
         valid_indices = [idx for idx in indices if idx < len(landmarks)]
         if not valid_indices:
@@ -235,7 +300,7 @@ def analyze_heatmap_regions(mask: np.ndarray, landmarks: np.ndarray) -> str:
     top_region = max(region_scores, key=region_scores.get)
     intensity = region_scores[top_region]
 
-    if intensity < 0.2:
+    if intensity < Config.SUBTLE_FEATURES_THRESHOLD:
         return "The model's decision is based on subtle features across the face."
 
     descriptions = {
@@ -250,14 +315,21 @@ def analyze_heatmap_regions(mask: np.ndarray, landmarks: np.ndarray) -> str:
     )
 
 
-@app.post("/predict", response_model=PredictionResponse)
-async def predict(file: UploadFile = File(...)):
-    if not MODEL:
-        raise HTTPException(status_code=500, detail="Model not loaded")
+def preprocess_image(image_data: bytes) -> tuple[np.ndarray, np.ndarray | None]:
+    """Preprocess uploaded image for model inference.
+    
+    Args:
+        image_data: Raw image data bytes.
+    
+    Returns:
+        Tuple of (processed_image, landmarks) where landmarks may be None.
+    
+    Raises:
+        HTTPException: If image is invalid or processing fails.
 
+    """
     # Read Image
-    contents = await file.read()
-    nparr = np.frombuffer(contents, np.uint8)
+    nparr = np.frombuffer(image_data, np.uint8)
     img_bgr = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     if img_bgr is None:
@@ -266,53 +338,61 @@ async def predict(file: UploadFile = File(...)):
     # Preprocess with Face Alignment if available
     face_aligned = img_bgr
     landmarks = None
-    if FACE_DETECTOR:
-        face_result = FACE_DETECTOR.extract_aligned_face(img_bgr, res=224)
+    if server_state.face_detector:
+        face_result = server_state.face_detector.extract_aligned_face(img_bgr, res=224)
         if face_result[0] is not None:
             face_aligned = face_result[0]
             landmarks = face_result[1]
-            logger.info("Face aligned for %s", file.filename)
+            logger.info("Face aligned successfully")
         else:
-            logger.warning(
-                "No face detected in %s, using original image", file.filename,
-            )
+            logger.warning("No face detected, using original image")
 
-    # Just resize to 224x224 for the model input
-    # Note: inference.py ImagePreprocessor handles normalization
+    # Convert to RGB and resize for Grad-CAM visualization
     img_rgb = cv2.cvtColor(face_aligned, cv2.COLOR_BGR2RGB)
-
-    # Keep a normalized float copy for Grad-CAM visualization
     img_float_norm = cv2.resize(img_rgb, (224, 224))
     img_float_norm = np.float32(img_float_norm) / 255.0
 
-    # Prepare Tensor
-    input_tensor = ImagePreprocessor.preprocess_face(face_aligned).to(DEVICE)
+    return img_float_norm, landmarks
 
+
+def perform_inference(input_tensor: torch.Tensor) -> tuple[str, float, str | None]:
+    """Perform model inference and generate prediction.
+    
+    Args:
+        input_tensor: Preprocessed input tensor.
+    
+    Returns:
+        Tuple of (label, probability, reasoning).
+
+    """
     # Inference
-    # We need to compute Grad-CAM and Prediction
-
-    # 1. Prediction
     with torch.no_grad():
-        pred_dict = MODEL(
-            {"image": input_tensor, "label": torch.tensor([0]).to(DEVICE)},
+        pred_dict = server_state.model(
+            {"image": input_tensor, "label": torch.tensor([0]).to(server_state.device)},
         )  # Mock label
         prob = pred_dict["prob"].item()
         # prob is probability of FAKE (1).
 
-    label_str = "FAKE" if prob > 0.5 else "REAL"
-
-    # 2. Grad-CAM
-    # Target category: we want to see what makes it FAKE (1) or REAL (0)?
-    # Usually we visualize the predicted class.
-    targets = None  # Uses predicted class by default
-
-    grayscale_cam = CAM(input_tensor=input_tensor, targets=targets)
-    grayscale_cam = grayscale_cam[0, :]
-
-    # 3. Reasoning
+    label_str = "FAKE" if prob > Config.FAKE_PROBABILITY_THRESHOLD else "REAL"
     reasoning = None
-    if label_str == "FAKE" and landmarks is not None:
-        reasoning = analyze_heatmap_regions(grayscale_cam, landmarks)
+
+    return label_str, prob, reasoning
+
+
+def generate_grad_cam(input_tensor: torch.Tensor, img_float_norm: np.ndarray) -> str:
+    """Generate Grad-CAM visualization.
+    
+    Args:
+        input_tensor: Input tensor for Grad-CAM.
+        img_float_norm: Normalized image for overlay.
+    
+    Returns:
+        Base64 encoded Grad-CAM image.
+
+    """
+    # Generate Grad-CAM
+    grayscale_cam = server_state.cam(input_tensor=input_tensor, targets=None)
+    grayscale_cam = grayscale_cam[0, :]
 
     # Overlay
     cam_image = show_cam_on_image(img_float_norm, grayscale_cam, use_rgb=True)
@@ -321,11 +401,115 @@ async def predict(file: UploadFile = File(...)):
     _, buffer = cv2.imencode(".jpg", cv2.cvtColor(cam_image, cv2.COLOR_RGB2BGR))
     grad_cam_b64 = base64.b64encode(buffer).decode("utf-8")
 
+    return f"data:image/jpeg;base64,{grad_cam_b64}"
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI) -> None:
+    """FastAPI lifespan context manager for resource management."""
+    # Initialize device
+    server_state.device = DeviceManager.get_optimal_device()
+    logger.info("Using device: %s", server_state.device)
+
+    # Load configuration
+    config = load_model_config()
+
+    # Load model
+    server_state.model = load_model(config, server_state.device)
+
+    # Load weights
+    weights_path = find_best_weights()
+    if weights_path:
+        load_model_weights(server_state.model, weights_path)
+    else:
+        logger.warning(
+            "No checkpoint found! Using random initialization (Expect poor results)",
+        )
+
+    server_state.model.eval()
+
+    # Setup Grad-CAM
+    server_state.cam = setup_grad_cam(server_state.model)
+
+    # Load Face Detector
+    server_state.face_detector = load_face_detector()
+
+    yield
+
+    # Clean up resources
+    server_state.cleanup()
+
+
+app = FastAPI(lifespan=lifespan)
+
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+class PredictionResponse(BaseModel):
+    """Response model for prediction results."""
+
+    label: str
+    score: float
+    reasoning: str | None = None
+    grad_cam_image: str  # Base64 encoded image
+
+
+@app.get("/health")
+def health_check() -> dict:
+    """Health check endpoint."""
+    return {"status": "ok"}
+
+
+@app.post("/predict", response_model=PredictionResponse)
+async def predict(file: UploadFile = File(...)) -> PredictionResponse:
+    """Predict deepfake probability for uploaded image.
+    
+    Args:
+        file: Uploaded image file.
+    
+    Returns:
+        Prediction response with label, score, reasoning, and Grad-CAM visualization.
+    
+    Raises:
+        HTTPException: If model is not loaded or image processing fails.
+
+    """
+    if not server_state.model:
+        raise HTTPException(status_code=500, detail="Model not loaded")
+
+    # Read and preprocess image
+    contents = await file.read()
+    img_float_norm, landmarks = preprocess_image(contents)
+
+    # Prepare tensor for model input
+    input_tensor = ImagePreprocessor.preprocess_face(
+        cv2.cvtColor(np.uint8(img_float_norm * 255), cv2.COLOR_RGB2BGR),
+    ).to(server_state.device)
+
+    # Perform inference
+    label_str, prob, reasoning = perform_inference(input_tensor)
+
+    # Generate reasoning based on Grad-CAM analysis
+    if label_str == "FAKE" and landmarks is not None:
+        grayscale_cam = server_state.cam(input_tensor=input_tensor, targets=None)
+        grayscale_cam = grayscale_cam[0, :]
+        reasoning = analyze_heatmap_regions(grayscale_cam, landmarks)
+
+    # Generate Grad-CAM visualization
+    grad_cam_image = generate_grad_cam(input_tensor, img_float_norm)
+
     return {
         "label": label_str,
         "score": float(prob),
         "reasoning": reasoning,
-        "grad_cam_image": f"data:image/jpeg;base64,{grad_cam_b64}",
+        "grad_cam_image": grad_cam_image,
     }
 
 
