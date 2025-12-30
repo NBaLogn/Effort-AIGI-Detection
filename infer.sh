@@ -8,6 +8,6 @@ uv run 'DeepfakeBench/training/inference.py' \
     --landmark_model \
         'DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat' \
     --weights \
-        'DeepfakeBench/training/logs/batchFaces2000/test/combined_test/batchFaces2000.pth' \
+        'DeepfakeBench/training/weights/batchFacesAll.pth' \
     --image \
-        'DeepfakeBench/facedata/quan_faceswap2000/val'
+        'DeepfakeBench/training/facedata/quan_faceswap2000/val'
