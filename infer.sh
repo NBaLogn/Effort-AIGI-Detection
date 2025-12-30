@@ -8,6 +8,7 @@ uv run 'DeepfakeBench/training/inference.py' \
     --landmark_model \
         'DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat' \
     --weights \
-        'DeepfakeBench/training/weights/batchFacesAll.pth' \
+        'DeepfakeBench/training/finetuned_weights/batchFacesAll.pth' \
     --image \
-        'DeepfakeBench/training/facedata/quan_faceswap2000/val'
+        'DeepfakeBench/training/facedata/ivansivkovenin_faces' \
+    --limit 1000

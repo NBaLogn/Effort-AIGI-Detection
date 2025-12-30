@@ -460,30 +460,75 @@ def main():
 
     # Training loop
     logger.info("Starting fine-tuning process")
-    best_metric = None
+
+    # Early stopping initialization
+    es_config = config.get("early_stopping", {})
+    early_stopping_enabled = es_config.get("enabled", False)
+    patience = es_config.get("patience", 3)
+    min_delta = es_config.get("min_delta", 0.001)
+    monitor_metric = es_config.get("metric", metric_scoring)
+
+    best_metric_val = float("-inf") if monitor_metric != "eer" else float("inf")
+    epochs_without_improvement = 0
 
     for epoch in range(config["start_epoch"], config["nEpochs"] + 1):
         trainer.model.epoch = epoch
 
         # Train for one epoch
-        epoch_metric = trainer.train_epoch(
+        best_metrics_all_time = trainer.train_epoch(
             epoch=epoch,
             train_data_loader=train_data_loader,
             test_data_loaders=test_data_loaders,
         )
 
-        if epoch_metric is not None:
-            best_metric = epoch_metric
-            logger.info(
-                f"===> Epoch[{epoch}] completed with {metric_scoring}: {parse_metric_for_print(epoch_metric)}!",
+        if best_metrics_all_time:
+            # Determine which key to monitor (prioritize 'avg', then first available key)
+            monitor_key = (
+                "avg"
+                if "avg" in best_metrics_all_time
+                else next(iter(best_metrics_all_time.keys()))
             )
+            current_metric_val = best_metrics_all_time[monitor_key].get(monitor_metric)
+
+            if current_metric_val is not None:
+                logger.info(
+                    f"===> Epoch[{epoch}]: Current best {monitor_metric} for {monitor_key} is {parse_metric_for_print(current_metric_val)}",
+                )
+
+                # Check for improvement
+                is_improvement = False
+                if monitor_metric == "eer":
+                    if current_metric_val < best_metric_val - min_delta:
+                        is_improvement = True
+                else:
+                    if current_metric_val > best_metric_val + min_delta:
+                        is_improvement = True
+
+                if is_improvement:
+                    best_metric_val = current_metric_val
+                    epochs_without_improvement = 0
+                    logger.info(
+                        f"New best metric achieved: {parse_metric_for_print(best_metric_val)}"
+                    )
+                else:
+                    epochs_without_improvement += 1
+                    logger.info(
+                        f"No improvement for {epochs_without_improvement} epochs."
+                    )
+
+                # Early stopping check
+                if early_stopping_enabled and epochs_without_improvement >= patience:
+                    logger.info(
+                        f"Early stopping triggered after {epoch} epochs. No improvement for {patience} epochs."
+                    )
+                    break
 
         # Step scheduler if available
         if scheduler is not None:
             scheduler.step()
 
     logger.info(
-        f"Fine-tuning completed! Best {metric_scoring}: {parse_metric_for_print(best_metric)}",
+        f"Fine-tuning completed! Best {monitor_metric}: {parse_metric_for_print(best_metric_val)}",
     )
 
     # Clean up

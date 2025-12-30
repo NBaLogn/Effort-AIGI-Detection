@@ -21,7 +21,7 @@ from pathlib import Path
 
 def split_dataset(base_path, split_ratio=0.7) -> None:
     """Split dataset into train/val directories with specified ratio.
-    
+
     Args:
         base_path: Path to dataset root containing 'fake' and 'real' subdirectories
         split_ratio: Ratio for train split (default: 0.7 = 70% train, 30% val)
@@ -85,5 +85,5 @@ def split_dataset(base_path, split_ratio=0.7) -> None:
 
 if __name__ == "__main__":
     split_dataset(
-        "/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/quan_faceswap1000"
+        "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/facedata/ivansivkovenin_faces",
     )

@@ -360,7 +360,7 @@ class ImageCollection:
     """Handles image path collection and validation."""
 
     @staticmethod
-    def collect_image_paths(path_str: str, limit: int = 1000) -> list[Path]:
+    def collect_image_paths(path_str: str, limit: int) -> list[Path]:
         """Collect valid image paths from given directory or file."""
         p = Path(path_str)
         ImageCollection._validate_path(p, path_str)
@@ -409,7 +409,11 @@ class ImageCollection:
 
     @staticmethod
     def _sample_images(img_list: list[Path], limit: int) -> list[Path]:
-        """Sample images if limit exceeded, otherwise shuffle."""
+        """Sample images if limit exceeded, otherwise shuffle. limit <= 0 means no limit."""
+        if limit <= 0:
+            random.shuffle(img_list)
+            return img_list
+
         if len(img_list) > limit:
             logger.info(
                 "Randomly sampling %d images from %d available images",
@@ -648,6 +652,12 @@ def parse_args() -> argparse.Namespace:
         default=False,
         help="dlib 81 landmarks dat file / False if no face cropping needed",
     )
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=1000,
+        help="Limit the number of images to process (default: 1000)",
+    )
     return parser.parse_args()
 
 
@@ -669,7 +679,7 @@ def main() -> None:
         face_detector = FaceAlignment(face_det, shape_predictor)
 
     # Collect images
-    img_paths = ImageCollection.collect_image_paths(args.image)
+    img_paths = ImageCollection.collect_image_paths(args.image, limit=args.limit)
     is_multiple = len(img_paths) > 1
 
     if is_multiple:
