@@ -156,12 +156,22 @@ def prepare_testing_data(config, raw_data_paths=None):
 
     test_data_loaders = {}
     if raw_data_paths:
-        # When using raw data paths, create a single combined test loader
-        test_data_loaders["combined_test"] = get_test_data_loader(
-            config,
-            None,  # Not used for raw data
-            raw_data_paths,
-        )
+        if isinstance(raw_data_paths, list):
+            # Create a loader for each dataset path to get separate metrics
+            for path in raw_data_paths:
+                # Use the last directory name for the test name
+                name = os.path.basename(path.rstrip("/"))
+                test_data_loaders[name] = get_test_data_loader(
+                    config,
+                    None,  # Not used for raw data
+                    path,
+                )
+        else:
+            test_data_loaders["test"] = get_test_data_loader(
+                config,
+                None,
+                raw_data_paths,
+            )
     else:
         # Fallback to traditional JSON-based approach
         for test_name in config["test_dataset"]:
