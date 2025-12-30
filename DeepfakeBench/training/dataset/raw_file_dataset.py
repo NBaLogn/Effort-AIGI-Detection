@@ -214,6 +214,34 @@ class RawFileDataset(data.Dataset):
                 f"Raw data root directory not found: {self.raw_data_root}",
             )
 
+        # Auto-detect train/val splits if present
+        if self.mode in ["train", "test", "val"]:
+            mode_dir = "val" if self.mode == "test" else self.mode
+            split_path = os.path.join(self.raw_data_root, mode_dir)
+
+            # If the current root doesn't have real/fake but does have the split dir, move into it
+            if os.path.exists(split_path) and os.path.isdir(split_path):
+                # Check if current root has real/fake dirs
+                has_direct_subdirs = False
+                try:
+                    current_subdirs = [
+                        d
+                        for d in os.listdir(self.raw_data_root)
+                        if os.path.isdir(os.path.join(self.raw_data_root, d))
+                    ]
+                    for d in current_subdirs:
+                        if self._is_real_directory(d) or self._is_fake_directory(d):
+                            has_direct_subdirs = True
+                            break
+                except Exception:
+                    pass
+
+                if not has_direct_subdirs:
+                    logger.info(
+                        f"Auto-descending into {mode_dir} directory: {split_path}"
+                    )
+                    self.raw_data_root = split_path
+
         # Configuration parameters
         self.resolution = config.get("resolution", 224)
         self.frame_num = config.get("frame_num", {}).get(mode, 1)
@@ -335,12 +363,17 @@ class RawFileDataset(data.Dataset):
         dir_lower = dir_name.lower()
 
         # Exact matches
-        if dir_lower in [s.lower() for s in self.REAL_SYNONYMS]:
+        real_synonyms_lower = [s.lower() for s in self.REAL_SYNONYMS]
+        if dir_lower in real_synonyms_lower:
             return True
 
-        # Partial matches - check if directory name contains any real synonym
+        # Partial matches - only for longer synonyms to avoid false positives (e.g., "ai" in "train")
         for synonym in self.REAL_SYNONYMS:
-            if synonym.lower() in dir_lower:
+            syn_lower = synonym.lower()
+            if len(syn_lower) > 3 and syn_lower in dir_lower:
+                return True
+            # For short synonyms, use word boundary check (simplified)
+            if syn_lower in dir_lower.split("_") or syn_lower in dir_lower.split(" "):
                 return True
 
         return False
@@ -350,12 +383,17 @@ class RawFileDataset(data.Dataset):
         dir_lower = dir_name.lower()
 
         # Exact matches
-        if dir_lower in [s.lower() for s in self.FAKE_SYNONYMS]:
+        fake_synonyms_lower = [s.lower() for s in self.FAKE_SYNONYMS]
+        if dir_lower in fake_synonyms_lower:
             return True
 
-        # Partial matches - check if directory name contains any fake synonym
+        # Partial matches - only for longer synonyms to avoid false positives (e.g., "ai" in "train")
         for synonym in self.FAKE_SYNONYMS:
-            if synonym.lower() in dir_lower:
+            syn_lower = synonym.lower()
+            if len(syn_lower) > 3 and syn_lower in dir_lower:
+                return True
+            # For short synonyms, use word boundary check (simplified)
+            if syn_lower in dir_lower.split("_") or syn_lower in dir_lower.split(" "):
                 return True
 
         return False

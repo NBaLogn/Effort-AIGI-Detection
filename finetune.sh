@@ -22,4 +22,4 @@ uv run 'DeepfakeBench/training/finetune.py' \
         'DeepfakeBench/training/facedata/df40/styleclip'\
         'DeepfakeBench/training/facedata/df40/whichfaceisreal'\
     --pretrained_weights \
-        'DeepfakeBench/training/weights/finetuned/effort_clip_L14_trainOn_FaceForensic.pth'
+        'DeepfakeBench/training/weights/effort_clip_L14_trainOn_FaceForensic.pth'
