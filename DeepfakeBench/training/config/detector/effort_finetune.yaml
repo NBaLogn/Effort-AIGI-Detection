@@ -60,7 +60,7 @@ optimizer:
     beta2: 0.999
     eps: 0.00000001
     weight_decay: 0.0001
-    amsgrad: false
+    amsgrad: true
   sgd:
     lr: 0.00001  # Lowered learning rate for fine-tuning (1e-5)
     momentum: 0.9

@@ -11,4 +11,4 @@ uv run 'DeepfakeBench/training/inference.py' \
         'DeepfakeBench/training/finetuned_weights/batchFacesAll.pth' \
     --image \
         'DeepfakeBench/training/facedata/ivansivkovenin_faces' \
-    --limit 1000
+    --limit 0
