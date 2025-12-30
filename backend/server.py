@@ -53,10 +53,10 @@ CONFIG_PATH = Path(
     "DeepfakeBench/training/config/detector/effort_finetune.yaml",
 )
 WEIGHTS_PATH = Path(
-    "DeepfakeBench/training/weights/batchFacesAll.pth",
+    "DeepfakeBench/training/finetuned_weights/",
 )
 LANDMARK_MODEL_PATH = Path(
-    "DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat",
+    "DeepfakeBench/preprocessing/",
 )
 
 DEVICE = None
@@ -88,8 +88,8 @@ def find_best_weights():
     if not logs_dir.exists():
         return None
 
-    # Simple heuristic: find most recent modified ckpt_best.pth in subdirs
-    candidates = list(logs_dir.rglob("ckpt_best.pth"))
+    # Simple heuristic: find most recent modified weights (*.pth) in subdirs
+    candidates = [path for path in logs_dir.rglob("*.pth") if path.is_file()]
     if not candidates:
         return None
 
