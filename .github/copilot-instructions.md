@@ -1,124 +1,135 @@
-This repository implements "Effort" — an SVD-based residual modeling approach for generalizable
-AIGI / deepfake detection built on top of DeepfakeBench and an alternative benchmark (UniversalFakeDetect).
+This repository implements **Effort**, the SVD-based residual modeling detector for generalizable AIGI/deepfake detection, built on DeepfakeBench and glued to a FastAPI backend plus a Next.js frontend.
 
-**Quick Purpose**: Help AI coding agents be productive by summarizing architecture, workflows,
-conventions, and concrete commands used by contributors.
+**Quick Purpose**: Help AI coding agents stay productive by surfacing the key components (DeepfakeBench training/inference, backend API, frontend UI), the required conventions (`uv run`, `python3.13`), and the everyday commands and scripts people actually use.
 
 **Big Picture**
-- **Architecture**: Two main stacks coexist:
-  - DeepfakeBench-based training/evaluation: code under `DeepfakeBench/` (preprocessing, training, detectors).
-  - Alternative reproduction code: `UniversalFakeDetect_Benchmark/` (separate training/eval pathway).
-- **Core idea**: the `Effort` detector plugs into ViT/CLIP-style models by decomposing weights via SVD
-  and freezing a low-rank main component while training residual components. See:
-  - [DeepfakeBench/training/detectors/effort_detector.py](DeepfakeBench/training/detectors/effort_detector.py) (implementation)
-  - The high-level method snippet in `README.md`.
+- **DeepfakeBench/training**: canonical training/eval/inference pipeline; detectors live under `training/detectors/`, configs under `training/config/detector/` (see `effort.yaml` / `effort_finetune.yaml`), and the residual `Effort` model is detailed in `training/detectors/effort_detector.py`.
+- **Backend**: `backend/server.py` instantiates the Effort detector, backs it with Grad-CAM reasoning, and exposes `/predict`, `/health` via FastAPI/uvicorn while reusing DeepfakeBench inference utilities (device manager, face alignment).
+- **Frontend**: `frontend/` is a Next.js 16 + React 19 SPA that calls the backend `/predict` endpoint; the UI and assets live entirely inside this folder and use `npm`/Next scripts.
 
 **Where to look first**
-- Project overview: [README.md](README.md)
-- Training & demo: [DeepfakeBench/training/demo.py](DeepfakeBench/training/demo.py)
-- Training entrypoint/config: [DeepfakeBench/training/train.py](DeepfakeBench/training/train.py) and detector config files under
-  `DeepfakeBench/training/config/detector/` (e.g. `effort.yaml`).
-- Preprocessing & dataset manifests: `DeepfakeBench/preprocessing/` and `DeepfakeBench/preprocessing/dataset_json/`.
-- Face extraction & utilities: [face_detection_filter_retinaface.py](face_detection_filter_retinaface.py), [face_detection_filter.py](face_detection_filter.py), and [validate_retinaface.py](validate_retinaface.py).
+- `README.md` for the quick start, uv-based commands, and the API overview.
+- `DeepfakeBench/training/train.py`, `finetune.py`, `evaluate_finetune.py`, `inference.py`, and `test.py` for the core ML training/eval workflows.
+- `DeepfakeBench/training/config/detector/effort_finetune.yaml` for training/evaluation hyperparameters and `effort.yaml` for inference defaults.
+- `backend/server.py` to understand model loading, Grad-CAM wiring, and how predictions / heatmaps reach the frontend.
+- `frontend/` for the Next.js UI, its `package.json` scripts, and the hooks that fetch `/predict`.
+- `finetune.sh`, `eval.sh`, `infer.sh` in the project root for the curated `uv run` commands people copy; each one hardcodes dataset/weight paths that need replacement in a local setup.
 
 **Developer workflows / concrete commands**
-- Install dependencies: run the repository `install.sh` from project root: `sh install.sh`.
-- Demo (inference) using a released checkpoint:
+- **Environment setup**
   ```bash
-  cd DeepfakeBench/
-  python3 training/demo.py --detector_config training/config/detector/effort.yaml \
-    --weights ./training/weights/{CKPT}.pth --image {IMAGE_PATH_OR_FOLDER}
+  python3.13 -m venv .venv
+  source .venv/bin/activate
+  python3.13 -m pip install -U pip
+  uv sync
   ```
-  If processing faces add the landmark model: `--landmark_model ./preprocessing/shape_predictor_81_face_landmarks.dat`.
-- Training (single GPU):
+  `uv sync` installs everything listed in `pyproject.toml`, honoring the versions locked in `uv.lock`. The repo tracks `torch` 2.9.1+, `clip`, `dlib`, `insightface`, etc.
+- **Finetuning (example)**
   ```bash
-  python3 training/train.py --detector_path training/config/detector/effort.yaml \
-    --train_dataset FaceForensics++ --test_dataset Celeb-DF-v2
+  uv run DeepfakeBench/training/finetune.py \
+    --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
+    --train_dataset /path/to/extracted/faces/train/… \
+    --test_dataset /path/to/extracted/faces/val/… \
+    --pretrained_weights /path/to/effort_clip_L14_trainOn_FaceForensic.pth
   ```
-- Training (multi-GPU / distributed):
+  Replace the dataset/weight paths with your local downloads; `finetune.sh` contains a concrete example that points at `/Volumes/Crucial/Large_Downloads/…`.
+- **Evaluation**
   ```bash
-  python3 -m torch.distributed.launch --nproc_per_node=4 training/train.py \
-    --detector_path training/config/detector/effort.yaml --train_dataset FaceForensics++ \
-    --test_dataset Celeb-DF-v2 --ddp
+  uv run DeepfakeBench/training/evaluate_finetune.py \
+    --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
+    --weights /path/to/logs/<run>/test/avg/ckpt_best.pth \
+    --test_dataset /path/to/dataset1 /path/to/dataset2 … \
+    --output_dir evaluation_results
   ```
-- Testing/evaluation example:
+  Look inside `DeepfakeBench/training/logs/<run>/test/avg/ckpt_best.pth` for the latest checkpoint if you don’t have a standalone `.pth`.
+- **Inference**
   ```bash
-  python3 training/test.py --detector_path training/config/detector/effort.yaml \
-    --test_dataset simswap_ff blendface_ff uniface_ff fomm_ff deepfacelab \
-    --weights_path ./training/weights/{CKPT}.pth
+  uv run DeepfakeBench/training/inference.py \
+    --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
+    --landmark_model DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat \
+    --weights /path/to/ckpt_best.pth \
+    --image /path/to/images
   ```
+- **Distributed training**
+  ```bash
+  python3.13 -m torch.distributed.launch --nproc_per_node=4 \
+    DeepfakeBench/training/train.py \
+    --detector_path DeepfakeBench/training/config/detector/effort.yaml \
+    --train_dataset … --test_dataset … --ddp
+  ```
+  `uv run` is not required for `torch.distributed.launch`, but the script itself should still be run inside the Python 3.13 env.
+- **Backend dev server**
+  ```bash
+  uv run backend/server.py
+  ```
+  It auto-loads the best checkpoint from `DeepfakeBench/training/logs` (falls back to the `WEIGHTS_PATH` constant or even random weights with a warning) and serves Grad-CAM overlays.
+- **Frontend dev server**
+  ```bash
+  cd frontend
+  npm install
+  npm run dev
+  ```
+  Or `uv run npm run dev` if you prefer to stick to the `uv` wrapper. The Next app talks to `http://localhost:8000/predict`.
+- **Tests**
+  ```bash
+  uv run DeepfakeBench/training/test.py \
+    --detector_config DeepfakeBench/training/config/detector/effort.yaml \
+    --test_dataset /path/to/dataset \
+    --weights /path/to/ckpt_best.pth
+  ```
+  Look in `DeepfakeBench/training/test.py` for additional flags (batch size override, GPU/CPU selection, etc.).
+- **Curated shell scripts**: `finetune.sh`, `eval.sh`, and `infer.sh` wrap the above commands with the actual datasets the maintainer uses. They are authoritative examples of argument order, but edit the dataset/weights paths before running on a new machine.
 
-- Automation policy: when an agent or automation runs repository scripts, **always** use `uv add` or `uv run` (see `effort.sh`). Do **not** invoke `python` directly. If `uv` is missing, the agent must raise an explicit error or warning and halt — do not implement a fallback to `python`.
-
-    - Common helper script: `effort.sh` contains curated `uv run` commands used day-to-day (finetune, evaluate, perf runs).
-      - The project maintainer uses `python3.13` and `uv run` as a lightweight wrapper for running scripts; replicate that pattern locally.
-      - Example (from `effort.sh`, evaluation command):
-        ```bash
-        uv run DeepfakeBench/training/evaluate_finetune.py \
-          --detector_config DeepfakeBench/training/config/detector/effort_finetune.yaml \
-          --weights ./DeepfakeBench/training/logs/.../ckpt_best.pth \
-          --test_dataset /path/to/val --output_dir evaluation_results
-        ```
+**Automation policy**
+- Always run repo scripts via `uv run` (or `uv add` for installing new packages). The maintainer uses `python3.13` + `uv` as the official execution environment; automations that invoke `python` directly violate policy. If the agent notices `uv` is missing, it must raise a blocker rather than falling back to raw `python`.
+- `uv.lock` frames the dependency tree. If you add/upgrade packages, run `uv add <pkg>` and commit the updated lockfile.
 
 **Project-specific conventions & patterns**
-- DeepfakeBench is used as the canonical dataset/bench pipeline — prefer its dataset JSON manifests and preprocessing code
-  rather than ad-hoc scripts.
-- Detector plumbing: detectors are registered/loaded under `DeepfakeBench/training/detectors/` — new detectors should follow the
-  same constructor/signature pattern used by existing detectors (see `effort_detector.py`).
-- Weight/ckpt layout: trained checkpoints are expected in `DeepfakeBench/training/weights/` and referenced by CLI `--weights`/`--weights_path`.
-- Dataset manifests: dataset lists are JSON files under `DeepfakeBench/preprocessing/dataset_json/` and the project expects those structures.
+- Configs live under `DeepfakeBench/training/config/detector/`: copy the frozen structure (optimize, data augmentation, SVD residual toggles) when adding a new detector.
+- Detectors are registered in `DeepfakeBench/training/detectors/`. Follow the existing constructors (see `effort_detector.py`) to keep initialization consistent.
+- Dataset manifests live under `DeepfakeBench/preprocessing/dataset_json/`, and preprocessing helpers share common artifacts under `DeepfakeBench/preprocessing/`.
+- Logs and checkpoints live under `DeepfakeBench/training/logs/<run>/test/avg/ckpt_best.pth` (pruned weights are not checked in). Keep an eye on these paths when loading weights in automation scripts or debugging `backend/server.py`.
+- The backend reuses `DeepfakeBench/training/inference.DeviceManager`, `FaceAlignment`, and the Grad-CAM helpers under `backend/gradcam_utils.py`. This keeps the API aligned with the training code.
 
 **Integration points & notable dependencies**
-- CLIP integration: uses CLIP models (`clip` dependency) as a backbone for some detectors.
-- InsightFace RetinaFace: local utilities use `insightface` for face detection (`face_detection_filter_retinaface.py`) and support `mps` auto-detection on macOS.
-- Dlib landmarks: some face-processing code expects a `shape_predictor_81_face_landmarks.dat` file for face cropping.
-- PyTorch DDP: training supports distributed launch via `torch.distributed.launch` with a `--ddp` flag.
+- CLIP-backed Vision Transformer (the `Effort` detector wraps the CLIP encoder; see `DeepfakeBench/training/detectors/effort_detector.py`).
+- Grad-CAM (`pytorch_grad_cam`) to produce explanations shown in the frontend.
+- Torch distributed (`torch.distributed.launch`, `--ddp`) for scaling training.
+- FastAPI/uvicorn to serve predictions (`backend/server.py` and `/health`, `/predict` endpoints).
+- Next.js 16 + React 19 for the frontend UI; `frontend/package.json` lists the scripts.
+- Dlib + InsightFace + the 81-point shape predictor (`DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat`) for face alignment and landmarks.
+- External checkpoints and extracted faces are not part of the repo; expect to download them separately.
 
 **Gotchas & notes discovered in repo**
-- The project targets **Python 3.13 only** (see `pyproject.toml`). Use `python3.13` as the interpreter for runs, virtualenvs, and CI jobs.
-- The codebase relies heavily on external checkpoints and preprocessed datasets. Without those artifacts, training/evaluation won't reproduce reported results.
+- **Python 3.13 only** (see `pyproject.toml`). Always activate a `python3.13` venv before running scripts or `uv`.
+- **`uv run` required**: automation + CI wrap every command with `uv run` (or `uv add`). Scripts must not call `python` directly.
+- **Checkpoints reside under finetuned_weights** (`DeepfakeBench/training/finetune_weights`). `backend/server.py` searches for `ckpt_best.pth`, so adding new training runs should produce that file in the logs tree.
+- **Datasets & weights are large**: they are not committed. Mirror your own `DeepfakeBench/facedata/…` structure or point the scripts at wherever you store the extracted faces.
+- **Landmark model**: ingestion scripts and the backend expect `DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat`. Download it from the Dlib repo and place it there, or pass `--landmark_model` every time.
+- **finetune/eval/infer scripts reference `/Volumes/Crucial/Large_Downloads…`**; update those absolute paths before running on a new machine.
 
 **How to propose code changes / where to run tests**
-- Local quick checks: run example scripts in `DeepfakeBench/` for small inference jobs.
-- For larger changes, run training with a small dataset subset or disabled heavy augmentations to validate end-to-end behavior.
-
-If any of the above commands or file locations look out-of-date, tell me which part to update and I will refine this instruction file.
+- For ML behavior, rerun `uv run DeepfakeBench/training/evaluate_finetune.py` to validate inference/backbone changes before pushing.
+- Backend regressions: run `uv run backend/server.py` locally and call `/predict` with a known image (the frontend UI, cURL, or `inference.py` can help).
+- Frontend/UI changes: run `cd frontend && npm run lint` / `npm run dev` (or `uv run npm run dev`) to verify TypeScript/Next behavior.
 
 **Troubleshooting (quick fixes)**
-- **Python / env**: This project requires `python3.13`. Verify and create an environment:
+- **Python / env**: Ensure `python3.13` is installed.
   ```bash
   python3.13 --version
   python3.13 -m venv .venv
   source .venv/bin/activate
   python3.13 -m pip install -U pip
-  sh install.sh
+  uv sync
   ```
-
-- **`uv` wrapper requirement**: The maintainer uses `uv run`/`uv add` from `effort.sh` as the standard execution wrapper. Agents must use `uv` and must not fall back to `python` invocations. If `uv` is not installed or not available in the environment, the agent should emit a clear error/warning and stop rather than attempting to run `python` directly.
-
-- **InsightFace / RetinaFace issues (common)**
-  - Check MPS availability on macOS:
-    ```bash
-    python3.13 -c "import torch; print(torch.backends.mps.is_available())"
-    ```
-  - If RetinaFace model fails to load or prepare, force CPU by passing `--device cpu` to `face_detection_filter_retinaface.py` or use the script's device mapping.
-  - Verify `insightface` is installed and compatible (pyproject lists `insightface>=0.7.3`):
-    ```bash
-    python3.13 -c "import insightface; print(insightface.__version__)"
-    ```
-  - If a model name is not found, list available models:
-    ```bash
-    python3.13 -c "import insightface; print(insightface.model_zoo.list_models())"
-    ```
-
-- **Dlib landmarks missing**: If face cropping/inference complains about missing landmarks, place or download `shape_predictor_81_face_landmarks.dat` and pass `--landmark_model PATH` to demo/evaluation scripts. Check `DeepfakeBench/preprocessing/` for expected locations.
-
-- **Missing checkpoints / weights**: Ensure weights are available under `DeepfakeBench/training/weights/` or pass full path to `--weights`/`--weights_path` when running `demo.py`, `test.py`, or `evaluate_finetune.py`.
-
-- **Distributed training (DDP) failures**:
-  - Use `python3.13 -m torch.distributed.launch --nproc_per_node=N ...` and ensure CUDA/MPS availability for the target devices.
-  - When debugging networking issues set `MASTER_ADDR` and `MASTER_PORT` env vars explicitly.
-
-- **General debugging tips**:
-  - Reproduce locally with a very small dataset subset before scaling to full experiments.
-  - When in doubt, run the same script with `--device cpu` to separate device-specific errors from code errors.
+- **`uv` wrapper requirement**: If `uv` is missing, install it (`pip install uv`) and then run scripts via `uv run ...`. Do not run `python ...` by hand.
+- **InsightFace / RetinaFace / dlib**:
+  ```bash
+  python3.13 -c "import insightface; print(insightface.__version__)"
+  python3.13 -c "import dlib; print(dlib.__version__)"
+  ```
+  Force CPU by passing `--device cpu` to the dataset filtering or inference scripts if GPU initialization fails.
+- **Missing checkpoints / weights**: After training or evaluation, look under `DeepfakeBench/training/logs/<run>/test/avg/ckpt_best.pth`. Backend server will automatically search for the most recent `ckpt_best.pth` in the logs directory.
+- **Landmarks missing**: Download `shape_predictor_81_face_landmarks.dat` and point scripts/servers at it (`--landmark_model`).
+- **Distributed training issues**: Set `MASTER_ADDR` and `MASTER_PORT` if you hit networking errors, and use `python3.13 -m torch.distributed.launch --nproc_per_node=N ...`.
+- **General debugging**: Reproduce failures with small subsets / `--device cpu` before scaling; use `training/logs` artifacts for metrics, and inspect `evaluation_results/` or `inference_results/` output JSON for regression signals.
