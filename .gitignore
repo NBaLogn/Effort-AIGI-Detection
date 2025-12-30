@@ -11,3 +11,11 @@ logs
 *.jpeg
 dataset*.json
 facedata
+.kilocodeignore
+.cursor/
+.gemini/
+.kilocode/
+.opencode/
+.ruff_cache/
+.specify/
+.vscode/
