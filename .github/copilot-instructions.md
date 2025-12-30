@@ -103,7 +103,7 @@ This repository implements **Effort**, the SVD-based residual modeling detector 
 **Gotchas & notes discovered in repo**
 - **Python 3.13 only** (see `pyproject.toml`). Always activate a `python3.13` venv before running scripts or `uv`.
 - **`uv run` required**: automation + CI wrap every command with `uv run` (or `uv add`). Scripts must not call `python` directly.
-- **Checkpoints reside under finetuned_weights** (`DeepfakeBench/training/finetune_weights`). `backend/server.py` searches for `ckpt_best.pth`, so adding new training runs should produce that file in the logs tree.
+- **Checkpoints reside under finetuned_weights** (`DeepfakeBench/training/weights/finetuned`). `backend/server.py` searches for `ckpt_best.pth`, so adding new training runs should produce that file in the logs tree.
 - **Datasets & weights are large**: they are not committed. Mirror your own `DeepfakeBench/facedata/…` structure or point the scripts at wherever you store the extracted faces.
 - **Landmark model**: ingestion scripts and the backend expect `DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat`. Download it from the Dlib repo and place it there, or pass `--landmark_model` every time.
 - **finetune/eval/infer scripts reference `/Volumes/Crucial/Large_Downloads…`**; update those absolute paths before running on a new machine.

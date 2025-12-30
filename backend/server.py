@@ -1,5 +1,5 @@
 """Deepfake Detection Server.
- 
+
 This module provides a FastAPI server for deepfake detection using the Effort model.
 It includes endpoints for health checks and image prediction with Grad-CAM visualization.
 """
@@ -49,7 +49,7 @@ class ModelWrapper(torch.nn.Module):
 
     def __init__(self, model: torch.nn.Module) -> None:
         """Initialize ModelWrapper.
-        
+
         Args:
             model: The model to wrap for Grad-CAM compatibility.
 
@@ -59,10 +59,10 @@ class ModelWrapper(torch.nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass for Grad-CAM.
-        
+
         Args:
             x: Input tensor.
-        
+
         Returns:
             Output tensor from the model.
 
@@ -78,7 +78,7 @@ class Config:
         "DeepfakeBench/training/config/detector/effort_finetune.yaml",
     )
     WEIGHTS_PATH = Path(
-        "DeepfakeBench/training/finetuned_weights/batchFacesAll.pth",
+        "DeepfakeBench/training/weights/finetuned/batchFacesAll.pth",
     )
     LANDMARK_MODEL_PATH = Path(
         "DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat",
@@ -123,7 +123,7 @@ server_state = ServerState()
 
 def find_best_weights() -> Path | None:
     """Find the best available model weights.
-    
+
     Returns:
         Path to the best weights file, or None if not found.
 
@@ -157,10 +157,10 @@ def find_best_weights() -> Path | None:
 
 def load_model_config() -> dict[str, Any]:
     """Load model configuration from YAML file.
-    
+
     Returns:
         Parsed configuration dictionary.
-    
+
     Raises:
         RuntimeError: If config file is not found.
 
@@ -176,14 +176,14 @@ def load_model_config() -> dict[str, Any]:
 
 def load_model(config: dict[str, Any], device: torch.device) -> torch.nn.Module:
     """Load and initialize the deepfake detection model.
-    
+
     Args:
         config: Model configuration dictionary.
         device: Target device for the model.
-    
+
     Returns:
         Initialized model.
-    
+
     Raises:
         RuntimeError: If model definition is not found.
 
@@ -191,14 +191,16 @@ def load_model(config: dict[str, Any], device: torch.device) -> torch.nn.Module:
     try:
         return DETECTOR[config["model_name"]](config).to(device)
     except KeyError as e:
-        logger.exception("Model %s not found in DETECTOR registry", config["model_name"])
+        logger.exception(
+            "Model %s not found in DETECTOR registry", config["model_name"]
+        )
         model_error_msg = "Model definition not found"
         raise RuntimeError(model_error_msg) from e
 
 
 def load_model_weights(model: torch.nn.Module, weights_path: Path) -> None:
     """Load model weights from checkpoint file.
-    
+
     Args:
         model: Model to load weights into.
         weights_path: Path to weights file.
@@ -214,10 +216,10 @@ def load_model_weights(model: torch.nn.Module, weights_path: Path) -> None:
 
 def setup_grad_cam(model: torch.nn.Module) -> GradCAM:
     """Set up Grad-CAM for model visualization.
-    
+
     Args:
         model: Model to set up Grad-CAM for.
-    
+
     Returns:
         Configured Grad-CAM instance.
 
@@ -239,7 +241,7 @@ def setup_grad_cam(model: torch.nn.Module) -> GradCAM:
 
 def load_face_detector() -> FaceAlignment | None:
     """Load face detector for face alignment.
-    
+
     Returns:
         FaceAlignment instance if landmark model is found, None otherwise.
 
@@ -258,11 +260,11 @@ def load_face_detector() -> FaceAlignment | None:
 
 def analyze_heatmap_regions(mask: np.ndarray, landmarks: np.ndarray) -> str:
     """Analyze which facial regions are most affected by the heatmap.
-    
+
     Args:
         mask: Grad-CAM heatmap mask.
         landmarks: Facial landmarks array.
-    
+
     Returns:
         String describing the analysis result.
 
@@ -311,19 +313,20 @@ def analyze_heatmap_regions(mask: np.ndarray, landmarks: np.ndarray) -> str:
     }
 
     return descriptions.get(
-        top_region, f"The model is focused on the {top_region} region.",
+        top_region,
+        f"The model is focused on the {top_region} region.",
     )
 
 
 def preprocess_image(image_data: bytes) -> tuple[np.ndarray, np.ndarray | None]:
     """Preprocess uploaded image for model inference.
-    
+
     Args:
         image_data: Raw image data bytes.
-    
+
     Returns:
         Tuple of (processed_image, landmarks) where landmarks may be None.
-    
+
     Raises:
         HTTPException: If image is invalid or processing fails.
 
@@ -357,10 +360,10 @@ def preprocess_image(image_data: bytes) -> tuple[np.ndarray, np.ndarray | None]:
 
 def perform_inference(input_tensor: torch.Tensor) -> tuple[str, float, str | None]:
     """Perform model inference and generate prediction.
-    
+
     Args:
         input_tensor: Preprocessed input tensor.
-    
+
     Returns:
         Tuple of (label, probability, reasoning).
 
@@ -381,11 +384,11 @@ def perform_inference(input_tensor: torch.Tensor) -> tuple[str, float, str | Non
 
 def generate_grad_cam(input_tensor: torch.Tensor, img_float_norm: np.ndarray) -> str:
     """Generate Grad-CAM visualization.
-    
+
     Args:
         input_tensor: Input tensor for Grad-CAM.
         img_float_norm: Normalized image for overlay.
-    
+
     Returns:
         Base64 encoded Grad-CAM image.
 
@@ -470,13 +473,13 @@ def health_check() -> dict:
 @app.post("/predict", response_model=PredictionResponse)
 async def predict(file: UploadFile = File(...)) -> PredictionResponse:
     """Predict deepfake probability for uploaded image.
-    
+
     Args:
         file: Uploaded image file.
-    
+
     Returns:
         Prediction response with label, score, reasoning, and Grad-CAM visualization.
-    
+
     Raises:
         HTTPException: If model is not loaded or image processing fails.
 

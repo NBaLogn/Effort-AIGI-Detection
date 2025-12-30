@@ -85,5 +85,5 @@ def split_dataset(base_path, split_ratio=0.7) -> None:
 
 if __name__ == "__main__":
     split_dataset(
-        "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/facedata/ivansivkovenin_faces",
+        "/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/whichfaceisreal",
     )

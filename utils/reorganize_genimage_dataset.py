@@ -24,7 +24,7 @@ from tqdm import tqdm
 
 def reorganize_genimage_dataset(base_path, dry_run=False):
     """Reorganize GenImageFaces dataset from generator-based to split-based structure.
-    
+
     Args:
         base_path: Path to the GenImageFaces dataset root directory
         dry_run: If True, only show what would be done without moving files
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "base_path",
         nargs="?",
-        default="/Volumes/Crucial/Large_Downloads/AI/DATASETS/GenImageFaces",
+        default="/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40",
         help="Path to the GenImageFaces dataset root",
     )
     parser.add_argument(
