@@ -256,7 +256,7 @@ class Trainer:
             self.setTrain()
             # more elegant and more scalable way of moving data to GPU
             for key in data_dict.keys():
-                if data_dict[key] != None and key != "name":
+                if torch.is_tensor(data_dict[key]):
                     data_dict[key] = data_dict[key].to(device)
 
             losses, predictions = self.train_step(data_dict)
@@ -387,7 +387,7 @@ class Trainer:
             )  # fix the label to 0 and 1 only
             # move data to GPU elegantly
             for key in data_dict.keys():
-                if data_dict[key] != None:
+                if torch.is_tensor(data_dict[key]):
                     data_dict[key] = data_dict[key].to(device)
             # model forward without considering gradient computation
             predictions = self.inference(data_dict)
