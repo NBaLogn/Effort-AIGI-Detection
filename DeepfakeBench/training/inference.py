@@ -467,10 +467,10 @@ class LabelExtractor:
         )
 
         real_dirs = [
-            d for d in subdirs if any(kw in d.name.lower() for kw in REAL_KEYWORDS)
+            d for d in subdirs if any(kw == d.name.lower() for kw in REAL_KEYWORDS)
         ]
         fake_dirs = [
-            d for d in subdirs if any(kw in d.name.lower() for kw in FAKE_KEYWORDS)
+            d for d in subdirs if any(kw == d.name.lower() for kw in FAKE_KEYWORDS)
         ]
 
         logger.debug("Real directories found: %s", [d.name for d in real_dirs])

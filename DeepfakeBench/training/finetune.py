@@ -203,19 +203,16 @@ def load_pretrained_weights(model, pretrained_path, config):
     """Load pretrained weights for fine-tuning."""
     if not pretrained_path or not os.path.exists(pretrained_path):
         logging.warning(
-            # f"No pretrained weights found at {pretrained_path}, starting from scratch",
-            "No pretrained weights found at {pretrained_path}, starting from scratch",
-            extra={"pretrained_path": pretrained_path},
+            f"No pretrained weights found at {pretrained_path}, starting from scratch",
         )
         return model
 
     logging.info(
-        "Loading pretrained weights from {pretrained_path}",
-        extra={"pretrained_path": pretrained_path},
+        f"Loading pretrained weights from {pretrained_path}",
     )
 
     try:
-        checkpoint = torch.load(pretrained_path, map_location="cpu")
+        checkpoint = torch.load(pretrained_path, map_location="cpu", weights_only=True)
         state_dict = checkpoint.get("state_dict", checkpoint)
 
         # Handle potential key mismatches
@@ -378,9 +375,12 @@ def main():
     # Load configuration
     with open(args.detector_config) as f:
         config = yaml.safe_load(f)
-    with open(
-        "/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/config/train_config.yaml",
-    ) as f:
+
+    # Use relative path for train_config.yaml
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    train_config_path = os.path.join(current_dir, "config", "train_config.yaml")
+
+    with open(train_config_path) as f:
         config.update(yaml.safe_load(f))
 
     config["local_rank"] = args.local_rank
@@ -491,19 +491,20 @@ def main():
             test_data_loaders=test_data_loaders,
         )
 
-        if best_metrics_all_time:
+        if best_metrics_all_time and len(best_metrics_all_time.keys()) > 0:
             # Determine which key to monitor (prioritize 'avg', then first available key)
-            monitor_key = (
-                "avg"
-                if "avg" in best_metrics_all_time
-                else next(iter(best_metrics_all_time.keys()))
-            )
+            if "avg" in best_metrics_all_time:
+                monitor_key = "avg"
+            else:
+                monitor_key = next(iter(best_metrics_all_time.keys()))
+
             current_metric_val = best_metrics_all_time[monitor_key].get(monitor_metric)
 
             if current_metric_val is not None:
                 logger.info(
-                    f"===> Epoch[{epoch}]: Current best {monitor_metric} for {monitor_key} is {parse_metric_for_print(current_metric_val)}",
+                    f"===> Epoch[{epoch}]: Current best {monitor_metric} for {monitor_key} is {current_metric_val:.4f}",
                 )
+                logger.info(parse_metric_for_print(best_metrics_all_time))
 
                 # Check for improvement
                 is_improvement = False
@@ -517,9 +518,7 @@ def main():
                 if is_improvement:
                     best_metric_val = current_metric_val
                     epochs_without_improvement = 0
-                    logger.info(
-                        f"New best metric achieved: {parse_metric_for_print(best_metric_val)}"
-                    )
+                    logger.info(f"New best metric achieved: {best_metric_val:.4f}")
                 else:
                     epochs_without_improvement += 1
                     logger.info(
@@ -538,7 +537,7 @@ def main():
             scheduler.step()
 
     logger.info(
-        f"Fine-tuning completed! Best {monitor_metric}: {parse_metric_for_print(best_metric_val)}",
+        f"Fine-tuning completed! Best {monitor_metric}: {best_metric_val:.4f}",
     )
 
     # Clean up

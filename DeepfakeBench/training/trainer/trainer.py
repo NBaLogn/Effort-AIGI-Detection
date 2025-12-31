@@ -112,7 +112,9 @@ class Trainer:
             self.model = DDP(
                 self.model,
                 find_unused_parameters=True,
-                device_ids=[self.config["local_rank"]] if device.type == "cuda" else None,
+                device_ids=[self.config["local_rank"]]
+                if device.type == "cuda"
+                else None,
             )
 
     def setTrain(self):
@@ -140,19 +142,24 @@ class Trainer:
         os.makedirs(save_dir, exist_ok=True)
         ckpt_name = "ckpt_best.pth"
         save_path = os.path.join(save_dir, ckpt_name)
+
+        # Move state_dict to CPU before saving to avoid device-specific serialization issues
+        # especially common on MPS or when memory is tight.
+        state_dict = {k: v.cpu() for k, v in self.model.state_dict().items()}
+
         if self.config["ddp"] == True:
-            torch.save(self.model.state_dict(), save_path)
+            torch.save(state_dict, save_path)
         elif "svdd" in self.config["model_name"]:
             torch.save(
                 {
                     "R": self.model.R,
                     "c": self.model.c,
-                    "state_dict": self.model.state_dict(),
+                    "state_dict": state_dict,
                 },
                 save_path,
             )
         else:
-            torch.save(self.model.state_dict(), save_path)
+            torch.save(state_dict, save_path)
         self.logger.info(
             f"Checkpoint saved to {save_path}, current ckpt is {ckpt_info}",
         )
@@ -436,7 +443,10 @@ class Trainer:
                 ]
             # Save checkpoint, feature, and metrics if specified in config
             if self.config["save_ckpt"] and key not in FFpp_pool:
-                self.save_ckpt("test", key, f"{epoch}+{iteration}")
+                # Optimized: Only save the checkpoint for the 'avg' metric if multiple datasets are present
+                # This saves significant disk space and prevents redundant I/O crashes
+                if not self.config.get("save_avg", False) or key == "avg":
+                    self.save_ckpt("test", key, f"{epoch}+{iteration}")
             self.save_metrics("test", metric_one_dataset, key)
         if losses_one_dataset_recorder is not None:
             # info for each dataset

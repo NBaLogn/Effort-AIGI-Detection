@@ -186,7 +186,7 @@ def evaluate_model(
             labels = data_dict["label"].cpu().detach().numpy()
             logits = pred_dict["cls"].cpu().detach().numpy()
             probs = pred_dict["prob"].cpu().detach().numpy()
-            names = data_dict["image"]
+            names = data_dict["name"]
 
             all_labels.extend(labels.tolist())
             all_logits.extend(logits.tolist())
@@ -316,7 +316,9 @@ def main():
     # For multiple test datasets, evaluate each one separately
     for i, dataset_path in enumerate(test_dataset_paths):
         try:
-            dataset_name = f"dataset_{i + 1}_{os.path.basename(dataset_path)}"
+            # Handle trailing slashes in dataset_path
+            dataset_path_clean = dataset_path.rstrip("/")
+            dataset_name = f"dataset_{i + 1}_{os.path.basename(dataset_path_clean)}"
 
             # Prepare test loader for this specific dataset
             test_loader = prepare_test_data(config, [dataset_path], args.batch_size)

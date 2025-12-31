@@ -879,7 +879,7 @@ class RawFileDataset(data.Dataset):
                 # Convert to tensor and normalize
                 image_tensor = self._normalize(self._to_tensor(image_aug))
 
-                return image_tensor, label, landmarks_aug, mask_aug
+                return image_tensor, label, landmarks_aug, mask_aug, image_path
 
             except Exception as e:
                 logger.error(
@@ -893,7 +893,7 @@ class RawFileDataset(data.Dataset):
                     )
                     # Return a zero tensor as fallback
                     zero_image = torch.zeros(3, self.resolution, self.resolution)
-                    return zero_image, label, None, None
+                    return zero_image, label, None, None, "error_path"
 
                 # Try next index
                 index = (index + 1) % len(self.image_list)
@@ -908,7 +908,7 @@ class RawFileDataset(data.Dataset):
     @staticmethod
     def collate_fn(batch: list[tuple]) -> dict[str, torch.Tensor]:
         """Collate function for DataLoader."""
-        images, labels, landmarks, masks = zip(*batch)
+        images, labels, landmarks, masks, names = zip(*batch)
 
         # Stack images and convert labels to tensor
         images_stacked = torch.stack(images, dim=0)
@@ -916,13 +916,15 @@ class RawFileDataset(data.Dataset):
 
         # Handle landmarks - stack if all are not None, else None
         if landmarks and not any(l is None for l in landmarks):
-            landmarks_stacked = torch.stack(
-                [
-                    torch.from_numpy(l) if l is not None else torch.zeros((81, 2))
-                    for l in landmarks
-                ],
-                dim=0,
-            )
+            # Convert numpy arrays to tensors and handle None cases
+            landmark_tensors = []
+            for l in landmarks:
+                if l is not None:
+                    landmark_tensors.append(torch.from_numpy(l))
+                else:
+                    # Provide a zero tensor of correct shape if landmarks are missing for some items
+                    landmark_tensors.append(torch.zeros((81, 2)))
+            landmarks_stacked = torch.stack(landmark_tensors, dim=0)
         else:
             landmarks_stacked = None
 
@@ -943,6 +945,7 @@ class RawFileDataset(data.Dataset):
             "label": labels_tensor,
             "landmark": landmarks_stacked,
             "mask": masks_stacked,
+            "name": list(names),
         }
 
     def get_dataset_info(self) -> dict:
@@ -1028,7 +1031,8 @@ class MultiRawFileDataset(data.Dataset):
         local_index = index - self.cumulative_lengths[dataset_idx]
 
         try:
-            return self.datasets[dataset_idx][local_index]
+            img, label, landmark, mask, path = self.datasets[dataset_idx][local_index]
+            return img, label, landmark, mask, path
         except Exception as e:
             logger.warning(
                 f"Error getting item {index} from dataset {dataset_idx}: {e}",
@@ -1039,7 +1043,7 @@ class MultiRawFileDataset(data.Dataset):
                 self.datasets[dataset_idx].resolution,
                 self.datasets[dataset_idx].resolution,
             )
-            return zero_image, 0, None, None
+            return zero_image, 0, None, None, "error_path"
 
     @staticmethod
     def collate_fn(batch: list[tuple]) -> dict[str, torch.Tensor]:

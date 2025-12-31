@@ -675,7 +675,7 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
             ):
                 mask_tensors = mask_tensors[0]
 
-        return image_tensors, label, landmark_tensors, mask_tensors
+        return image_tensors, label, landmark_tensors, mask_tensors, image_paths
 
     @staticmethod
     def collate_fn(batch):
@@ -691,7 +691,7 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
 
         """
         # Separate the image, label, landmark, and mask tensors
-        images, labels, landmarks, masks = zip(*batch)
+        images, labels, landmarks, masks, names = zip(*batch)
 
         # Stack the image, label, landmark, and mask tensors
         images = torch.stack(images, dim=0)
@@ -699,14 +699,22 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
 
         # Special case for landmarks and masks if they are None
         if not any(
-            landmark is None or (isinstance(landmark, list) and None in landmark)
+            landmark is None
+            or (
+                isinstance(landmark, (list, tuple))
+                and (len(landmark) == 0 or landmark[0] is None)
+            )
             for landmark in landmarks
         ):
             landmarks = torch.stack(landmarks, dim=0)
         else:
             landmarks = None
 
-        if not any(m is None or (isinstance(m, list) and None in m) for m in masks):
+        if not any(
+            m is None
+            or (isinstance(m, (list, tuple)) and (len(m) == 0 or m[0] is None))
+            for m in masks
+        ):
             masks = torch.stack(masks, dim=0)
         else:
             masks = None
@@ -717,6 +725,7 @@ class DeepfakeAbstractBaseDataset(data.Dataset):
         data_dict["label"] = labels
         data_dict["landmark"] = landmarks
         data_dict["mask"] = masks
+        data_dict["name"] = list(names)
         return data_dict
 
     def __len__(self):
