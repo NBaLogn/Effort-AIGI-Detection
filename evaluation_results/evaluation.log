@@ -5727,3 +5727,290 @@ FileNotFoundError: Raw data root directory not found: Volumes/Crucial/Large_Down
 2025-12-29 09:56:40,709 - INFO - Saved evaluation results to evaluation_results/dataset_8_whichfaceisreal_eval_20251229_095640.json
 2025-12-29 09:56:40,711 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
 2025-12-29 09:56:40,711 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-05 16:52:47,479 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-05 16:52:47,479 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-05 16:52:47,479 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-05 16:52:47,479 - INFO - pretrained: no need to provide this for the effort model
+2026-01-05 16:52:47,479 - INFO - model_name: effort
+2026-01-05 16:52:47,479 - INFO - backbone_name: vit
+2026-01-05 16:52:47,479 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-05 16:52:47,479 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-05 16:52:47,479 - INFO - train_dataset: ['UADFV']
+2026-01-05 16:52:47,479 - INFO - test_dataset: ['UADFV']
+2026-01-05 16:52:47,479 - INFO - train_batchSize: 8
+2026-01-05 16:52:47,479 - INFO - test_batchSize: 8
+2026-01-05 16:52:47,479 - INFO - workers: 4
+2026-01-05 16:52:47,479 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-05 16:52:47,479 - INFO - resolution: 224
+2026-01-05 16:52:47,479 - INFO - with_mask: False
+2026-01-05 16:52:47,479 - INFO - with_landmark: False
+2026-01-05 16:52:47,479 - INFO - use_data_augmentation: True
+2026-01-05 16:52:47,479 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-05 16:52:47,479 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-05 16:52:47,479 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-05 16:52:47,479 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-05 16:52:47,479 - INFO - lr_scheduler: cosine
+2026-01-05 16:52:47,479 - INFO - lr_T_max: 5
+2026-01-05 16:52:47,479 - INFO - lr_eta_min: 1e-06
+2026-01-05 16:52:47,479 - INFO - nEpochs: 5
+2026-01-05 16:52:47,480 - INFO - start_epoch: 0
+2026-01-05 16:52:47,480 - INFO - save_epoch: 1
+2026-01-05 16:52:47,480 - INFO - rec_iter: 50
+2026-01-05 16:52:47,480 - INFO - logdir: ./logs
+2026-01-05 16:52:47,480 - INFO - manualSeed: 1024
+2026-01-05 16:52:47,480 - INFO - save_ckpt: True
+2026-01-05 16:52:47,480 - INFO - save_feat: True
+2026-01-05 16:52:47,480 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-05 16:52:47,480 - INFO - loss_func: cross_entropy
+2026-01-05 16:52:47,480 - INFO - losstype: None
+2026-01-05 16:52:47,480 - INFO - metric_scoring: auc
+2026-01-05 16:52:47,480 - INFO - fine_tune: True
+2026-01-05 16:52:47,480 - INFO - pretrained_checkpoint: None
+2026-01-05 16:52:47,480 - INFO - freeze_backbone: True
+2026-01-05 16:52:47,480 - INFO - train_classification_head: True
+2026-01-05 16:52:47,480 - INFO - train_svd_residuals: True
+2026-01-05 16:52:47,480 - INFO - save_avg: True
+2026-01-05 16:52:47,480 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-05 16:52:47,480 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-05 16:52:47,480 - INFO - Loading model from DeepfakeBench/training/logs/batchFacesAllNew/test/avg/newBatchFaces.pth
+2026-01-05 16:53:04,064 - INFO - Model loaded successfully
+2026-01-05 16:53:04,066 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff']
+2026-01-05 16:53:04,066 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff
+2026-01-05 16:53:04,186 - INFO - Auto-descending into val directory: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff/val
+2026-01-05 16:53:04,217 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff/val
+2026-01-05 16:53:04,218 - INFO - All subdirectories found: ['real', 'fake']
+2026-01-05 16:53:04,218 - INFO - Found real directories: ['real']
+2026-01-05 16:53:04,218 - INFO - Found fake directories: ['fake']
+2026-01-05 16:53:04,218 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff/val
+2026-01-05 16:53:04,218 - INFO - Processing real directory: real
+2026-01-05 16:53:04,221 - INFO - Processing fake directory: fake
+2026-01-05 16:53:04,223 - INFO - Checking for faulty images...
+2026-01-05 16:53:05,526 - INFO - No faulty images found.
+2026-01-05 16:53:05,526 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-05 16:53:05,526 - INFO - RawFileDataset initialized with 300 samples for test mode
+2026-01-05 16:53:05,527 - INFO - Test loader prepared with 19 batches
+2026-01-05 16:53:05,527 - INFO - Evaluating on dataset_1_CollabDiff
+2026-01-05 16:53:51,241 - INFO - Evaluation results for dataset_1_CollabDiff:
+2026-01-05 16:53:51,241 - INFO -   auc: 0.9840
+2026-01-05 16:53:51,241 - INFO -   eer: 0.0667
+2026-01-05 16:53:51,241 - INFO -   accuracy: 0.9367
+2026-01-05 16:53:51,242 - INFO -   ap: 0.9829
+2026-01-05 16:53:51,242 - INFO -   precision: 0.9226
+2026-01-05 16:53:51,242 - INFO -   recall: 0.9533
+2026-01-05 16:53:51,242 - INFO -   f1: 0.9377
+2026-01-05 16:53:51,242 - INFO -   sample_count: 300.0000
+2026-01-05 16:53:51,242 - INFO -   video_auc: 1.0000
+2026-01-05 16:53:51,242 - INFO -   video_eer: 0.0000
+2026-01-05 16:53:51,242 - INFO -   video_acc: 1.0000
+2026-01-05 16:53:51,243 - INFO - Saved evaluation results to evaluation_results/dataset_1_CollabDiff_eval_20260105_165351.json
+2026-01-05 16:53:51,243 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/deepfacelab']
+2026-01-05 16:53:51,243 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/deepfacelab
+2026-01-05 16:53:51,245 - INFO - Auto-descending into val directory: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/deepfacelab/val
+2026-01-05 16:53:51,249 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/deepfacelab/val
+2026-01-05 16:53:51,250 - INFO - All subdirectories found: ['real', 'fake']
+2026-01-05 16:53:51,250 - INFO - Found real directories: ['real']
+2026-01-05 16:53:51,250 - INFO - Found fake directories: ['fake']
+2026-01-05 16:53:51,250 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/deepfacelab/val
+2026-01-05 16:53:51,250 - INFO - Processing real directory: real
+2026-01-05 16:53:51,253 - INFO - Processing fake directory: fake
+2026-01-05 16:53:51,256 - INFO - Checking for faulty images...
+2026-01-05 16:53:52,098 - INFO - No faulty images found.
+2026-01-05 16:53:52,098 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-05 16:53:52,098 - INFO - RawFileDataset initialized with 300 samples for test mode
+2026-01-05 16:53:52,099 - INFO - Test loader prepared with 19 batches
+2026-01-05 16:53:52,099 - INFO - Evaluating on dataset_2_deepfacelab
+2026-01-05 16:54:36,200 - INFO - Evaluation results for dataset_2_deepfacelab:
+2026-01-05 16:54:36,201 - INFO -   auc: 0.8947
+2026-01-05 16:54:36,201 - INFO -   eer: 0.1667
+2026-01-05 16:54:36,201 - INFO -   accuracy: 0.7167
+2026-01-05 16:54:36,201 - INFO -   ap: 0.9073
+2026-01-05 16:54:36,201 - INFO -   precision: 0.6540
+2026-01-05 16:54:36,201 - INFO -   recall: 0.9200
+2026-01-05 16:54:36,201 - INFO -   f1: 0.7645
+2026-01-05 16:54:36,201 - INFO -   sample_count: 300.0000
+2026-01-05 16:54:36,201 - INFO -   video_auc: 1.0000
+2026-01-05 16:54:36,201 - INFO -   video_eer: 0.0000
+2026-01-05 16:54:36,201 - INFO -   video_acc: 0.5000
+2026-01-05 16:54:36,202 - INFO - Saved evaluation results to evaluation_results/dataset_2_deepfacelab_eval_20260105_165436.json
+2026-01-05 16:54:36,202 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/heygen_new']
+2026-01-05 16:54:36,202 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/heygen_new
+2026-01-05 16:54:36,204 - INFO - Auto-descending into val directory: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/heygen_new/val
+2026-01-05 16:54:36,208 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/heygen_new/val
+2026-01-05 16:54:36,209 - INFO - All subdirectories found: ['real', 'fake']
+2026-01-05 16:54:36,209 - INFO - Found real directories: ['real']
+2026-01-05 16:54:36,209 - INFO - Found fake directories: ['fake']
+2026-01-05 16:54:36,209 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/heygen_new/val
+2026-01-05 16:54:36,209 - INFO - Processing real directory: real
+2026-01-05 16:54:36,212 - INFO - Processing fake directory: fake
+2026-01-05 16:54:36,214 - INFO - Checking for faulty images...
+2026-01-05 16:54:37,597 - INFO - No faulty images found.
+2026-01-05 16:54:37,597 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-05 16:54:37,597 - INFO - RawFileDataset initialized with 300 samples for test mode
+2026-01-05 16:54:37,597 - INFO - Test loader prepared with 19 batches
+2026-01-05 16:54:37,597 - INFO - Evaluating on dataset_3_heygen_new
+2026-01-05 16:55:22,801 - INFO - Evaluation results for dataset_3_heygen_new:
+2026-01-05 16:55:22,802 - INFO -   auc: 0.9074
+2026-01-05 16:55:22,802 - INFO -   eer: 0.1800
+2026-01-05 16:55:22,802 - INFO -   accuracy: 0.5633
+2026-01-05 16:55:22,802 - INFO -   ap: 0.9223
+2026-01-05 16:55:22,802 - INFO -   precision: 0.5341
+2026-01-05 16:55:22,802 - INFO -   recall: 0.9933
+2026-01-05 16:55:22,802 - INFO -   f1: 0.6946
+2026-01-05 16:55:22,802 - INFO -   sample_count: 300.0000
+2026-01-05 16:55:22,802 - INFO -   video_auc: 1.0000
+2026-01-05 16:55:22,803 - INFO -   video_eer: 0.0000
+2026-01-05 16:55:22,803 - INFO -   video_acc: 0.5000
+2026-01-05 16:55:22,804 - INFO - Saved evaluation results to evaluation_results/dataset_3_heygen_new_eval_20260105_165522.json
+2026-01-05 16:55:22,804 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/MidJourney']
+2026-01-05 16:55:22,804 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/MidJourney
+2026-01-05 16:55:22,807 - INFO - Auto-descending into val directory: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/MidJourney/val
+2026-01-05 16:55:22,810 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/MidJourney/val
+2026-01-05 16:55:22,812 - INFO - All subdirectories found: ['real', 'fake']
+2026-01-05 16:55:22,812 - INFO - Found real directories: ['real']
+2026-01-05 16:55:22,812 - INFO - Found fake directories: ['fake']
+2026-01-05 16:55:22,812 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/MidJourney/val
+2026-01-05 16:55:22,812 - INFO - Processing real directory: real
+2026-01-05 16:55:22,813 - INFO - Processing fake directory: fake
+2026-01-05 16:55:22,817 - INFO - Checking for faulty images...
+2026-01-05 16:55:26,227 - INFO - No faulty images found.
+2026-01-05 16:55:26,227 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-05 16:55:26,227 - INFO - RawFileDataset initialized with 300 samples for test mode
+2026-01-05 16:55:26,227 - INFO - Test loader prepared with 19 batches
+2026-01-05 16:55:26,227 - INFO - Evaluating on dataset_4_MidJourney
+2026-01-05 16:56:12,565 - INFO - Evaluation results for dataset_4_MidJourney:
+2026-01-05 16:56:12,566 - INFO -   auc: 0.9932
+2026-01-05 16:56:12,566 - INFO -   eer: 0.0333
+2026-01-05 16:56:12,566 - INFO -   accuracy: 0.9567
+2026-01-05 16:56:12,566 - INFO -   ap: 0.9924
+2026-01-05 16:56:12,566 - INFO -   precision: 0.9202
+2026-01-05 16:56:12,566 - INFO -   recall: 1.0000
+2026-01-05 16:56:12,566 - INFO -   f1: 0.9585
+2026-01-05 16:56:12,566 - INFO -   sample_count: 300.0000
+2026-01-05 16:56:12,566 - INFO -   video_auc: 1.0000
+2026-01-05 16:56:12,566 - INFO -   video_eer: 0.0000
+2026-01-05 16:56:12,566 - INFO -   video_acc: 1.0000
+2026-01-05 16:56:12,568 - INFO - Saved evaluation results to evaluation_results/dataset_4_MidJourney_eval_20260105_165612.json
+2026-01-05 16:56:12,568 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/stargan']
+2026-01-05 16:56:12,568 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/stargan
+2026-01-05 16:56:12,570 - INFO - Auto-descending into val directory: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/stargan/val
+2026-01-05 16:56:12,576 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/stargan/val
+2026-01-05 16:56:12,577 - INFO - All subdirectories found: ['real', 'fake']
+2026-01-05 16:56:12,577 - INFO - Found real directories: ['real']
+2026-01-05 16:56:12,577 - INFO - Found fake directories: ['fake']
+2026-01-05 16:56:12,577 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/stargan/val
+2026-01-05 16:56:12,577 - INFO - Processing real directory: real
+2026-01-05 16:56:12,579 - INFO - Processing fake directory: fake
+2026-01-05 16:56:12,581 - INFO - Checking for faulty images...
+2026-01-05 16:56:12,826 - INFO - No faulty images found.
+2026-01-05 16:56:12,826 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-05 16:56:12,826 - INFO - RawFileDataset initialized with 300 samples for test mode
+2026-01-05 16:56:12,827 - INFO - Test loader prepared with 19 batches
+2026-01-05 16:56:12,827 - INFO - Evaluating on dataset_5_stargan
+2026-01-05 16:56:58,121 - INFO - Evaluation results for dataset_5_stargan:
+2026-01-05 16:56:58,121 - INFO -   auc: 0.9795
+2026-01-05 16:56:58,122 - INFO -   eer: 0.0733
+2026-01-05 16:56:58,122 - INFO -   accuracy: 0.7600
+2026-01-05 16:56:58,122 - INFO -   ap: 0.9758
+2026-01-05 16:56:58,122 - INFO -   precision: 0.6757
+2026-01-05 16:56:58,122 - INFO -   recall: 1.0000
+2026-01-05 16:56:58,122 - INFO -   f1: 0.8065
+2026-01-05 16:56:58,122 - INFO -   sample_count: 300.0000
+2026-01-05 16:56:58,122 - INFO -   video_auc: 1.0000
+2026-01-05 16:56:58,122 - INFO -   video_eer: 0.0000
+2026-01-05 16:56:58,122 - INFO -   video_acc: 0.5000
+2026-01-05 16:56:58,123 - INFO - Saved evaluation results to evaluation_results/dataset_5_stargan_eval_20260105_165658.json
+2026-01-05 16:56:58,123 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2']
+2026-01-05 16:56:58,123 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2
+2026-01-05 16:56:58,125 - INFO - Auto-descending into val directory: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val
+2026-01-05 16:56:58,132 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val
+2026-01-05 16:56:58,133 - INFO - All subdirectories found: ['real', 'fake']
+2026-01-05 16:56:58,133 - INFO - Found real directories: ['real']
+2026-01-05 16:56:58,133 - INFO - Found fake directories: ['fake']
+2026-01-05 16:56:58,133 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val
+2026-01-05 16:56:58,133 - INFO - Processing real directory: real
+2026-01-05 16:56:58,135 - INFO - Processing fake directory: fake
+2026-01-05 16:56:58,137 - INFO - Checking for faulty images...
+2026-01-05 16:56:58,441 - ERROR - Error loading image /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val/real/1132.jpg: cannot identify image file '/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val/real/1132.jpg'
+2026-01-05 16:56:58,442 - ERROR - Error loading image /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val/real/1132.jpg: Cannot identify image file: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val/real/1132.jpg
+2026-01-05 16:56:58,442 - WARNING - Removing faulty image: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val/real/1132.jpg - Cannot identify image file: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val/real/1132.jpg
+2026-01-05 16:56:58,474 - ERROR - Error loading image /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val/fake/1096.jpg: cannot identify image file '/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val/fake/1096.jpg'
+2026-01-05 16:56:58,475 - ERROR - Error loading image /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val/fake/1096.jpg: Cannot identify image file: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val/fake/1096.jpg
+2026-01-05 16:56:58,475 - WARNING - Removing faulty image: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val/fake/1096.jpg - Cannot identify image file: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2/val/fake/1096.jpg
+2026-01-05 16:56:58,530 - INFO - Removed 2 faulty images. Remaining: 298
+2026-01-05 16:56:58,530 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-05 16:56:58,530 - INFO - RawFileDataset initialized with 298 samples for test mode
+2026-01-05 16:56:58,530 - INFO - Test loader prepared with 19 batches
+2026-01-05 16:56:58,530 - INFO - Evaluating on dataset_6_starganv2
+2026-01-05 16:57:44,122 - INFO - Evaluation results for dataset_6_starganv2:
+2026-01-05 16:57:44,123 - INFO -   auc: 0.9490
+2026-01-05 16:57:44,123 - INFO -   eer: 0.1275
+2026-01-05 16:57:44,123 - INFO -   accuracy: 0.7181
+2026-01-05 16:57:44,123 - INFO -   ap: 0.9490
+2026-01-05 16:57:44,123 - INFO -   precision: 0.6407
+2026-01-05 16:57:44,124 - INFO -   recall: 0.9933
+2026-01-05 16:57:44,124 - INFO -   f1: 0.7789
+2026-01-05 16:57:44,124 - INFO -   sample_count: 298.0000
+2026-01-05 16:57:44,124 - INFO -   video_auc: 1.0000
+2026-01-05 16:57:44,124 - INFO -   video_eer: 0.0000
+2026-01-05 16:57:44,124 - INFO -   video_acc: 0.5000
+2026-01-05 16:57:44,125 - INFO - Saved evaluation results to evaluation_results/dataset_6_starganv2_eval_20260105_165744.json
+2026-01-05 16:57:44,125 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/styleclip']
+2026-01-05 16:57:44,125 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/styleclip
+2026-01-05 16:57:44,127 - INFO - Auto-descending into val directory: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/styleclip/val
+2026-01-05 16:57:44,131 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/styleclip/val
+2026-01-05 16:57:44,132 - INFO - All subdirectories found: ['real', 'fake']
+2026-01-05 16:57:44,132 - INFO - Found real directories: ['real']
+2026-01-05 16:57:44,132 - INFO - Found fake directories: ['fake']
+2026-01-05 16:57:44,132 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/styleclip/val
+2026-01-05 16:57:44,132 - INFO - Processing real directory: real
+2026-01-05 16:57:44,133 - INFO - Processing fake directory: fake
+2026-01-05 16:57:44,135 - INFO - Checking for faulty images...
+2026-01-05 16:57:44,855 - INFO - No faulty images found.
+2026-01-05 16:57:44,855 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-05 16:57:44,855 - INFO - RawFileDataset initialized with 300 samples for test mode
+2026-01-05 16:57:44,856 - INFO - Test loader prepared with 19 batches
+2026-01-05 16:57:44,856 - INFO - Evaluating on dataset_7_styleclip
+2026-01-05 16:58:30,069 - INFO - Evaluation results for dataset_7_styleclip:
+2026-01-05 16:58:30,070 - INFO -   auc: 0.9984
+2026-01-05 16:58:30,070 - INFO -   eer: 0.0067
+2026-01-05 16:58:30,070 - INFO -   accuracy: 0.9600
+2026-01-05 16:58:30,070 - INFO -   ap: 0.9985
+2026-01-05 16:58:30,070 - INFO -   precision: 0.9313
+2026-01-05 16:58:30,070 - INFO -   recall: 0.9933
+2026-01-05 16:58:30,070 - INFO -   f1: 0.9613
+2026-01-05 16:58:30,070 - INFO -   sample_count: 300.0000
+2026-01-05 16:58:30,070 - INFO -   video_auc: 1.0000
+2026-01-05 16:58:30,070 - INFO -   video_eer: 0.0000
+2026-01-05 16:58:30,070 - INFO -   video_acc: 1.0000
+2026-01-05 16:58:30,071 - INFO - Saved evaluation results to evaluation_results/dataset_7_styleclip_eval_20260105_165830.json
+2026-01-05 16:58:30,071 - INFO - Preparing test data for paths: ['/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/whichfaceisreal']
+2026-01-05 16:58:30,071 - INFO - Using RawFileDataset with data from /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/whichfaceisreal
+2026-01-05 16:58:30,072 - INFO - Auto-descending into val directory: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/whichfaceisreal/val
+2026-01-05 16:58:30,077 - INFO - Validating directory structure: /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/whichfaceisreal/val
+2026-01-05 16:58:30,077 - INFO - All subdirectories found: ['real', 'fake']
+2026-01-05 16:58:30,077 - INFO - Found real directories: ['real']
+2026-01-05 16:58:30,077 - INFO - Found fake directories: ['fake']
+2026-01-05 16:58:30,078 - INFO - Discovering files in /Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/whichfaceisreal/val
+2026-01-05 16:58:30,078 - INFO - Processing real directory: real
+2026-01-05 16:58:30,079 - INFO - Processing fake directory: fake
+2026-01-05 16:58:30,081 - INFO - Checking for faulty images...
+2026-01-05 16:58:35,140 - INFO - No faulty images found.
+2026-01-05 16:58:35,140 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-05 16:58:35,140 - INFO - RawFileDataset initialized with 300 samples for test mode
+2026-01-05 16:58:35,141 - INFO - Test loader prepared with 19 batches
+2026-01-05 16:58:35,141 - INFO - Evaluating on dataset_8_whichfaceisreal
+2026-01-05 16:59:22,655 - INFO - Evaluation results for dataset_8_whichfaceisreal:
+2026-01-05 16:59:22,655 - INFO -   auc: 0.9560
+2026-01-05 16:59:22,655 - INFO -   eer: 0.1333
+2026-01-05 16:59:22,655 - INFO -   accuracy: 0.8700
+2026-01-05 16:59:22,655 - INFO -   ap: 0.9595
+2026-01-05 16:59:22,655 - INFO -   precision: 0.8675
+2026-01-05 16:59:22,655 - INFO -   recall: 0.8733
+2026-01-05 16:59:22,656 - INFO -   f1: 0.8704
+2026-01-05 16:59:22,656 - INFO -   sample_count: 300.0000
+2026-01-05 16:59:22,656 - INFO -   video_auc: 1.0000
+2026-01-05 16:59:22,656 - INFO -   video_eer: 0.0000
+2026-01-05 16:59:22,656 - INFO -   video_acc: 1.0000
+2026-01-05 16:59:22,657 - INFO - Saved evaluation results to evaluation_results/dataset_8_whichfaceisreal_eval_20260105_165922.json
+2026-01-05 16:59:22,659 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-05 16:59:22,659 - INFO - Fine-tuned model evaluation finished successfully

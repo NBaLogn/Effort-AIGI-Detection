@@ -6,7 +6,7 @@ uv run 'DeepfakeBench/training/evaluate_finetune.py' \
 	--detector_config \
 		'DeepfakeBench/training/config/detector/effort_finetune.yaml' \
 	--weights \
-		'DeepfakeBench/training/logs/batchFacesAll/test/combined_test/batchFacesAll.pth' \
+		'DeepfakeBench/training/logs/batchFacesAllNew/test/avg/newBatchFaces.pth' \
 	--test_dataset \
 		'/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff' \
 		'/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/deepfacelab' \
