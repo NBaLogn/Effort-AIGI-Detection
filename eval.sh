@@ -6,7 +6,7 @@ uv run 'DeepfakeBench/training/evaluate_finetune.py' \
 	--detector_config \
 		'DeepfakeBench/training/config/detector/effort_finetune.yaml' \
 	--weights \
-		'DeepfakeBench/training/weights/finetuned/batchFacesAll.pth' \
+		'DeepfakeBench/training/weights/effort_clip_L14_trainOn_FaceForensic.pth' \
 	--test_dataset \
 		'DeepfakeBench/training/facedata/Chameleon_retinafaces' \
 		'DeepfakeBench/training/facedata/df40/CollabDiff' \
