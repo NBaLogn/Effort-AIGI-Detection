@@ -59,13 +59,6 @@ Sử dụng `effort_clip_L14_trainOn_FaceForensic.pth`, dùng tất cả khuôn 
 ##### Cấu hình tinh chỉnh
 
 ```yaml
-# Các tùy chọn riêng cho tinh chỉnh
-fine_tune: true
-pretrained_checkpoint: null
-freeze_backbone: true
-train_classification_head: true
-train_svd_residuals: true
-
 # Cấu hình huấn luyện
 nEpochs: 10
 lr_scheduler: cosine
@@ -84,11 +77,15 @@ optimizer:
 # Tăng cường dữ liệu
 data_aug:
   flip_prob: 0.5
-  rotate_prob: 0.4
-  rotate_limit: [-10, 10]
-  blur_prob: 0.3
-  brightness_prob: 0.3
-  brightness_limit: [-0.1, 0.1]
+  rotate_prob: 0.4  # Giảm nhẹ từ 0.5 gốc
+  rotate_limit: [-10, 10]  # Phạm vi chuẩn
+  blur_prob: 0.3  # Làm mờ vừa phải
+  blur_limit: [3, 7]  # Phạm vi chuẩn
+  brightness_prob: 0.3  # Thay đổi độ sáng vừa phải
+  brightness_limit: [-0.1, 0.1]  # Phạm vi chuẩn
+  contrast_limit: [-0.1, 0.1]  # Phạm vi chuẩn
+  quality_lower: 40  # Hỗ trợ mẫu chất lượng thấp
+  quality_upper: 100  # Chất lượng tối đa
 ```
 
 ### Cấu hình dành cho newBatch
@@ -99,13 +96,6 @@ Thêm tập Midjourney từ `ivansivkovenin`, dùng `cosine` cho `lr_scheduler`,
 
 ##### Cấu hình tinh chỉnh
 ```yaml
-# Các công tắc tinh chỉnh (khớp với `effort_finetune.yaml`)
-fine_tune: true
-freeze_backbone: true
-train_classification_head: true
-train_svd_residuals: true
-save_avg: true
-
 # Lịch huấn luyện được điều chỉnh cho tập dữ liệu mở rộng
 nEpochs: 5
 lr_scheduler: cosine
@@ -114,17 +104,18 @@ lr_eta_min: 0.000001
 
 # Cấu hình bộ tối ưu
 optimizer:
-  type: adam
   adam:
-    lr: 0.000025   # giảm một nửa so với batchAll để ổn định tập dữ liệu lớn hơn
+    lr: 0.00001   # Giảm cho ổn định khi tinh chỉnh transformer
     beta1: 0.9
     beta2: 0.999
+    eps: 0.00000001
     weight_decay: 0.0001
+    amsgrad: true
 
 early_stopping:
   enabled: true
   patience: 2
-  min_delta: 0.0001   # dừng khi AUC không cải thiện nghĩa trong hai epoch
+  min_delta: 0.001   # dừng khi AUC không cải thiện nghĩa trong hai epoch
   metric: auc
 ```
 
