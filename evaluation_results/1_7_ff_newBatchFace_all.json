@@ -1,4 +1,5 @@
 {
+  "weight": "newBatchFaces.pth",
   "datasets": {
     "dataset_1_Chameleon_retinafaces": {
       "auc": 0.9610520387596064,
