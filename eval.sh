@@ -10,14 +10,13 @@ uv run 'DeepfakeBench/training/evaluate_finetune.py' \
 	--test_dataset \
 		'DeepfakeBench/training/facedata/Chameleon_retinafaces' \
 		'DeepfakeBench/training/facedata/quan_dataset' \
-		'DeepfakeBench/training/facedata/quan_faceswap2000'
+		'DeepfakeBench/training/facedata/quan_faceswap2000' \
+		'DeepfakeBench/training/facedata/df40/CollabDiff' \
+        'DeepfakeBench/training/facedata/df40/deepfacelab' \
+        'DeepfakeBench/training/facedata/df40/heygen_new' \
+        'DeepfakeBench/training/facedata/df40/MidJourney' \
+        'DeepfakeBench/training/facedata/df40/stargan' \
+        'DeepfakeBench/training/facedata/df40/starganv2' \
+        'DeepfakeBench/training/facedata/df40/styleclip' \
+        'DeepfakeBench/training/facedata/df40/whichfaceisreal' \
 	--output_dir 'evaluation_results'
-
-		# '/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/CollabDiff' \
-		# '/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/deepfacelab' \
-		# '/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/heygen_new' \
-		# '/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/MidJourney' \
-		# '/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/stargan' \
-		# '/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/starganv2' \
-		# '/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/styleclip' \
-		# '/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/whichfaceisreal' \
