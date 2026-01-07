@@ -40,7 +40,7 @@ uv run 'DeepfakeBench/training/inference.py' \
         '[PATH_TO_IMAGE_FILE_OR_FOLDER]'
 ```
 
-## 📋 Fine-Tuning Configuration
+## 📋 Fine-Tuning Configs
 
 The fine-tuning configuration file (`effort_finetune.yaml`) includes optimized settings:
 
@@ -52,20 +52,13 @@ Used effort_clip_L14_trainOn_FaceForensic.pth, used 2000 extracted faces from Ch
 
 ### Settings for batchAll
 
-Used effort_clip_L14_trainOn_FaceForensic.pth, used all the extracted faces from Chameleon, Genimage, quan and quanFaceSwap datasets, finetuned for 10 epochs. 
+Used effort_clip_L14_trainOn_FaceForensic.pth, used all the extracted faces from Chameleon, Genimage, quan and quanFaceSwap datasets, finetuned for 10 epochs on cosine lr_scheduler. 
 
 --train_dataset are the train splits, --test_dataset targets the val splits.
 
-##### Fine-Tune Configuration
+##### Config
 
 ```yaml
-# Fine-tuning specific settings
-fine_tune: true
-pretrained_checkpoint: null
-freeze_backbone: true
-train_classification_head: true
-train_svd_residuals: true
-
 # Training configuration
 nEpochs: 10
 lr_scheduler: cosine
@@ -84,47 +77,45 @@ optimizer:
 # Data augmentation settings
 data_aug:
   flip_prob: 0.5
-  rotate_prob: 0.4
-  rotate_limit: [-10, 10]
-  blur_prob: 0.3
-  brightness_prob: 0.3
-  brightness_limit: [-0.1, 0.1]
+  rotate_prob: 0.4  # Slightly reduced from original 0.5
+  rotate_limit: [-10, 10]  # Standard range
+  blur_prob: 0.3  # Moderate blur
+  blur_limit: [3, 7]  # Standard range
+  brightness_prob: 0.3  # Moderate brightness variation
+  brightness_limit: [-0.1, 0.1]  # Standard range
+  contrast_limit: [-0.1, 0.1]  # Standard range
+  quality_lower: 40  # Support lower quality samples
+  quality_upper: 100  # Full quality ceiling
 ```
 
 ### Settings for newBatch
 
-Added a Midjourney dataset from ivansivkovenin, used cosine lr_scheduler, implemented early stopping if AUC doesn't improve above 0.0001 for 2 epochs. Halved the learning rate.
+Added a Midjourney dataset from ivansivkovenin, implemented early stopping if AUC doesn't improve above 0.001 for 2 epochs. Reduced the learning rate.
 
 --train_dataset are Chameleon, Genimage, ivansivkovenin's, quan and quanFS; --test_dataset targets df40. Finetuning stopped after 5 epochs.
 
-##### Fine-Tune Configuration
+##### Config
 ```yaml
-# Fine-tuning switches (aligned with `effort_finetune.yaml`)
-fine_tune: true
-freeze_backbone: true
-train_classification_head: true
-train_svd_residuals: true
-save_avg: true
-
 # Training schedule tuned for the expanded dataset mix
 nEpochs: 5
 lr_scheduler: cosine
 lr_T_max: 5
 lr_eta_min: 0.000001
 
-# Optimizer settings
+# optimizer config - Fine-tuning optimized settings
 optimizer:
-  type: adam
   adam:
-    lr: 0.000025   # halved from the batchAll run to stabilize the larger dataset
+    lr: 0.00001  # Lowered for stable transformer fine-tuning (1e-5)
     beta1: 0.9
     beta2: 0.999
+    eps: 0.00000001
     weight_decay: 0.0001
+    amsgrad: true
 
 early_stopping:
   enabled: true
   patience: 2
-  min_delta: 0.0001   # stop if AUC does not improve meaningfully for two epochs
+  min_delta: 0.001   # stop if AUC does not improve meaningfully for two epochs
   metric: auc
 ```
 
