@@ -46,13 +46,17 @@ The fine-tuning configuration file (`effort_finetune.yaml`) includes optimized s
 
 ### Settings for batch2k
 
-Used effort_clip_L14_trainOn_FaceForensic.pth, used 2000 extracted faces from Chameleon, Genimage, quan and quanFaceSwap datasets, finetuned for 2 epochs.
+Used effort_clip_L14_trainOn_FaceForensic.pth, used 2000 extracted faces from Chameleon, Genimage, quan and quanFaceSwap datasets, finetuned for 2 epochs. 
+
+--train_dataset and --test_dataset are the same.
 
 ### Settings for batchAll
 
-Used effort_clip_L14_trainOn_FaceForensic.pth, used all the extracted faces from Chameleon, Genimage, quan and quanFaceSwap datasets, finetuned for 10 epochs.
+Used effort_clip_L14_trainOn_FaceForensic.pth, used all the extracted faces from Chameleon, Genimage, quan and quanFaceSwap datasets, finetuned for 10 epochs. 
 
-#### Current Fine-Tune Configuration
+--train_dataset are the train splits, --test_dataset targets the val splits.
+
+##### Fine-Tune Configuration
 
 ```yaml
 # Fine-tuning specific settings
@@ -85,6 +89,43 @@ data_aug:
   blur_prob: 0.3
   brightness_prob: 0.3
   brightness_limit: [-0.1, 0.1]
+```
+
+### Settings for newBatch
+
+Added a Midjourney dataset from ivansivkovenin, used cosine lr_scheduler, implemented early stopping if AUC doesn't improve above 0.0001 for 2 epochs. Halved the learning rate.
+
+--train_dataset are Chameleon, Genimage, ivansivkovenin's, quan and quanFS; --test_dataset targets df40. Finetuning stopped after 5 epochs.
+
+##### Fine-Tune Configuration
+```yaml
+# Fine-tuning switches (aligned with `effort_finetune.yaml`)
+fine_tune: true
+freeze_backbone: true
+train_classification_head: true
+train_svd_residuals: true
+save_avg: true
+
+# Training schedule tuned for the expanded dataset mix
+nEpochs: 5
+lr_scheduler: cosine
+lr_T_max: 5
+lr_eta_min: 0.000001
+
+# Optimizer settings
+optimizer:
+  type: adam
+  adam:
+    lr: 0.000025   # halved from the batchAll run to stabilize the larger dataset
+    beta1: 0.9
+    beta2: 0.999
+    weight_decay: 0.0001
+
+early_stopping:
+  enabled: true
+  patience: 2
+  min_delta: 0.0001   # stop if AUC does not improve meaningfully for two epochs
+  metric: auc
 ```
 
 ## 🔧 How Fine-Tuning Works

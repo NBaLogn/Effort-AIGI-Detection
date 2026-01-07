@@ -1,0 +1,1 @@
+Các tệp JSON trong thư mục này được đặt tên thủ công theo định dạng `[tháng]_[ngày]_[pretrained-weight]_[new-weight]_[eval-datasets].json`, giúp làm rõ trọng số và tập dữ liệu nào đã được sử dụng cho lần đánh giá cụ thể đó. Để xem đầy đủ logs cho từng lần chạy hãy xem `evaluation.log` trong thư mục này.
