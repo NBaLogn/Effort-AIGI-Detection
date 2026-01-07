@@ -6219,3 +6219,49 @@ FileNotFoundError: [Errno 2] No such file or directory: 'DeepfakeBench/training/
 2026-01-07 08:26:34,272 - INFO - Saved evaluation results to evaluation_results/dataset_3_quan_faceswap2000_eval_20260107_082634.json
 2026-01-07 08:26:34,273 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
 2026-01-07 08:26:34,273 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-07 09:43:48,252 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-07 09:43:48,254 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-07 09:43:48,254 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-07 09:43:48,254 - INFO - pretrained: no need to provide this for the effort model
+2026-01-07 09:43:48,254 - INFO - model_name: effort
+2026-01-07 09:43:48,254 - INFO - backbone_name: vit
+2026-01-07 09:43:48,254 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-07 09:43:48,254 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-07 09:43:48,254 - INFO - train_dataset: ['UADFV']
+2026-01-07 09:43:48,254 - INFO - test_dataset: ['UADFV']
+2026-01-07 09:43:48,254 - INFO - train_batchSize: 8
+2026-01-07 09:43:48,254 - INFO - test_batchSize: 8
+2026-01-07 09:43:48,254 - INFO - workers: 4
+2026-01-07 09:43:48,254 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-07 09:43:48,254 - INFO - resolution: 224
+2026-01-07 09:43:48,254 - INFO - with_mask: False
+2026-01-07 09:43:48,254 - INFO - with_landmark: False
+2026-01-07 09:43:48,254 - INFO - use_data_augmentation: True
+2026-01-07 09:43:48,254 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-07 09:43:48,254 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-07 09:43:48,254 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-07 09:43:48,254 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-07 09:43:48,254 - INFO - lr_scheduler: cosine
+2026-01-07 09:43:48,254 - INFO - lr_T_max: 5
+2026-01-07 09:43:48,254 - INFO - lr_eta_min: 1e-06
+2026-01-07 09:43:48,254 - INFO - nEpochs: 5
+2026-01-07 09:43:48,254 - INFO - start_epoch: 0
+2026-01-07 09:43:48,255 - INFO - save_epoch: 1
+2026-01-07 09:43:48,255 - INFO - rec_iter: 50
+2026-01-07 09:43:48,255 - INFO - logdir: ./logs
+2026-01-07 09:43:48,255 - INFO - manualSeed: 1024
+2026-01-07 09:43:48,255 - INFO - save_ckpt: True
+2026-01-07 09:43:48,255 - INFO - save_feat: True
+2026-01-07 09:43:48,255 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-07 09:43:48,255 - INFO - loss_func: cross_entropy
+2026-01-07 09:43:48,255 - INFO - losstype: None
+2026-01-07 09:43:48,255 - INFO - metric_scoring: auc
+2026-01-07 09:43:48,255 - INFO - fine_tune: True
+2026-01-07 09:43:48,255 - INFO - pretrained_checkpoint: None
+2026-01-07 09:43:48,255 - INFO - freeze_backbone: True
+2026-01-07 09:43:48,255 - INFO - train_classification_head: True
+2026-01-07 09:43:48,255 - INFO - train_svd_residuals: True
+2026-01-07 09:43:48,255 - INFO - save_avg: True
+2026-01-07 09:43:48,255 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-07 09:43:48,255 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-07 09:43:48,255 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
