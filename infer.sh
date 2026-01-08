@@ -5,10 +5,10 @@
 uv run 'DeepfakeBench/training/inference.py' \
     --detector_config \
         'DeepfakeBench/training/config/detector/effort_finetune.yaml' \
+    --weights \
+        'DeepfakeBench/training/weights/finetuned/newBatchFaces.pth' \
+    --image \
+        'DeepfakeBench/training/facedata/GenImage_faces_09/Midjourney/val/real' \
+    --limit 0 \
     --landmark_model \
         'DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat' \
-    --weights \
-        'DeepfakeBench/training/weights/finetuned/batchFacesAll.pth' \
-    --image \
-        'DeepfakeBench/training/facedata/ivansivkovenin_faces' \
-    --limit 0

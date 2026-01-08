@@ -19,3 +19,4 @@ facedata
 .ruff_cache/
 .specify/
 .vscode/
+.DS_Store
