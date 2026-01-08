@@ -9,10 +9,7 @@
       "precision": 0.591756624141315,
       "recall": 0.33407202216066484,
       "f1": 0.42705382436260625,
-      "sample_count": 2833,
-      "video_auc": 0.0,
-      "video_eer": 1.0,
-      "video_acc": 0.5
+      "sample_count": 2833
     },
     "dataset_2_CollabDiff": {
       "auc": 0.7391333333333334,
@@ -22,10 +19,7 @@
       "precision": 0.7452830188679245,
       "recall": 0.5266666666666666,
       "f1": 0.6171875,
-      "sample_count": 300,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 300
     },
     "dataset_3_deepfacelab": {
       "auc": 0.9427555555555555,
@@ -35,10 +29,7 @@
       "precision": 0.7473118279569892,
       "recall": 0.9266666666666666,
       "f1": 0.8273809523809523,
-      "sample_count": 300,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 300
     },
     "dataset_4_heygen_new": {
       "auc": 0.7752222222222223,
@@ -48,10 +39,7 @@
       "precision": 0.8,
       "recall": 0.6666666666666666,
       "f1": 0.7272727272727273,
-      "sample_count": 300,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 300
     },
     "dataset_5_MidJourney": {
       "auc": 0.5480666666666667,
@@ -61,10 +49,7 @@
       "precision": 0.43478260869565216,
       "recall": 0.06666666666666667,
       "f1": 0.11560693641618497,
-      "sample_count": 300,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 0.5
+      "sample_count": 300
     },
     "dataset_6_stargan": {
       "auc": 0.9941333333333333,
@@ -74,10 +59,7 @@
       "precision": 0.746268656716418,
       "recall": 1.0,
       "f1": 0.8547008547008547,
-      "sample_count": 300,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 300
     },
     "dataset_7_starganv2": {
       "auc": 0.8549614882212514,
@@ -87,10 +69,7 @@
       "precision": 0.75625,
       "recall": 0.8120805369127517,
       "f1": 0.7831715210355987,
-      "sample_count": 298,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 298
     },
     "dataset_8_styleclip": {
       "auc": 0.9120444444444443,
@@ -100,10 +79,7 @@
       "precision": 0.8282208588957055,
       "recall": 0.9,
       "f1": 0.8626198083067093,
-      "sample_count": 300,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 300
     },
     "dataset_9_whichfaceisreal": {
       "auc": 0.5715111111111111,
@@ -113,10 +89,7 @@
       "precision": 0.5421686746987951,
       "recall": 0.3,
       "f1": 0.38626609442060084,
-      "sample_count": 300,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 0.5
+      "sample_count": 300
     },
     "dataset_10_ADM": {
       "auc": 0.9375814863102998,
@@ -126,10 +99,7 @@
       "precision": 0.7552447552447552,
       "recall": 0.9152542372881356,
       "f1": 0.8275862068965517,
-      "sample_count": 222,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 222
     },
     "dataset_11_BigGAN": {
       "auc": 0.9780844155844156,
@@ -139,10 +109,7 @@
       "precision": 0.46236559139784944,
       "recall": 0.9772727272727273,
       "f1": 0.6277372262773723,
-      "sample_count": 156,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 156
     },
     "dataset_12_glide": {
       "auc": 0.9900990099009901,
@@ -152,10 +119,7 @@
       "precision": 0.03333333333333333,
       "recall": 1.0,
       "f1": 0.06451612903225806,
-      "sample_count": 102,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 102
     },
     "dataset_13_Midjourney": {
       "auc": 0.5986842105263157,
@@ -165,10 +129,7 @@
       "precision": 0.48717948717948717,
       "recall": 0.5,
       "f1": 0.4935064935064935,
-      "sample_count": 196,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 0.5
+      "sample_count": 196
     },
     "dataset_14_stable_diffusion_v_1_4": {
       "auc": 0.6442931603020955,
@@ -178,10 +139,7 @@
       "precision": 0.5172413793103449,
       "recall": 0.569620253164557,
       "f1": 0.5421686746987951,
-      "sample_count": 198,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 198
     },
     "dataset_15_stable_diffusion_v_1_5": {
       "auc": 0.5749829390354868,
@@ -191,10 +149,7 @@
       "precision": 0.4774774774774775,
       "recall": 0.4732142857142857,
       "f1": 0.47533632286995514,
-      "sample_count": 269,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 269
     },
     "dataset_16_VQDM": {
       "auc": 0.9975161450571286,
@@ -204,10 +159,7 @@
       "precision": 0.5596330275229358,
       "recall": 1.0,
       "f1": 0.7176470588235294,
-      "sample_count": 160,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 160
     },
     "dataset_17_wukong": {
       "auc": 0.7168242296918768,
@@ -217,10 +169,7 @@
       "precision": 0.6260869565217392,
       "recall": 0.7058823529411765,
       "f1": 0.663594470046083,
-      "sample_count": 214,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 214
     },
     "dataset_18_quan_dataset": {
       "auc": 0.9004141666666667,
@@ -230,10 +179,7 @@
       "precision": 0.8783783783783784,
       "recall": 0.78,
       "f1": 0.826271186440678,
-      "sample_count": 6000,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 6000
     },
     "dataset_19_quan_faceswap2000": {
       "auc": 0.6916555555555556,
@@ -243,10 +189,7 @@
       "precision": 0.7523809523809524,
       "recall": 0.2633333333333333,
       "f1": 0.39012345679012345,
-      "sample_count": 600,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 0.5
+      "sample_count": 600
     }
   },
   "timestamp": "2026-01-07T15:28:06.925853"

@@ -9,10 +9,7 @@
       "precision": 0.8958990536277602,
       "recall": 0.9440443213296399,
       "f1": 0.9193417858106285,
-      "sample_count": 2833,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 2833
     },
     "dataset_2_CollabDiff": {
       "auc": 0.9840444444444444,
@@ -22,10 +19,7 @@
       "precision": 0.9225806451612903,
       "recall": 0.9533333333333334,
       "f1": 0.9377049180327869,
-      "sample_count": 300,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 300
     },
     "dataset_3_deepfacelab": {
       "auc": 0.894711111111111,
@@ -35,10 +29,7 @@
       "precision": 0.6540284360189573,
       "recall": 0.92,
       "f1": 0.7645429362880887,
-      "sample_count": 300,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 0.5
+      "sample_count": 300
     },
     "dataset_4_heygen_new": {
       "auc": 0.9073777777777777,
@@ -48,10 +39,7 @@
       "precision": 0.5340501792114696,
       "recall": 0.9933333333333333,
       "f1": 0.6946386946386947,
-      "sample_count": 300,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 0.5
+      "sample_count": 300
     },
     "dataset_5_MidJourney": {
       "auc": 0.9931555555555556,
@@ -61,10 +49,7 @@
       "precision": 0.9202453987730062,
       "recall": 1.0,
       "f1": 0.9584664536741214,
-      "sample_count": 300,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 300
     },
     "dataset_6_stargan": {
       "auc": 0.9795333333333333,
@@ -74,10 +59,7 @@
       "precision": 0.6756756756756757,
       "recall": 1.0,
       "f1": 0.8064516129032258,
-      "sample_count": 300,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 0.5
+      "sample_count": 300
     },
     "dataset_7_starganv2": {
       "auc": 0.9489662627809559,
@@ -87,10 +69,7 @@
       "precision": 0.6406926406926406,
       "recall": 0.9932885906040269,
       "f1": 0.7789473684210526,
-      "sample_count": 298,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 0.5
+      "sample_count": 298
     },
     "dataset_8_styleclip": {
       "auc": 0.9984,
@@ -100,10 +79,7 @@
       "precision": 0.93125,
       "recall": 0.9933333333333333,
       "f1": 0.9612903225806452,
-      "sample_count": 300,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 300
     },
     "dataset_9_whichfaceisreal": {
       "auc": 0.9559555555555556,
@@ -113,10 +89,7 @@
       "precision": 0.8675496688741722,
       "recall": 0.8733333333333333,
       "f1": 0.8704318936877077,
-      "sample_count": 300,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 300
     },
     "dataset_10_ADM": {
       "auc": 0.9983702737940027,
@@ -126,10 +99,7 @@
       "precision": 0.9829059829059829,
       "recall": 0.9745762711864406,
       "f1": 0.9787234042553191,
-      "sample_count": 222,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 222
     },
     "dataset_11_BigGAN": {
       "auc": 0.997564935064935,
@@ -139,10 +109,7 @@
       "precision": 0.9148936170212766,
       "recall": 0.9772727272727273,
       "f1": 0.945054945054945,
-      "sample_count": 156,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 156
     },
     "dataset_12_glide": {
       "auc": 1.0,
@@ -152,10 +119,7 @@
       "precision": 0.3333333333333333,
       "recall": 1.0,
       "f1": 0.5,
-      "sample_count": 102,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 102
     },
     "dataset_13_Midjourney": {
       "auc": 0.986842105263158,
@@ -165,10 +129,7 @@
       "precision": 0.9324324324324325,
       "recall": 0.9078947368421053,
       "f1": 0.92,
-      "sample_count": 196,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 196
     },
     "dataset_14_stable_diffusion_v_1_4": {
       "auc": 0.9919157536432295,
@@ -178,10 +139,7 @@
       "precision": 0.9047619047619048,
       "recall": 0.9620253164556962,
       "f1": 0.9325153374233128,
-      "sample_count": 198,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 198
     },
     "dataset_15_stable_diffusion_v_1_5": {
       "auc": 0.9941992720655142,
@@ -191,10 +149,7 @@
       "precision": 0.963963963963964,
       "recall": 0.9553571428571429,
       "f1": 0.9596412556053812,
-      "sample_count": 269,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 269
     },
     "dataset_16_VQDM": {
       "auc": 1.0,
@@ -204,10 +159,7 @@
       "precision": 0.9242424242424242,
       "recall": 1.0,
       "f1": 0.9606299212598425,
-      "sample_count": 160,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 160
     },
     "dataset_17_wukong": {
       "auc": 0.9839810924369747,
@@ -217,10 +169,7 @@
       "precision": 0.9587628865979382,
       "recall": 0.9117647058823529,
       "f1": 0.9346733668341709,
-      "sample_count": 214,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 214
     },
     "dataset_18_quan_dataset": {
       "auc": 0.9960263333333333,
@@ -230,10 +179,7 @@
       "precision": 0.9491143317230274,
       "recall": 0.9823333333333333,
       "f1": 0.9654381654381654,
-      "sample_count": 6000,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 6000
     },
     "dataset_19_quan_faceswap2000": {
       "auc": 0.9350222222222222,
@@ -243,10 +189,7 @@
       "precision": 0.9170506912442397,
       "recall": 0.6633333333333333,
       "f1": 0.769825918762089,
-      "sample_count": 600,
-      "video_auc": 1.0,
-      "video_eer": 0.0,
-      "video_acc": 1.0
+      "sample_count": 600
     }
   },
   "timestamp": "2026-01-07T12:06:28.689111"

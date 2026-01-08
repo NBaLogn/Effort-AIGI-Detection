@@ -78,10 +78,11 @@ class Config:
         "DeepfakeBench/training/config/detector/effort_finetune.yaml",
     )
     WEIGHTS_PATH = Path(
-        "DeepfakeBench/training/weights/finetuned/batchFacesAll.pth",
+        "DeepfakeBench/training/weights/finetuned/newBatchFaces.pth",
     )
     LANDMARK_MODEL_PATH = Path(
         "DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat",
+        # "DeepfakeBench/preprocessing/missing.dat",
     )
 
     # Landmark group indices for 81-landmark model
@@ -192,7 +193,7 @@ def load_model(config: dict[str, Any], device: torch.device) -> torch.nn.Module:
         return DETECTOR[config["model_name"]](config).to(device)
     except KeyError as e:
         logger.exception(
-            "Model %s not found in DETECTOR registry", config["model_name"]
+            "Model %s not found in DETECTOR registry", config["model_name"],
         )
         model_error_msg = "Model definition not found"
         raise RuntimeError(model_error_msg) from e
