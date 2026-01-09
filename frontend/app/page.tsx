@@ -213,12 +213,28 @@ export default function Home() {
         </div>
       )}
 
-      {/* Render Finalized Batches */}
-      {finalizedBatches.map((batch) => {
-        const summary = calculateSummary(batch.results);
-        if (!summary) return null; // Should not happen if we only finalize with results
+      {/* Render Active Batch */}
+      {(() => {
+        const summary = calculateSummary(activeBatch.results);
         return (
-          <div key={batch.id} style={{ marginBottom: "3rem", opacity: 0.8 }}>
+          <div style={{ marginBottom: finalizedBatches.some(b => b.results.length > 0) ? "0" : "3rem" }}>
+            {summary && <ResultSummary {...summary} />}
+            <ResultsGrid results={activeBatch.results} hasSummary={Boolean(summary)} />
+          </div>
+        )
+      })()}
+
+      {/* Divider if needed */}
+      {finalizedBatches.some(b => b.results.length > 0) && activeBatch.results.length > 0 && (
+        <hr style={{ margin: "4rem 0", border: "none", borderTop: "2px dashed #eee" }} />
+      )}
+
+      {/* Render Finalized Batches (Newest First) */}
+      {[...finalizedBatches].reverse().map((batch) => {
+        const summary = calculateSummary(batch.results);
+        if (!summary) return null;
+        return (
+          <div key={batch.id} style={{ marginBottom: "4rem", opacity: 0.8 }}>
             <div style={{
               borderBottom: "1px solid #eee",
               paddingBottom: "1rem",
@@ -237,21 +253,6 @@ export default function Home() {
         );
       })}
 
-      {/* Divider if needed */}
-      {finalizedBatches.length > 0 && activeBatch.results.length > 0 && (
-        <hr style={{ margin: "3rem 0", border: "none", borderTop: "2px dashed #eee" }} />
-      )}
-
-      {/* Render Active Batch */}
-      {(() => {
-        const summary = calculateSummary(activeBatch.results);
-        return (
-          <div>
-            {summary && <ResultSummary {...summary} />}
-            <ResultsGrid results={activeBatch.results} hasSummary={Boolean(summary)} />
-          </div>
-        )
-      })()}
     </main>
   );
 }
