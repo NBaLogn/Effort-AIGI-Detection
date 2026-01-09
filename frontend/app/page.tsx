@@ -4,6 +4,7 @@ import { useState } from "react";
 import Dropzone from "./components/Dropzone";
 import ResultSummary from "./components/ResultSummary";
 import ResultsGrid from "./components/ResultsGrid";
+import ProgressBar from "./components/ProgressBar";
 
 interface AnalysisResult {
   filename: string;
@@ -58,6 +59,7 @@ export default function Home() {
   ]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState<{ current: number; total: number } | null>(null);
 
   // The active batch is always the last one in the list (or the one !isFinalized)
   // We'll assume the last one is always the active one based on our logic.
@@ -68,9 +70,25 @@ export default function Home() {
   const handleFilesSelected = async (files: File[]) => {
     setLoading(true);
     setError(null);
+    setProgress({ current: 0, total: files.length });
+
+    // Helper to add a single result to the active batch
+    const addResult = (result: AnalysisResult) => {
+      setBatches((prev) => {
+        const next = [...prev];
+        const current = next[activeBatchIndex];
+        next[activeBatchIndex] = {
+          ...current,
+          results: [result, ...current.results],
+        };
+        return next;
+      });
+    };
 
     try {
-      const promises = files.map(async (file): Promise<AnalysisResult | null> => {
+      // Create an array of potential promises, but manage them so we can update progress
+      // We still run them concurrently, but we intercept each completion.
+      const promises = files.map(async (file) => {
         const formData = new FormData();
         formData.append("file", file);
 
@@ -87,7 +105,7 @@ export default function Home() {
           const data = await response.json();
           const objectUrl = URL.createObjectURL(file);
 
-          return {
+          const result: AnalysisResult = {
             filename: file.name,
             originalImage: objectUrl,
             gradCamImage: data.grad_cam_image,
@@ -95,30 +113,29 @@ export default function Home() {
             score: data.score,
             reasoning: data.reasoning,
           };
+
+          addResult(result);
+
         } catch (err) {
           console.error(err);
-          return null;
+          // For now, we just log errors but don't stop the whole batch.
+          // We could optionally add an "ErrorResult" type to the UI.
+        } finally {
+          setProgress((prev) => {
+            if (!prev) return null;
+            return { ...prev, current: prev.current + 1 };
+          });
         }
       });
 
-      const newResults = await Promise.all(promises);
-      const validResults = newResults.filter((r): r is AnalysisResult => r !== null);
+      await Promise.all(promises);
 
-      setBatches((prev) => {
-        const next = [...prev];
-        const current = next[activeBatchIndex];
-        // Create a new updated batch object
-        next[activeBatchIndex] = {
-          ...current,
-          results: [...validResults, ...current.results],
-        };
-        return next;
-      });
     } catch (err) {
       setError("An error occurred while processing images.");
       console.error(err);
     } finally {
       setLoading(false);
+      setProgress(null);
     }
   };
 
@@ -150,24 +167,28 @@ export default function Home() {
 
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         <Dropzone onFilesSelected={handleFilesSelected} disabled={loading} />
-        
+
+        {progress && (
+          <ProgressBar current={progress.current} total={progress.total} />
+        )}
+
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <button
-              onClick={handleFinalizeBatch}
-              disabled={loading || activeBatch.results.length === 0}
-              style={{
-                padding: "0.5rem 1rem",
-                borderRadius: "6px",
-                border: "1px solid #ccc",
-                background: activeBatch.results.length > 0 ? "#fff" : "#f5f5f5",
-                cursor: activeBatch.results.length > 0 ? "pointer" : "not-allowed",
-                color: activeBatch.results.length > 0 ? "#333" : "#aaa",
-                fontSize: "0.9rem",
-                fontWeight: 500,
-              }}
-            >
-              Finalize Batch
-            </button>
+          <button
+            onClick={handleFinalizeBatch}
+            disabled={loading || activeBatch.results.length === 0}
+            style={{
+              padding: "0.5rem 1rem",
+              borderRadius: "6px",
+              border: "1px solid #ccc",
+              background: activeBatch.results.length > 0 ? "#fff" : "#f5f5f5",
+              cursor: activeBatch.results.length > 0 ? "pointer" : "not-allowed",
+              color: activeBatch.results.length > 0 ? "#333" : "#aaa",
+              fontSize: "0.9rem",
+              fontWeight: 500,
+            }}
+          >
+            Finalize Batch
+          </button>
         </div>
       </div>
 
@@ -186,7 +207,7 @@ export default function Home() {
         </div>
       )}
 
-      {loading && (
+      {loading && !progress && (
         <div style={{ textAlign: "center", marginTop: "2rem", color: "#888" }}>
           Processing images...
         </div>
@@ -198,17 +219,17 @@ export default function Home() {
         if (!summary) return null; // Should not happen if we only finalize with results
         return (
           <div key={batch.id} style={{ marginBottom: "3rem", opacity: 0.8 }}>
-            <div style={{ 
-                borderBottom: "1px solid #eee", 
-                paddingBottom: "1rem", 
-                marginBottom: "1rem",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                color: "#666"
+            <div style={{
+              borderBottom: "1px solid #eee",
+              paddingBottom: "1rem",
+              marginBottom: "1rem",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              color: "#666"
             }}>
-                <span>Batch completed at {new Date(batch.timestamp).toLocaleTimeString()}</span>
-                <span>{batch.results.length} images</span>
+              <span>Batch completed at {new Date(batch.timestamp).toLocaleTimeString()}</span>
+              <span>{batch.results.length} images</span>
             </div>
             <ResultSummary {...summary} />
             <ResultsGrid results={batch.results} hasSummary={true} />
@@ -218,19 +239,21 @@ export default function Home() {
 
       {/* Divider if needed */}
       {finalizedBatches.length > 0 && activeBatch.results.length > 0 && (
-         <hr style={{ margin: "3rem 0", border: "none", borderTop: "2px dashed #eee" }} />
+        <hr style={{ margin: "3rem 0", border: "none", borderTop: "2px dashed #eee" }} />
       )}
 
       {/* Render Active Batch */}
       {(() => {
         const summary = calculateSummary(activeBatch.results);
         return (
-            <div>
-                 {summary && <ResultSummary {...summary} />}
-                 <ResultsGrid results={activeBatch.results} hasSummary={Boolean(summary)} />
-            </div>
+          <div>
+            {summary && <ResultSummary {...summary} />}
+            <ResultsGrid results={activeBatch.results} hasSummary={Boolean(summary)} />
+          </div>
         )
       })()}
     </main>
   );
 }
+
+

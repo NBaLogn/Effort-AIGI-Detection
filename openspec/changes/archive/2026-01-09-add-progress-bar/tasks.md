@@ -1,0 +1,5 @@
+- [x] Create `ProgressBar` component <!-- id: 0 -->
+- [x] Refactor `handleFilesSelected` for incremental updates <!-- id: 1 -->
+- [x] Implement progress state management in `page.tsx` <!-- id: 2 -->
+- [x] Integrate `ProgressBar` into UI <!-- id: 3 -->
+- [x] Verify progress bar updates correctly during batch upload <!-- id: 4 -->
