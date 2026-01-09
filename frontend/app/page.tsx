@@ -20,6 +20,7 @@ interface Batch {
   timestamp: number;
   isFinalized: boolean;
   results: AnalysisResult[];
+  isCollapsed: boolean;
 }
 
 function calculateSummary(results: AnalysisResult[]) {
@@ -55,6 +56,7 @@ export default function Home() {
       timestamp: Date.now(),
       isFinalized: false,
       results: [],
+      isCollapsed: false,
     },
   ]);
   const [loading, setLoading] = useState(false);
@@ -152,9 +154,18 @@ export default function Home() {
         timestamp: Date.now(),
         isFinalized: false,
         results: [],
+        isCollapsed: false,
       });
       return next;
     });
+  };
+
+  const handleToggleCollapse = (id: string) => {
+    setBatches((prev) =>
+      prev.map((batch) =>
+        batch.id === id ? { ...batch, isCollapsed: !batch.isCollapsed } : batch
+      )
+    );
   };
 
   return (
@@ -218,10 +229,18 @@ export default function Home() {
         const summary = calculateSummary(activeBatch.results);
         return (
           <div style={{ marginBottom: finalizedBatches.some(b => b.results.length > 0) ? "0" : "3rem" }}>
-            {summary && <ResultSummary {...summary} />}
-            <ResultsGrid results={activeBatch.results} hasSummary={Boolean(summary)} />
+            {summary && (
+              <ResultSummary
+                {...summary}
+                isCollapsed={activeBatch.isCollapsed}
+                onToggle={() => handleToggleCollapse(activeBatch.id)}
+              />
+            )}
+            {!activeBatch.isCollapsed && (
+              <ResultsGrid results={activeBatch.results} hasSummary={Boolean(summary)} />
+            )}
           </div>
-        )
+        );
       })()}
 
       {/* Divider if needed */}
@@ -247,8 +266,12 @@ export default function Home() {
               <span>Batch completed at {new Date(batch.timestamp).toLocaleTimeString()}</span>
               <span>{batch.results.length} images</span>
             </div>
-            <ResultSummary {...summary} />
-            <ResultsGrid results={batch.results} hasSummary={true} />
+            <ResultSummary
+              {...summary}
+              isCollapsed={batch.isCollapsed}
+              onToggle={() => handleToggleCollapse(batch.id)}
+            />
+            {!batch.isCollapsed && <ResultsGrid results={batch.results} hasSummary={true} />}
           </div>
         );
       })}

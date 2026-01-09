@@ -36,6 +36,30 @@
   font-weight: 700;
 }
 
+.collapseToggle {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+  padding: 0;
+  margin-top: 2px;
+}
+
+.collapseToggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--foreground);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
 .totalBadge {
   background: rgba(59, 130, 246, 0.15);
   border: 1px solid rgba(59, 130, 246, 0.7);
