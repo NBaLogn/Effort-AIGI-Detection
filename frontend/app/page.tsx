@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Dropzone from "./components/Dropzone";
+import ResultSummary from "./components/ResultSummary";
 import ResultsGrid from "./components/ResultsGrid";
 
 interface AnalysisResult {
@@ -17,11 +18,36 @@ export default function Home() {
   const [results, setResults] = useState<AnalysisResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+ 
+  const summary = useMemo(() => {
+    const total = results.length;
+    if (total === 0) {
+      return null;
+    }
+
+    let realCount = 0;
+    let fakeCount = 0;
+
+    for (const result of results) {
+      const normalizedLabel = result.label.trim().toUpperCase();
+      if (normalizedLabel === "REAL") {
+        realCount += 1;
+      } else if (normalizedLabel === "FAKE") {
+        fakeCount += 1;
+      }
+    }
+
+    const roundToOneDecimal = (value: number) => Math.round(value * 10) / 10;
+
+    const realPercent = roundToOneDecimal((realCount / total) * 100);
+    const fakePercent = roundToOneDecimal((fakeCount / total) * 100);
+
+    return { total, realCount, fakeCount, realPercent, fakePercent };
+  }, [results]);
 
   const handleFilesSelected = async (files: File[]) => {
     setLoading(true);
     setError(null);
-    const newResults: AnalysisResult[] = [];
 
     // Process files sequentially or in parallel?
     // Parallel is better for UX, but let's limit concurrency if needed.
@@ -105,7 +131,8 @@ export default function Home() {
         </div>
       )}
 
-      <ResultsGrid results={results} />
+      {summary && <ResultSummary {...summary} />}
+      <ResultsGrid results={results} hasSummary={Boolean(summary)} />
     </main>
   );
 }

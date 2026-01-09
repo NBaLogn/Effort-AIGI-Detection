@@ -20,3 +20,5 @@ facedata
 .specify/
 .vscode/
 .DS_Store
+
+gha-creds-*.json

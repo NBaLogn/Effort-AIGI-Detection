@@ -11,17 +11,20 @@ interface Result {
 
 interface ResultsGridProps {
     results: Result[];
+    hasSummary?: boolean;
 }
 
-export default function ResultsGrid({ results }: ResultsGridProps) {
+export default function ResultsGrid({ results, hasSummary = false }: ResultsGridProps) {
     if (results.length === 0) return null;
+
+    const marginTop = hasSummary ? '1.5rem' : '3rem';
 
     return (
         <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
             gap: '2rem',
-            marginTop: '3rem'
+            marginTop
         }}>
             {results.map((result, index) => (
                 <ResultCard
