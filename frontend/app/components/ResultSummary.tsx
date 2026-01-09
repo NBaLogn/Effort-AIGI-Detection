@@ -29,15 +29,25 @@ export default function ResultSummary({
         <div className={styles.headingText}>
           <p className={styles.label}>Latest batch</p>
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-            <h2 className={styles.title}>Upload summary</h2>
             <button
               onClick={onToggle}
               className={styles.collapseToggle}
               aria-expanded={!isCollapsed}
               title={isCollapsed ? "Expand section" : "Collapse section"}
             >
-              {isCollapsed ? ">" : "V"}
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={isCollapsed ? styles.collapsedIcon : ""}
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
             </button>
+            <h2 className={styles.title}>Upload summary</h2>
           </div>
         </div>
         <span className={styles.totalBadge}>{total} images</span>
