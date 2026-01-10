@@ -13,6 +13,12 @@ interface AnalysisResult {
   label: string;
   score: number;
   reasoning?: string;
+  kind?: "image" | "video";
+  videoMeta?: {
+    sampledFrames: number;
+    worstFrameIndex: number;
+    worstFrameScore: number;
+  };
 }
 
 interface Batch {
@@ -95,7 +101,11 @@ export default function Home() {
         formData.append("file", file);
 
         try {
-          const response = await fetch("http://localhost:8000/predict", {
+          const endpoint = file.type.startsWith("video/")
+            ? "http://localhost:8000/predict_video"
+            : "http://localhost:8000/predict";
+
+          const response = await fetch(endpoint, {
             method: "POST",
             body: formData,
           });
@@ -114,6 +124,14 @@ export default function Home() {
             label: data.label,
             score: data.score,
             reasoning: data.reasoning,
+            kind: file.type.startsWith("video/") ? "video" : "image",
+            videoMeta: file.type.startsWith("video/")
+              ? {
+                  sampledFrames: data.sampled_frames,
+                  worstFrameIndex: data.worst_frame_index,
+                  worstFrameScore: data.worst_frame_score,
+                }
+              : undefined,
           };
 
           addResult(result);

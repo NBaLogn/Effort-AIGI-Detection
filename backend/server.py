@@ -27,6 +27,7 @@ from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from gradcam_utils import reshape_transform
 from pydantic import BaseModel
+from video_utils import extract_frames
 
 # Import Grad-CAM
 from pytorch_grad_cam import GradCAM
@@ -465,6 +466,18 @@ class PredictionResponse(BaseModel):
     grad_cam_image: str  # Base64 encoded image
 
 
+class VideoPredictionResponse(BaseModel):
+    """Response model for video prediction results."""
+
+    label: str
+    score: float
+    reasoning: str | None = None
+    grad_cam_image: str  # Base64 encoded image from the most suspicious frame
+    sampled_frames: int
+    worst_frame_index: int
+    worst_frame_score: float
+
+
 @app.get("/health")
 def health_check() -> dict:
     """Health check endpoint."""
@@ -514,6 +527,93 @@ async def predict(file: UploadFile = File(...)) -> PredictionResponse:
         "score": float(prob),
         "reasoning": reasoning,
         "grad_cam_image": grad_cam_image,
+    }
+
+
+@app.post("/predict_video", response_model=VideoPredictionResponse)
+async def predict_video(file: UploadFile = File(...)) -> VideoPredictionResponse:
+    """Predict deepfake probability for an uploaded video.
+
+    The video is sampled into a fixed number of frames, each frame is run through the
+    same image pipeline, and the video-level score is the average frame score.
+
+    Returns Grad-CAM + reasoning for the most suspicious (highest fake-probability)
+    sampled frame.
+    """
+    if not server_state.model:
+        raise HTTPException(status_code=500, detail="Model not loaded")
+
+    contents = await file.read()
+
+    try:
+        extracted = extract_frames(contents, num_frames=60)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
+
+    frame_scores: list[float] = []
+    worst_idx = -1
+    worst_score = -1.0
+    worst_input_tensor: torch.Tensor | None = None
+    worst_img_float_norm: np.ndarray | None = None
+    worst_landmarks: np.ndarray | None = None
+
+    for frame in extracted:
+        # Mirror preprocess_image(), but start from an in-memory BGR frame.
+        face_aligned = frame.bgr
+        landmarks = None
+        if server_state.face_detector:
+            face_result = server_state.face_detector.extract_aligned_face(
+                frame.bgr,
+                res=224,
+            )
+            if face_result[0] is not None:
+                face_aligned = face_result[0]
+                landmarks = face_result[1]
+
+        img_rgb = cv2.cvtColor(face_aligned, cv2.COLOR_BGR2RGB)
+        img_float_norm = cv2.resize(img_rgb, (224, 224))
+        img_float_norm = np.float32(img_float_norm) / 255.0
+
+        input_tensor = ImagePreprocessor.preprocess_face(
+            cv2.cvtColor(np.uint8(img_float_norm * 255), cv2.COLOR_RGB2BGR),
+        ).to(server_state.device)
+
+        _label_str, prob, _reasoning = perform_inference(input_tensor)
+        frame_scores.append(float(prob))
+
+        if prob > worst_score:
+            worst_score = float(prob)
+            worst_idx = frame.index
+            worst_input_tensor = input_tensor
+            worst_img_float_norm = img_float_norm
+            worst_landmarks = landmarks
+
+    video_score = float(np.mean(frame_scores)) if frame_scores else 0.0
+    label_str = "FAKE" if video_score > Config.FAKE_PROBABILITY_THRESHOLD else "REAL"
+
+    reasoning = None
+    if (
+        label_str == "FAKE"
+        and worst_input_tensor is not None
+        and worst_landmarks is not None
+    ):
+        grayscale_cam = server_state.cam(input_tensor=worst_input_tensor, targets=None)
+        grayscale_cam = grayscale_cam[0, :]
+        reasoning = analyze_heatmap_regions(grayscale_cam, worst_landmarks)
+
+    if worst_input_tensor is None or worst_img_float_norm is None:
+        raise HTTPException(status_code=500, detail="Failed to compute video result")
+
+    grad_cam_image = generate_grad_cam(worst_input_tensor, worst_img_float_norm)
+
+    return {
+        "label": label_str,
+        "score": video_score,
+        "reasoning": reasoning,
+        "grad_cam_image": grad_cam_image,
+        "sampled_frames": len(extracted),
+        "worst_frame_index": int(worst_idx),
+        "worst_frame_score": float(worst_score),
     }
 
 

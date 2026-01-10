@@ -10,9 +10,15 @@ interface ResultCardProps {
     label: string;
     score: number;
     reasoning?: string;
+    kind?: "image" | "video";
+    videoMeta?: {
+        sampledFrames: number;
+        worstFrameIndex: number;
+        worstFrameScore: number;
+    };
 }
 
-export default function ResultCard({ filename, originalImage, gradCamImage, label, score, reasoning }: ResultCardProps) {
+export default function ResultCard({ filename, originalImage, gradCamImage, label, score, reasoning, kind, videoMeta }: ResultCardProps) {
     const [showGradCam, setShowGradCam] = useState(false);
 
     const isFake = label.toUpperCase() === 'FAKE';
@@ -69,6 +75,17 @@ export default function ResultCard({ filename, originalImage, gradCamImage, labe
                         <p className={styles.reasoningText}>{reasoning}</p>
                     </div>
                 )}
+
+                {kind === 'video' && videoMeta && (
+                    <div className={styles.videoMeta}>
+                        <small>Sampled frames: {videoMeta.sampledFrames}</small>
+                        <br />
+                        <small>Worst frame index: {videoMeta.worstFrameIndex}</small>
+                        <br />
+                        <small>Worst frame score: {(videoMeta.worstFrameScore * 100).toFixed(1)}%</small>
+                    </div>
+                )
+                }
             </div>
         </div>
     );

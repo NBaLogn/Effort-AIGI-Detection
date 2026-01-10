@@ -38,7 +38,9 @@ export default function Dropzone({ onFilesSelected, disabled }: DropzoneProps) {
 
         if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
             const files = Array.from(e.dataTransfer.files);
-            const validFiles = files.filter(file => file.type.startsWith('image/'));
+            const validFiles = files.filter(
+                (file) => file.type.startsWith('image/') || file.type.startsWith('video/'),
+            );
             if (validFiles.length > 0) {
                 onFilesSelected(validFiles);
             }
@@ -72,7 +74,7 @@ export default function Dropzone({ onFilesSelected, disabled }: DropzoneProps) {
                 ref={inputRef}
                 type="file"
                 multiple
-                accept="image/*"
+                accept="image/*,video/*"
                 onChange={handleChange}
                 className={styles.input}
                 disabled={disabled}
@@ -80,10 +82,10 @@ export default function Dropzone({ onFilesSelected, disabled }: DropzoneProps) {
             <div className={styles.content}>
                 <span className={styles.icon}>📁</span>
                 <p className={styles.text}>
-                    Drag & drop images or folders here, or click to select
+                    Drag & drop images/videos or folders here, or click to select
                 </p>
                 <p className={styles.subtext}>
-                    Supports JPG, PNG, WEBP
+                    Supports JPG, PNG, WEBP, MP4, WEBM
                 </p>
             </div>
         </div>
