@@ -190,7 +190,7 @@ export default function Home() {
     <main className="container">
       <h1 className="title">Deepfake Verification</h1>
       <p className="subtitle">
-        Upload images to detect AI manipulation using our advanced Effort-ViT model.
+        Upload images or videos to detect AI manipulation using our advanced Effort-ViT model.
         Hover over results to reveal Grad-CAM heatmaps.
       </p>
 

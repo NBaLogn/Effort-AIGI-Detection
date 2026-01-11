@@ -32,12 +32,20 @@ export default function ResultCard({ filename, originalImage, gradCamImage, labe
     return (
         <div className={styles.card}>
             <div className={styles.imageContainer} onMouseEnter={() => setShowGradCam(true)} onMouseLeave={() => setShowGradCam(false)}>
-                {/* We layer GradCAM on top with opacity transition */}
-                <img
-                    src={originalImage}
-                    alt={filename}
-                    className={styles.image}
-                />
+                {kind === 'video' ? (
+                    <video
+                        src={originalImage}
+                        className={styles.image}
+                        muted
+                        controls
+                    />
+                ) : (
+                    <img
+                        src={originalImage}
+                        alt={filename}
+                        className={styles.image}
+                    />
+                )}
                 {gradCamImage && (
                     <img
                         src={gradCamImage}
@@ -45,7 +53,7 @@ export default function ResultCard({ filename, originalImage, gradCamImage, labe
                         className={`${styles.overlay} ${showGradCam ? styles.visible : ''}`}
                     />
                 )}
-                <div className={styles.hoverHint}>Hover to see Grad-CAM</div>
+                <div className={styles.hoverHint}>{kind === 'video' ? 'Hover to see worst frame Grad-CAM' : 'Hover to see Grad-CAM'}</div>
             </div>
 
             <div className={styles.info}>
