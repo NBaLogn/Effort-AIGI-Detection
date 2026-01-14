@@ -15,10 +15,10 @@ Usage:
     uv run utils/reorganize_genimage_dataset.py /path/to/GenImageFaces --dry-run
 """
 
-import os
+import argparse
 import shutil
 from pathlib import Path
-import argparse
+
 from tqdm import tqdm
 
 
@@ -28,6 +28,7 @@ def reorganize_genimage_dataset(base_path, dry_run=False):
     Args:
         base_path: Path to the GenImageFaces dataset root directory
         dry_run: If True, only show what would be done without moving files
+
     """
     base_dir = Path(base_path)
 
@@ -127,16 +128,16 @@ def reorganize_genimage_dataset(base_path, dry_run=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Reorganize GenImageFaces dataset from generator-based to split-based structure."
+        description="Reorganize GenImageFaces dataset from generator-based to split-based structure.",
     )
     parser.add_argument(
         "base_path",
         nargs="?",
-        default="/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40",
+        default="/Volumes/Crucial/AI/DATASETS/SAMPLED/df40",
         help="Path to the GenImageFaces dataset root",
     )
     parser.add_argument(
-        "--dry-run", action="store_true", help="Print actions without executing them"
+        "--dry-run", action="store_true", help="Print actions without executing them",
     )
 
     args = parser.parse_args()

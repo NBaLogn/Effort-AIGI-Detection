@@ -1,8 +1,8 @@
 mode: train
 lmdb: True
 dry_run: false
-dataset_root_rgb: '/Volumes/Crucial/Large_Downloads/AI/DATASETS/DFB/rgb'
-lmdb_dir:  '/Volumes/Crucial/Large_Downloads/AI/DATASETS/DFB/lmdbs'
+dataset_root_rgb: '/Volumes/Crucial/AI/DATASETS/DFB/rgb'
+lmdb_dir:  '/Volumes/Crucial/AI/DATASETS/DFB/lmdbs'
 dataset_json_folder: '/Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json'
 SWA: False
 

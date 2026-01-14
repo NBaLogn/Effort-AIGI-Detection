@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_PATH="${1:-/Volumes/Crucial/Large_Downloads/AI/DATASETS/GenImage_faces_keep_struct}"
+ROOT_PATH="${1:-/Volumes/Crucial/AI/DATASETS/GenImage_faces_keep_struct}"
 
 if [[ ! -d "$ROOT_PATH" ]]; then
   echo "Directory not found: $ROOT_PATH" >&2

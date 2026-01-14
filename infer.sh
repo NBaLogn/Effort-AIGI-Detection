@@ -8,7 +8,7 @@ uv run 'DeepfakeBench/training/inference.py' \
     --weights \
         'DeepfakeBench/training/weights/finetuned/newBatchFaces.pth' \
     --image \
-        'DeepfakeBench/training/facedata/GenImage_faces_09/Midjourney/' \
+        '/Volumes/Crucial/AI/DATASETS/SAMPLED/Genimage_faces_09_flat' \
     --limit 0 \
     # --landmark_model \
         # 'DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat' \

@@ -13,7 +13,6 @@ Usage:
     # Default split ratio is 0.7 (70% train, 30% val)
 """
 
-import os
 import random
 import shutil
 from pathlib import Path
@@ -25,6 +24,7 @@ def split_dataset(base_path, split_ratio=0.7) -> None:
     Args:
         base_path: Path to dataset root containing 'fake' and 'real' subdirectories
         split_ratio: Ratio for train split (default: 0.7 = 70% train, 30% val)
+
     """
     base_dir = Path(base_path)
     classes = ["fake", "real"]
@@ -58,7 +58,7 @@ def split_dataset(base_path, split_ratio=0.7) -> None:
         val_files = files[split_idx:]
 
         print(
-            f"Processing class '{cls}': Found {len(files)} files. Split: {len(train_files)} train, {len(val_files)} val."
+            f"Processing class '{cls}': Found {len(files)} files. Split: {len(train_files)} train, {len(val_files)} val.",
         )
 
         # Create destination directories
@@ -85,5 +85,5 @@ def split_dataset(base_path, split_ratio=0.7) -> None:
 
 if __name__ == "__main__":
     split_dataset(
-        "/Volumes/Crucial/Large_Downloads/AI/DATASETS/SAMPLED/df40/whichfaceisreal",
+        "/Volumes/Crucial/AI/DATASETS/SAMPLED/df40/whichfaceisreal",
     )

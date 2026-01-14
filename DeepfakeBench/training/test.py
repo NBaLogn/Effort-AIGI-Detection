@@ -168,7 +168,7 @@ def main():
     config.update(config2)
     # on_2060 logic removed, using default paths but logging them
     config["workers"] = 8
-    config["lmdb_dir"] = r"/Volumes/Crucial/Large_Downloads/AI/DATASETS/DFB/lmdbs"
+    config["lmdb_dir"] = r"/Volumes/Crucial/AI/DATASETS/DFB/lmdbs"
     print(f"[WARNING] Using hardcoded path for lmdb_dir: {config['lmdb_dir']}")
     weights_path = None
     # If arguments are provided, they will overwrite the yaml settings
