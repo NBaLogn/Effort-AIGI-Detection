@@ -8,17 +8,17 @@ uv run 'DeepfakeBench/training/evaluate_finetune.py' \
 	--weights \
 		'DeepfakeBench/training/weights/finetuned/newBatchFaces.pth' \
 	--test_dataset \
-		'/Volumes/Crucial/AI/DATASETS/TalkingHead_processed' \
+		'DeepfakeBench/training/facedata/df40/CollabDiff' \
+        'DeepfakeBench/training/facedata/df40/deepfacelab' \
+        'DeepfakeBench/training/facedata/df40/heygen_new' \
+        'DeepfakeBench/training/facedata/df40/MidJourney' \
+        'DeepfakeBench/training/facedata/df40/stargan' \
+        'DeepfakeBench/training/facedata/df40/starganv2' \
+        'DeepfakeBench/training/facedata/df40/styleclip' \
+        'DeepfakeBench/training/facedata/df40/whichfaceisreal' \
 	--output_dir 'evaluation_results'
+		# 'DeepfakeBench/training/facedata/df40' \
 		# 'DeepfakeBench/training/facedata/Chameleon_retinafaces' \
-		# 'DeepfakeBench/training/facedata/df40/CollabDiff' \
-        # 'DeepfakeBench/training/facedata/df40/deepfacelab' \
-        # 'DeepfakeBench/training/facedata/df40/heygen_new' \
-        # 'DeepfakeBench/training/facedata/df40/MidJourney' \
-        # 'DeepfakeBench/training/facedata/df40/stargan' \
-        # 'DeepfakeBench/training/facedata/df40/starganv2' \
-        # 'DeepfakeBench/training/facedata/df40/styleclip' \
-        # 'DeepfakeBench/training/facedata/df40/whichfaceisreal' \
 		# 'DeepfakeBench/training/facedata/GenImage_faces_09/ADM' \
 		# 'DeepfakeBench/training/facedata/GenImage_faces_09/BigGAN' \
 		# 'DeepfakeBench/training/facedata/GenImage_faces_09/glide' \
