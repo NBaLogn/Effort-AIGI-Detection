@@ -1,0 +1,26 @@
+{
+  "dataset": "dataset_1_Genimage_faces_09_flat",
+  "timestamp": "20260115_081206",
+  "metrics": {
+    "auc": 0.9929991312790638,
+    "eer": 0.04220779220779221,
+    "accuracy": 0.9591298615688859,
+    "ap": 0.9892292710606018,
+    "precision": 0.9432387312186978,
+    "recall": 0.9527824620573356,
+    "f1": 0.947986577181208,
+    "sample_count": 1517,
+    "video_auc": 1.0,
+    "video_eer": 0.0,
+    "video_acc": 1.0
+  },
+  "config": {
+    "model_name": "effort",
+    "backbone_name": "vit",
+    "resolution": 224,
+    "frame_num": {
+      "train": 8,
+      "test": 16
+    }
+  }
+}

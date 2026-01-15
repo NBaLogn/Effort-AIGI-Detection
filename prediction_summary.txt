@@ -1,0 +1,27 @@
+============================================================
+PREDICTION ACCURACY SUMMARY
+============================================================
+
+OVERALL PERFORMANCE:
+  Total Images Processed: 41363
+  Correct Predictions:    0
+  Incorrect Predictions:  41363
+  Overall Accuracy:       0.00%
+
+REAL IMAGES:
+  Total Real Images:      0
+  Correctly Classified:   0
+  Accuracy:               0.00%
+
+FAKE IMAGES:
+  Total Fake Images:      0
+  Correctly Classified:   0
+  Accuracy:               0.00%
+
+ERROR ANALYSIS:
+  False Positives (Real → Fake): 0
+  False Negatives (Fake → Real): 0
+
+============================================================
+SUMMARY: Model achieved 0.00% accuracy
+============================================================

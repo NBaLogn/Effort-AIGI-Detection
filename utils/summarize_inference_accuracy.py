@@ -125,10 +125,10 @@ def generate_summary_report(stats):
     # Error analysis
     report.append("ERROR ANALYSIS:")
     report.append(
-        f"  False Positives (Real → Fake): {stats['real_total'] - stats['real_correct']}"
+        f"  False Positives (Real → Fake): {stats['real_total'] - stats['real_correct']}",
     )
     report.append(
-        f"  False Negatives (Fake → Real): {stats['fake_total'] - stats['fake_correct']}"
+        f"  False Negatives (Fake → Real): {stats['fake_total'] - stats['fake_correct']}",
     )
     report.append("")
 
