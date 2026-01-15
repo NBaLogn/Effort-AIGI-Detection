@@ -8192,3 +8192,1122 @@ FileNotFoundError: [Errno 2] No such file or directory: 'DeepfakeBench/training/
 2026-01-15 08:12:06,803 - INFO - Saved evaluation results to evaluation_results/dataset_1_Genimage_faces_09_flat_eval_20260115_081206.json
 2026-01-15 08:12:06,803 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
 2026-01-15 08:12:06,803 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-15 09:19:13,094 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-15 09:19:13,095 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-15 09:19:13,095 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-15 09:19:13,095 - INFO - pretrained: no need to provide this for the effort model
+2026-01-15 09:19:13,095 - INFO - model_name: effort
+2026-01-15 09:19:13,095 - INFO - backbone_name: vit
+2026-01-15 09:19:13,095 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-15 09:19:13,095 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-15 09:19:13,095 - INFO - train_dataset: ['UADFV']
+2026-01-15 09:19:13,095 - INFO - test_dataset: ['UADFV']
+2026-01-15 09:19:13,095 - INFO - train_batchSize: 8
+2026-01-15 09:19:13,095 - INFO - test_batchSize: 8
+2026-01-15 09:19:13,095 - INFO - workers: 4
+2026-01-15 09:19:13,095 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-15 09:19:13,095 - INFO - resolution: 224
+2026-01-15 09:19:13,095 - INFO - with_mask: False
+2026-01-15 09:19:13,095 - INFO - with_landmark: False
+2026-01-15 09:19:13,095 - INFO - use_data_augmentation: True
+2026-01-15 09:19:13,095 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-15 09:19:13,095 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-15 09:19:13,095 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-15 09:19:13,095 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-15 09:19:13,095 - INFO - lr_scheduler: cosine
+2026-01-15 09:19:13,095 - INFO - lr_T_max: 5
+2026-01-15 09:19:13,095 - INFO - lr_eta_min: 1e-06
+2026-01-15 09:19:13,095 - INFO - nEpochs: 5
+2026-01-15 09:19:13,095 - INFO - start_epoch: 0
+2026-01-15 09:19:13,095 - INFO - save_epoch: 1
+2026-01-15 09:19:13,095 - INFO - rec_iter: 50
+2026-01-15 09:19:13,095 - INFO - logdir: ./logs
+2026-01-15 09:19:13,096 - INFO - manualSeed: 1024
+2026-01-15 09:19:13,096 - INFO - save_ckpt: True
+2026-01-15 09:19:13,096 - INFO - save_feat: True
+2026-01-15 09:19:13,096 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-15 09:19:13,096 - INFO - loss_func: cross_entropy
+2026-01-15 09:19:13,096 - INFO - losstype: None
+2026-01-15 09:19:13,096 - INFO - metric_scoring: auc
+2026-01-15 09:19:13,096 - INFO - fine_tune: True
+2026-01-15 09:19:13,096 - INFO - pretrained_checkpoint: None
+2026-01-15 09:19:13,096 - INFO - freeze_backbone: True
+2026-01-15 09:19:13,096 - INFO - train_classification_head: True
+2026-01-15 09:19:13,096 - INFO - train_svd_residuals: True
+2026-01-15 09:19:13,096 - INFO - save_avg: True
+2026-01-15 09:19:13,096 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-15 09:19:13,096 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-15 09:19:13,096 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-15 09:19:30,468 - INFO - Model loaded successfully
+2026-01-15 09:19:30,471 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/deepfake_in_the_wild_processed/val']
+2026-01-15 09:19:30,472 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/deepfake_in_the_wild_processed/val
+2026-01-15 09:19:30,499 - INFO - Validating directory structure: /Volumes/Crucial/AI/DATASETS/deepfake_in_the_wild_processed/val
+2026-01-15 09:19:30,499 - INFO - All subdirectories found: ['real', 'fake']
+2026-01-15 09:19:30,500 - INFO - Found real directories: ['real']
+2026-01-15 09:19:30,500 - INFO - Found fake directories: ['fake']
+2026-01-15 09:19:30,500 - INFO - Discovering files in /Volumes/Crucial/AI/DATASETS/deepfake_in_the_wild_processed/val
+2026-01-15 09:19:30,500 - INFO - Processing real directory: real
+2026-01-15 09:19:31,400 - INFO - Processing fake directory: fake
+2026-01-15 09:19:33,963 - INFO - Checking for faulty images...
+2026-01-15 09:28:00,790 - INFO - No faulty images found.
+2026-01-15 09:28:00,798 - INFO - Dataset contains 58659 real and 107003 fake samples
+2026-01-15 09:28:00,826 - INFO - RawFileDataset initialized with 165662 samples for test mode
+2026-01-15 09:28:00,838 - INFO - Test loader prepared with 10354 batches
+2026-01-15 09:28:00,839 - INFO - Evaluating on dataset_1_val
+2026-01-15 09:29:12,328 - INFO - Processed batch 50/10354
+2026-01-15 09:30:01,908 - INFO - Processed batch 100/10354
+2026-01-15 09:30:51,231 - INFO - Processed batch 150/10354
+2026-01-15 09:31:41,053 - INFO - Processed batch 200/10354
+2026-01-15 09:32:31,812 - INFO - Processed batch 250/10354
+2026-01-15 09:33:20,797 - INFO - Processed batch 300/10354
+2026-01-15 09:34:11,189 - INFO - Processed batch 350/10354
+2026-01-15 09:35:00,220 - INFO - Processed batch 400/10354
+2026-01-15 09:35:50,404 - INFO - Processed batch 450/10354
+2026-01-15 09:36:40,945 - INFO - Processed batch 500/10354
+2026-01-15 09:37:30,599 - INFO - Processed batch 550/10354
+2026-01-15 09:38:19,739 - INFO - Processed batch 600/10354
+2026-01-15 09:39:08,721 - INFO - Processed batch 650/10354
+2026-01-15 09:39:57,856 - INFO - Processed batch 700/10354
+2026-01-15 09:40:47,594 - INFO - Processed batch 750/10354
+2026-01-15 09:41:37,112 - INFO - Processed batch 800/10354
+2026-01-15 09:42:27,719 - INFO - Processed batch 850/10354
+2026-01-15 09:43:17,519 - INFO - Processed batch 900/10354
+2026-01-15 09:44:07,005 - INFO - Processed batch 950/10354
+2026-01-15 09:45:00,764 - INFO - Processed batch 1000/10354
+2026-01-15 09:45:49,215 - INFO - Processed batch 1050/10354
+2026-01-15 09:46:37,806 - INFO - Processed batch 1100/10354
+2026-01-15 09:47:27,438 - INFO - Processed batch 1150/10354
+2026-01-15 09:48:15,872 - INFO - Processed batch 1200/10354
+2026-01-15 09:49:05,289 - INFO - Processed batch 1250/10354
+2026-01-15 09:49:54,156 - INFO - Processed batch 1300/10354
+2026-01-15 09:50:43,764 - INFO - Processed batch 1350/10354
+2026-01-15 09:51:32,264 - INFO - Processed batch 1400/10354
+2026-01-15 09:52:21,307 - INFO - Processed batch 1450/10354
+2026-01-15 09:53:10,446 - INFO - Processed batch 1500/10354
+2026-01-15 09:54:00,798 - INFO - Processed batch 1550/10354
+2026-01-15 09:54:50,782 - INFO - Processed batch 1600/10354
+2026-01-15 09:55:40,449 - INFO - Processed batch 1650/10354
+2026-01-15 09:56:30,359 - INFO - Processed batch 1700/10354
+2026-01-15 09:57:19,016 - INFO - Processed batch 1750/10354
+2026-01-15 09:58:07,637 - INFO - Processed batch 1800/10354
+2026-01-15 09:58:56,330 - INFO - Processed batch 1850/10354
+2026-01-15 09:59:45,139 - INFO - Processed batch 1900/10354
+2026-01-15 10:00:33,185 - INFO - Processed batch 1950/10354
+2026-01-15 10:01:21,127 - INFO - Processed batch 2000/10354
+2026-01-15 10:02:09,093 - INFO - Processed batch 2050/10354
+2026-01-15 10:02:56,886 - INFO - Processed batch 2100/10354
+2026-01-15 10:03:45,480 - INFO - Processed batch 2150/10354
+2026-01-15 10:04:34,038 - INFO - Processed batch 2200/10354
+2026-01-15 10:05:23,938 - INFO - Processed batch 2250/10354
+2026-01-15 10:06:12,915 - INFO - Processed batch 2300/10354
+2026-01-15 10:07:01,071 - INFO - Processed batch 2350/10354
+2026-01-15 10:07:48,749 - INFO - Processed batch 2400/10354
+2026-01-15 10:08:36,647 - INFO - Processed batch 2450/10354
+2026-01-15 10:09:24,522 - INFO - Processed batch 2500/10354
+2026-01-15 10:10:12,267 - INFO - Processed batch 2550/10354
+2026-01-15 10:11:00,238 - INFO - Processed batch 2600/10354
+2026-01-15 10:11:48,461 - INFO - Processed batch 2650/10354
+2026-01-15 10:12:36,905 - INFO - Processed batch 2700/10354
+2026-01-15 10:13:25,244 - INFO - Processed batch 2750/10354
+2026-01-15 10:14:13,141 - INFO - Processed batch 2800/10354
+2026-01-15 10:15:01,108 - INFO - Processed batch 2850/10354
+2026-01-15 10:15:50,116 - INFO - Processed batch 2900/10354
+2026-01-15 10:16:39,066 - INFO - Processed batch 2950/10354
+2026-01-15 10:17:27,196 - INFO - Processed batch 3000/10354
+2026-01-15 10:18:14,886 - INFO - Processed batch 3050/10354
+2026-01-15 10:19:03,423 - INFO - Processed batch 3100/10354
+2026-01-15 10:19:52,011 - INFO - Processed batch 3150/10354
+2026-01-15 10:20:41,371 - INFO - Processed batch 3200/10354
+2026-01-15 10:21:31,080 - INFO - Processed batch 3250/10354
+2026-01-15 10:22:20,176 - INFO - Processed batch 3300/10354
+2026-01-15 10:23:08,711 - INFO - Processed batch 3350/10354
+2026-01-15 10:23:56,977 - INFO - Processed batch 3400/10354
+2026-01-15 10:24:46,017 - INFO - Processed batch 3450/10354
+2026-01-15 10:25:38,300 - INFO - Processed batch 3500/10354
+2026-01-15 10:26:26,002 - INFO - Processed batch 3550/10354
+2026-01-15 10:27:14,898 - INFO - Processed batch 3600/10354
+2026-01-15 10:28:02,761 - INFO - Processed batch 3650/10354
+2026-01-15 10:28:51,142 - INFO - Processed batch 3700/10354
+2026-01-15 10:29:39,226 - INFO - Processed batch 3750/10354
+2026-01-15 10:30:27,196 - INFO - Processed batch 3800/10354
+2026-01-15 10:31:15,050 - INFO - Processed batch 3850/10354
+2026-01-15 10:32:03,251 - INFO - Processed batch 3900/10354
+2026-01-15 10:32:53,406 - INFO - Processed batch 3950/10354
+2026-01-15 10:33:43,855 - INFO - Processed batch 4000/10354
+2026-01-15 10:34:34,702 - INFO - Processed batch 4050/10354
+2026-01-15 10:35:25,282 - INFO - Processed batch 4100/10354
+2026-01-15 10:36:14,633 - INFO - Processed batch 4150/10354
+2026-01-15 10:37:02,602 - INFO - Processed batch 4200/10354
+2026-01-15 10:37:50,929 - INFO - Processed batch 4250/10354
+2026-01-15 10:38:39,849 - INFO - Processed batch 4300/10354
+2026-01-15 10:39:29,365 - INFO - Processed batch 4350/10354
+2026-01-15 10:40:18,191 - INFO - Processed batch 4400/10354
+2026-01-15 10:41:05,898 - INFO - Processed batch 4450/10354
+2026-01-15 10:41:53,678 - INFO - Processed batch 4500/10354
+2026-01-15 10:42:44,145 - INFO - Processed batch 4550/10354
+2026-01-15 10:43:37,555 - INFO - Processed batch 4600/10354
+2026-01-15 10:44:29,977 - INFO - Processed batch 4650/10354
+2026-01-15 10:45:21,633 - INFO - Processed batch 4700/10354
+2026-01-15 10:46:12,694 - INFO - Processed batch 4750/10354
+2026-01-15 10:47:04,535 - INFO - Processed batch 4800/10354
+2026-01-15 10:47:55,484 - INFO - Processed batch 4850/10354
+2026-01-15 10:48:46,479 - INFO - Processed batch 4900/10354
+2026-01-15 10:49:37,576 - INFO - Processed batch 4950/10354
+2026-01-15 10:50:28,577 - INFO - Processed batch 5000/10354
+2026-01-15 10:51:20,082 - INFO - Processed batch 5050/10354
+2026-01-15 10:52:11,404 - INFO - Processed batch 5100/10354
+2026-01-15 10:53:03,413 - INFO - Processed batch 5150/10354
+2026-01-15 10:53:54,991 - INFO - Processed batch 5200/10354
+2026-01-15 10:54:46,083 - INFO - Processed batch 5250/10354
+2026-01-15 10:55:37,328 - INFO - Processed batch 5300/10354
+2026-01-15 10:56:28,813 - INFO - Processed batch 5350/10354
+2026-01-15 10:57:20,736 - INFO - Processed batch 5400/10354
+2026-01-15 10:58:12,473 - INFO - Processed batch 5450/10354
+2026-01-15 10:59:04,128 - INFO - Processed batch 5500/10354
+2026-01-15 10:59:56,966 - INFO - Processed batch 5550/10354
+2026-01-15 11:00:50,024 - INFO - Processed batch 5600/10354
+2026-01-15 11:01:39,665 - INFO - Processed batch 5650/10354
+2026-01-15 11:02:28,477 - INFO - Processed batch 5700/10354
+2026-01-15 11:03:20,416 - INFO - Processed batch 5750/10354
+2026-01-15 11:04:12,409 - INFO - Processed batch 5800/10354
+2026-01-15 11:05:04,134 - INFO - Processed batch 5850/10354
+2026-01-15 11:05:55,309 - INFO - Processed batch 5900/10354
+2026-01-15 11:06:47,206 - INFO - Processed batch 5950/10354
+2026-01-15 11:07:38,635 - INFO - Processed batch 6000/10354
+2026-01-15 11:08:32,108 - INFO - Processed batch 6050/10354
+2026-01-15 11:09:23,929 - INFO - Processed batch 6100/10354
+2026-01-15 11:10:14,219 - INFO - Processed batch 6150/10354
+2026-01-15 11:11:03,461 - INFO - Processed batch 6200/10354
+2026-01-15 11:11:51,950 - INFO - Processed batch 6250/10354
+2026-01-15 11:12:40,074 - INFO - Processed batch 6300/10354
+2026-01-15 11:13:28,580 - INFO - Processed batch 6350/10354
+2026-01-15 11:14:17,512 - INFO - Processed batch 6400/10354
+2026-01-15 11:15:05,641 - INFO - Processed batch 6450/10354
+2026-01-15 11:15:53,209 - INFO - Processed batch 6500/10354
+2026-01-15 11:16:41,525 - INFO - Processed batch 6550/10354
+2026-01-15 11:17:29,041 - INFO - Processed batch 6600/10354
+2026-01-15 11:18:16,698 - INFO - Processed batch 6650/10354
+2026-01-15 11:19:04,350 - INFO - Processed batch 6700/10354
+2026-01-15 11:19:52,614 - INFO - Processed batch 6750/10354
+2026-01-15 11:20:40,753 - INFO - Processed batch 6800/10354
+2026-01-15 11:21:30,010 - INFO - Processed batch 6850/10354
+2026-01-15 11:22:18,945 - INFO - Processed batch 6900/10354
+2026-01-15 11:23:07,829 - INFO - Processed batch 6950/10354
+2026-01-15 11:23:56,341 - INFO - Processed batch 7000/10354
+2026-01-15 11:24:46,426 - INFO - Processed batch 7050/10354
+2026-01-15 11:25:36,200 - INFO - Processed batch 7100/10354
+2026-01-15 11:26:25,442 - INFO - Processed batch 7150/10354
+2026-01-15 11:27:17,670 - INFO - Processed batch 7200/10354
+2026-01-15 11:28:06,168 - INFO - Processed batch 7250/10354
+2026-01-15 11:28:54,727 - INFO - Processed batch 7300/10354
+2026-01-15 11:29:43,901 - INFO - Processed batch 7350/10354
+2026-01-15 11:30:32,485 - INFO - Processed batch 7400/10354
+2026-01-15 11:31:20,714 - INFO - Processed batch 7450/10354
+2026-01-15 11:32:08,738 - INFO - Processed batch 7500/10354
+2026-01-15 11:32:56,830 - INFO - Processed batch 7550/10354
+2026-01-15 11:33:45,118 - INFO - Processed batch 7600/10354
+2026-01-15 11:34:33,060 - INFO - Processed batch 7650/10354
+2026-01-15 11:35:21,449 - INFO - Processed batch 7700/10354
+2026-01-15 11:36:10,145 - INFO - Processed batch 7750/10354
+2026-01-15 11:36:59,071 - INFO - Processed batch 7800/10354
+2026-01-15 11:37:47,133 - INFO - Processed batch 7850/10354
+2026-01-15 11:38:35,087 - INFO - Processed batch 7900/10354
+2026-01-15 11:39:24,440 - INFO - Processed batch 7950/10354
+2026-01-15 11:40:13,921 - INFO - Processed batch 8000/10354
+2026-01-15 11:41:03,132 - INFO - Processed batch 8050/10354
+2026-01-15 11:41:52,333 - INFO - Processed batch 8100/10354
+2026-01-15 11:42:40,351 - INFO - Processed batch 8150/10354
+2026-01-15 11:43:29,443 - INFO - Processed batch 8200/10354
+2026-01-15 11:44:18,382 - INFO - Processed batch 8250/10354
+2026-01-15 11:45:07,584 - INFO - Processed batch 8300/10354
+2026-01-15 11:45:56,866 - INFO - Processed batch 8350/10354
+2026-01-15 11:46:46,351 - INFO - Processed batch 8400/10354
+2026-01-15 11:47:36,544 - INFO - Processed batch 8450/10354
+2026-01-15 11:48:27,613 - INFO - Processed batch 8500/10354
+2026-01-15 11:49:16,343 - INFO - Processed batch 8550/10354
+2026-01-15 11:50:04,241 - INFO - Processed batch 8600/10354
+2026-01-15 11:50:52,089 - INFO - Processed batch 8650/10354
+2026-01-15 11:51:41,204 - INFO - Processed batch 8700/10354
+2026-01-15 11:52:28,811 - INFO - Processed batch 8750/10354
+2026-01-15 11:53:17,586 - INFO - Processed batch 8800/10354
+2026-01-15 11:54:06,243 - INFO - Processed batch 8850/10354
+2026-01-15 11:54:54,730 - INFO - Processed batch 8900/10354
+2026-01-15 11:55:43,081 - INFO - Processed batch 8950/10354
+2026-01-15 11:56:32,358 - INFO - Processed batch 9000/10354
+2026-01-15 11:57:21,114 - INFO - Processed batch 9050/10354
+2026-01-15 11:58:10,303 - INFO - Processed batch 9100/10354
+2026-01-15 11:58:59,909 - INFO - Processed batch 9150/10354
+2026-01-15 11:59:48,920 - INFO - Processed batch 9200/10354
+2026-01-15 12:00:38,197 - INFO - Processed batch 9250/10354
+2026-01-15 12:38:46,530 - INFO - Processed batch 9300/10354
+2026-01-15 12:39:34,197 - INFO - Processed batch 9350/10354
+2026-01-15 12:40:21,925 - INFO - Processed batch 9400/10354
+2026-01-15 12:41:09,575 - INFO - Processed batch 9450/10354
+2026-01-15 12:41:57,052 - INFO - Processed batch 9500/10354
+2026-01-15 12:42:44,742 - INFO - Processed batch 9550/10354
+2026-01-15 12:43:32,385 - INFO - Processed batch 9600/10354
+2026-01-15 12:44:20,087 - INFO - Processed batch 9650/10354
+2026-01-15 12:45:07,715 - INFO - Processed batch 9700/10354
+2026-01-15 12:45:55,304 - INFO - Processed batch 9750/10354
+2026-01-15 12:46:43,003 - INFO - Processed batch 9800/10354
+2026-01-15 12:47:30,657 - INFO - Processed batch 9850/10354
+2026-01-15 12:48:18,341 - INFO - Processed batch 9900/10354
+2026-01-15 12:49:06,057 - INFO - Processed batch 9950/10354
+2026-01-15 12:49:54,384 - INFO - Processed batch 10000/10354
+2026-01-15 12:50:42,068 - INFO - Processed batch 10050/10354
+2026-01-15 12:51:29,681 - INFO - Processed batch 10100/10354
+2026-01-15 12:52:17,386 - INFO - Processed batch 10150/10354
+2026-01-15 12:53:05,115 - INFO - Processed batch 10200/10354
+2026-01-15 12:53:52,593 - INFO - Processed batch 10250/10354
+2026-01-15 12:54:40,271 - INFO - Processed batch 10300/10354
+2026-01-15 12:55:27,905 - INFO - Processed batch 10350/10354
+2026-01-15 12:55:52,568 - INFO - Evaluation results for dataset_1_val:
+2026-01-15 12:55:52,569 - INFO -   auc: 0.8583
+2026-01-15 12:55:52,569 - INFO -   eer: 0.2331
+2026-01-15 12:55:52,569 - INFO -   accuracy: 0.7698
+2026-01-15 12:55:52,569 - INFO -   ap: 0.9225
+2026-01-15 12:55:52,569 - INFO -   precision: 0.8465
+2026-01-15 12:55:52,569 - INFO -   recall: 0.7862
+2026-01-15 12:55:52,569 - INFO -   f1: 0.8152
+2026-01-15 12:55:52,569 - INFO -   sample_count: 165662.0000
+2026-01-15 12:55:52,569 - INFO -   video_auc: 1.0000
+2026-01-15 12:55:52,569 - INFO -   video_eer: 0.0000
+2026-01-15 12:55:52,569 - INFO -   video_acc: 1.0000
+2026-01-15 12:55:52,602 - INFO - Saved evaluation results to evaluation_results/dataset_1_val_eval_20260115_125552.json
+2026-01-15 12:55:52,603 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-15 12:55:52,603 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-15 13:35:17,325 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-15 13:35:17,326 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-15 13:35:17,326 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-15 13:35:17,326 - INFO - pretrained: no need to provide this for the effort model
+2026-01-15 13:35:17,326 - INFO - model_name: effort
+2026-01-15 13:35:17,326 - INFO - backbone_name: vit
+2026-01-15 13:35:17,326 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-15 13:35:17,326 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-15 13:35:17,326 - INFO - train_dataset: ['UADFV']
+2026-01-15 13:35:17,326 - INFO - test_dataset: ['UADFV']
+2026-01-15 13:35:17,326 - INFO - train_batchSize: 8
+2026-01-15 13:35:17,326 - INFO - test_batchSize: 8
+2026-01-15 13:35:17,326 - INFO - workers: 4
+2026-01-15 13:35:17,326 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-15 13:35:17,326 - INFO - resolution: 224
+2026-01-15 13:35:17,326 - INFO - with_mask: False
+2026-01-15 13:35:17,326 - INFO - with_landmark: False
+2026-01-15 13:35:17,326 - INFO - use_data_augmentation: True
+2026-01-15 13:35:17,326 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-15 13:35:17,326 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-15 13:35:17,326 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-15 13:35:17,326 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-15 13:35:17,326 - INFO - lr_scheduler: cosine
+2026-01-15 13:35:17,326 - INFO - lr_T_max: 5
+2026-01-15 13:35:17,326 - INFO - lr_eta_min: 1e-06
+2026-01-15 13:35:17,326 - INFO - nEpochs: 5
+2026-01-15 13:35:17,326 - INFO - start_epoch: 0
+2026-01-15 13:35:17,326 - INFO - save_epoch: 1
+2026-01-15 13:35:17,326 - INFO - rec_iter: 50
+2026-01-15 13:35:17,326 - INFO - logdir: ./logs
+2026-01-15 13:35:17,326 - INFO - manualSeed: 1024
+2026-01-15 13:35:17,326 - INFO - save_ckpt: True
+2026-01-15 13:35:17,326 - INFO - save_feat: True
+2026-01-15 13:35:17,326 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-15 13:35:17,326 - INFO - loss_func: cross_entropy
+2026-01-15 13:35:17,326 - INFO - losstype: None
+2026-01-15 13:35:17,326 - INFO - metric_scoring: auc
+2026-01-15 13:35:17,326 - INFO - fine_tune: True
+2026-01-15 13:35:17,326 - INFO - pretrained_checkpoint: None
+2026-01-15 13:35:17,326 - INFO - freeze_backbone: True
+2026-01-15 13:35:17,326 - INFO - train_classification_head: True
+2026-01-15 13:35:17,326 - INFO - train_svd_residuals: True
+2026-01-15 13:35:17,327 - INFO - save_avg: True
+2026-01-15 13:35:17,327 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-15 13:35:17,327 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-15 13:35:17,327 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-15 13:35:34,464 - INFO - Model loaded successfully
+2026-01-15 13:35:34,465 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/humans100k_jpg']
+2026-01-15 13:35:34,466 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/humans100k_jpg
+2026-01-15 13:35:34,481 - INFO - Validating directory structure: /Volumes/Crucial/AI/DATASETS/humans100k_jpg
+2026-01-15 13:35:34,483 - INFO - All subdirectories found: ['fake']
+2026-01-15 13:35:34,484 - INFO - Found real directories: []
+2026-01-15 13:35:34,484 - INFO - Found fake directories: ['fake']
+2026-01-15 13:35:34,484 - INFO - Discovering files in /Volumes/Crucial/AI/DATASETS/humans100k_jpg
+2026-01-15 13:35:34,485 - INFO - Processing fake directory: fake
+2026-01-15 13:35:35,415 - INFO - Checking for faulty images...
+2026-01-15 13:37:36,674 - INFO - No faulty images found.
+2026-01-15 13:37:36,676 - INFO - Dataset contains 0 real and 100000 fake samples
+2026-01-15 13:37:36,682 - INFO - RawFileDataset initialized with 100000 samples for test mode
+2026-01-15 13:37:36,684 - INFO - Test loader prepared with 6250 batches
+2026-01-15 13:37:36,684 - INFO - Evaluating on dataset_1_humans100k_jpg
+2026-01-15 13:38:41,476 - INFO - Processed batch 50/6250
+2026-01-15 13:39:29,207 - INFO - Processed batch 100/6250
+2026-01-15 13:40:16,779 - INFO - Processed batch 150/6250
+2026-01-15 13:41:04,166 - INFO - Processed batch 200/6250
+2026-01-15 13:41:51,674 - INFO - Processed batch 250/6250
+2026-01-15 13:42:39,397 - INFO - Processed batch 300/6250
+2026-01-15 13:43:26,952 - INFO - Processed batch 350/6250
+2026-01-15 13:44:14,539 - INFO - Processed batch 400/6250
+2026-01-15 13:45:02,137 - INFO - Processed batch 450/6250
+2026-01-15 13:45:49,834 - INFO - Processed batch 500/6250
+2026-01-15 13:46:37,193 - INFO - Processed batch 550/6250
+2026-01-15 13:47:24,469 - INFO - Processed batch 600/6250
+2026-01-15 13:48:11,797 - INFO - Processed batch 650/6250
+2026-01-15 13:48:59,359 - INFO - Processed batch 700/6250
+2026-01-15 13:49:46,789 - INFO - Processed batch 750/6250
+2026-01-15 13:50:34,291 - INFO - Processed batch 800/6250
+2026-01-15 13:51:21,612 - INFO - Processed batch 850/6250
+2026-01-15 13:52:09,332 - INFO - Processed batch 900/6250
+2026-01-15 13:52:57,138 - INFO - Processed batch 950/6250
+2026-01-15 13:53:47,828 - INFO - Processed batch 1000/6250
+2026-01-15 13:54:35,554 - INFO - Processed batch 1050/6250
+2026-01-15 13:55:23,377 - INFO - Processed batch 1100/6250
+2026-01-15 13:56:11,668 - INFO - Processed batch 1150/6250
+2026-01-15 13:56:59,428 - INFO - Processed batch 1200/6250
+2026-01-15 13:57:47,464 - INFO - Processed batch 1250/6250
+2026-01-15 13:58:35,284 - INFO - Processed batch 1300/6250
+2026-01-15 13:59:23,372 - INFO - Processed batch 1350/6250
+2026-01-15 14:00:11,769 - INFO - Processed batch 1400/6250
+2026-01-15 14:00:59,752 - INFO - Processed batch 1450/6250
+2026-01-15 14:01:47,595 - INFO - Processed batch 1500/6250
+2026-01-15 14:02:35,261 - INFO - Processed batch 1550/6250
+2026-01-15 14:03:23,143 - INFO - Processed batch 1600/6250
+2026-01-15 14:04:11,479 - INFO - Processed batch 1650/6250
+2026-01-15 14:04:59,275 - INFO - Processed batch 1700/6250
+2026-01-15 14:05:46,549 - INFO - Processed batch 1750/6250
+2026-01-15 14:06:33,836 - INFO - Processed batch 1800/6250
+2026-01-15 14:07:21,080 - INFO - Processed batch 1850/6250
+2026-01-15 14:08:08,556 - INFO - Processed batch 1900/6250
+2026-01-15 14:08:57,642 - INFO - Processed batch 1950/6250
+2026-01-15 14:09:45,829 - INFO - Processed batch 2000/6250
+2026-01-15 14:10:33,885 - INFO - Processed batch 2050/6250
+2026-01-15 14:11:21,886 - INFO - Processed batch 2100/6250
+2026-01-15 14:12:09,649 - INFO - Processed batch 2150/6250
+2026-01-15 14:12:57,232 - INFO - Processed batch 2200/6250
+2026-01-15 14:13:44,806 - INFO - Processed batch 2250/6250
+2026-01-15 14:14:32,794 - INFO - Processed batch 2300/6250
+2026-01-15 14:15:20,820 - INFO - Processed batch 2350/6250
+2026-01-15 14:16:08,869 - INFO - Processed batch 2400/6250
+2026-01-15 14:16:56,938 - INFO - Processed batch 2450/6250
+2026-01-15 14:17:44,952 - INFO - Processed batch 2500/6250
+2026-01-15 14:18:32,507 - INFO - Processed batch 2550/6250
+2026-01-15 14:19:19,875 - INFO - Processed batch 2600/6250
+2026-01-15 14:20:07,133 - INFO - Processed batch 2650/6250
+2026-01-15 14:20:54,428 - INFO - Processed batch 2700/6250
+2026-01-15 14:21:41,805 - INFO - Processed batch 2750/6250
+2026-01-15 14:22:29,072 - INFO - Processed batch 2800/6250
+2026-01-15 14:23:16,755 - INFO - Processed batch 2850/6250
+2026-01-15 14:24:04,128 - INFO - Processed batch 2900/6250
+2026-01-15 14:24:51,413 - INFO - Processed batch 2950/6250
+2026-01-15 14:25:38,850 - INFO - Processed batch 3000/6250
+2026-01-15 14:26:26,759 - INFO - Processed batch 3050/6250
+2026-01-15 14:27:13,883 - INFO - Processed batch 3100/6250
+2026-01-15 14:28:01,151 - INFO - Processed batch 3150/6250
+2026-01-15 14:28:48,709 - INFO - Processed batch 3200/6250
+2026-01-15 14:29:36,470 - INFO - Processed batch 3250/6250
+2026-01-15 14:30:24,050 - INFO - Processed batch 3300/6250
+2026-01-15 14:31:11,276 - INFO - Processed batch 3350/6250
+2026-01-15 14:31:59,758 - INFO - Processed batch 3400/6250
+2026-01-15 14:32:47,161 - INFO - Processed batch 3450/6250
+2026-01-15 14:33:34,384 - INFO - Processed batch 3500/6250
+2026-01-15 14:34:21,693 - INFO - Processed batch 3550/6250
+2026-01-15 14:35:09,128 - INFO - Processed batch 3600/6250
+2026-01-15 14:35:56,493 - INFO - Processed batch 3650/6250
+2026-01-15 14:36:43,812 - INFO - Processed batch 3700/6250
+2026-01-15 14:37:31,029 - INFO - Processed batch 3750/6250
+2026-01-15 14:38:18,313 - INFO - Processed batch 3800/6250
+2026-01-15 14:39:05,549 - INFO - Processed batch 3850/6250
+2026-01-15 14:39:53,149 - INFO - Processed batch 3900/6250
+2026-01-15 14:40:41,496 - INFO - Processed batch 3950/6250
+2026-01-15 14:41:29,418 - INFO - Processed batch 4000/6250
+2026-01-15 14:42:17,221 - INFO - Processed batch 4050/6250
+2026-01-15 14:43:04,980 - INFO - Processed batch 4100/6250
+2026-01-15 14:43:52,775 - INFO - Processed batch 4150/6250
+2026-01-15 14:44:40,452 - INFO - Processed batch 4200/6250
+2026-01-15 14:45:27,737 - INFO - Processed batch 4250/6250
+2026-01-15 14:46:14,991 - INFO - Processed batch 4300/6250
+2026-01-15 14:47:02,613 - INFO - Processed batch 4350/6250
+2026-01-15 14:47:50,104 - INFO - Processed batch 4400/6250
+2026-01-15 14:48:37,734 - INFO - Processed batch 4450/6250
+2026-01-15 14:49:25,136 - INFO - Processed batch 4500/6250
+2026-01-15 14:50:13,547 - INFO - Processed batch 4550/6250
+2026-01-15 14:51:01,638 - INFO - Processed batch 4600/6250
+2026-01-15 14:51:49,256 - INFO - Processed batch 4650/6250
+2026-01-15 14:52:36,514 - INFO - Processed batch 4700/6250
+2026-01-15 14:53:24,359 - INFO - Processed batch 4750/6250
+2026-01-15 14:54:12,214 - INFO - Processed batch 4800/6250
+2026-01-15 14:55:00,068 - INFO - Processed batch 4850/6250
+2026-01-15 14:55:48,522 - INFO - Processed batch 4900/6250
+2026-01-15 14:56:37,764 - INFO - Processed batch 4950/6250
+2026-01-15 14:57:34,358 - INFO - Processed batch 5000/6250
+2026-01-15 14:58:31,747 - INFO - Processed batch 5050/6250
+2026-01-15 14:59:27,757 - INFO - Processed batch 5100/6250
+2026-01-15 15:00:17,267 - INFO - Processed batch 5150/6250
+2026-01-15 15:01:06,618 - INFO - Processed batch 5200/6250
+2026-01-15 15:01:56,152 - INFO - Processed batch 5250/6250
+2026-01-15 15:02:44,465 - INFO - Processed batch 5300/6250
+2026-01-15 15:03:32,750 - INFO - Processed batch 5350/6250
+2026-01-15 15:04:21,266 - INFO - Processed batch 5400/6250
+2026-01-15 15:05:09,779 - INFO - Processed batch 5450/6250
+2026-01-15 15:05:58,279 - INFO - Processed batch 5500/6250
+2026-01-15 15:06:46,351 - INFO - Processed batch 5550/6250
+2026-01-15 15:07:34,186 - INFO - Processed batch 5600/6250
+2026-01-15 15:08:22,040 - INFO - Processed batch 5650/6250
+2026-01-15 15:09:09,834 - INFO - Processed batch 5700/6250
+2026-01-15 15:09:58,539 - INFO - Processed batch 5750/6250
+2026-01-15 15:10:46,567 - INFO - Processed batch 5800/6250
+2026-01-15 15:11:34,381 - INFO - Processed batch 5850/6250
+2026-01-15 15:12:21,794 - INFO - Processed batch 5900/6250
+2026-01-15 15:13:09,008 - INFO - Processed batch 5950/6250
+2026-01-15 15:13:56,273 - INFO - Processed batch 6000/6250
+2026-01-15 15:14:43,507 - INFO - Processed batch 6050/6250
+2026-01-15 15:15:30,771 - INFO - Processed batch 6100/6250
+2026-01-15 15:16:18,008 - INFO - Processed batch 6150/6250
+2026-01-15 15:17:05,366 - INFO - Processed batch 6200/6250
+2026-01-15 15:17:53,071 - INFO - Processed batch 6250/6250
+2026-01-15 15:18:13,227 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/humans100k_jpg: All-NaN slice encountered
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 327, in main
+    metrics = evaluate_model(model, test_loader, device, dataset_name)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 201, in evaluate_model
+    metric_results = get_test_metrics(
+        y_pred=np.array(all_probs),
+        y_true=np.array(all_labels),
+        img_names=all_names,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/metrics/utils.py", line 153, in get_test_metrics
+    eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
+              ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/.venv/lib/python3.13/site-packages/numpy/lib/_nanfunctions_impl.py", line 562, in nanargmin
+    raise ValueError("All-NaN slice encountered")
+ValueError: All-NaN slice encountered
+2026-01-15 15:18:13,330 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-15 15:18:13,330 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-15 16:22:43,538 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-15 16:22:43,538 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-15 16:22:43,538 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-15 16:22:43,538 - INFO - pretrained: no need to provide this for the effort model
+2026-01-15 16:22:43,538 - INFO - model_name: effort
+2026-01-15 16:22:43,538 - INFO - backbone_name: vit
+2026-01-15 16:22:43,539 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-15 16:22:43,539 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-15 16:22:43,539 - INFO - train_dataset: ['UADFV']
+2026-01-15 16:22:43,539 - INFO - test_dataset: ['UADFV']
+2026-01-15 16:22:43,539 - INFO - train_batchSize: 8
+2026-01-15 16:22:43,539 - INFO - test_batchSize: 8
+2026-01-15 16:22:43,539 - INFO - workers: 4
+2026-01-15 16:22:43,539 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-15 16:22:43,539 - INFO - resolution: 224
+2026-01-15 16:22:43,539 - INFO - with_mask: False
+2026-01-15 16:22:43,539 - INFO - with_landmark: False
+2026-01-15 16:22:43,539 - INFO - use_data_augmentation: True
+2026-01-15 16:22:43,539 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-15 16:22:43,539 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-15 16:22:43,539 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-15 16:22:43,539 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-15 16:22:43,539 - INFO - lr_scheduler: cosine
+2026-01-15 16:22:43,539 - INFO - lr_T_max: 5
+2026-01-15 16:22:43,539 - INFO - lr_eta_min: 1e-06
+2026-01-15 16:22:43,539 - INFO - nEpochs: 5
+2026-01-15 16:22:43,539 - INFO - start_epoch: 0
+2026-01-15 16:22:43,539 - INFO - save_epoch: 1
+2026-01-15 16:22:43,539 - INFO - rec_iter: 50
+2026-01-15 16:22:43,539 - INFO - logdir: ./logs
+2026-01-15 16:22:43,539 - INFO - manualSeed: 1024
+2026-01-15 16:22:43,539 - INFO - save_ckpt: True
+2026-01-15 16:22:43,539 - INFO - save_feat: True
+2026-01-15 16:22:43,539 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-15 16:22:43,539 - INFO - loss_func: cross_entropy
+2026-01-15 16:22:43,539 - INFO - losstype: None
+2026-01-15 16:22:43,539 - INFO - metric_scoring: auc
+2026-01-15 16:22:43,539 - INFO - fine_tune: True
+2026-01-15 16:22:43,539 - INFO - pretrained_checkpoint: None
+2026-01-15 16:22:43,539 - INFO - freeze_backbone: True
+2026-01-15 16:22:43,539 - INFO - train_classification_head: True
+2026-01-15 16:22:43,539 - INFO - train_svd_residuals: True
+2026-01-15 16:22:43,539 - INFO - save_avg: True
+2026-01-15 16:22:43,539 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-15 16:22:43,539 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-15 16:22:43,539 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-15 16:23:02,059 - INFO - Model loaded successfully
+2026-01-15 16:23:02,061 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/test_dts']
+2026-01-15 16:23:02,061 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/test_dts
+2026-01-15 16:23:02,064 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/test_dts: Raw data root directory not found: /Volumes/Crucial/AI/DATASETS/test_dts
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 213, in __init__
+    raise FileNotFoundError(
+        f"Raw data root directory not found: {self.raw_data_root}",
+    )
+FileNotFoundError: Raw data root directory not found: /Volumes/Crucial/AI/DATASETS/test_dts
+2026-01-15 16:23:02,069 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-15 16:23:02,069 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-15 16:23:43,319 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-15 16:23:43,319 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-15 16:23:43,319 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-15 16:23:43,319 - INFO - pretrained: no need to provide this for the effort model
+2026-01-15 16:23:43,319 - INFO - model_name: effort
+2026-01-15 16:23:43,319 - INFO - backbone_name: vit
+2026-01-15 16:23:43,319 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-15 16:23:43,319 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-15 16:23:43,319 - INFO - train_dataset: ['UADFV']
+2026-01-15 16:23:43,319 - INFO - test_dataset: ['UADFV']
+2026-01-15 16:23:43,319 - INFO - train_batchSize: 8
+2026-01-15 16:23:43,319 - INFO - test_batchSize: 8
+2026-01-15 16:23:43,319 - INFO - workers: 4
+2026-01-15 16:23:43,319 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-15 16:23:43,320 - INFO - resolution: 224
+2026-01-15 16:23:43,320 - INFO - with_mask: False
+2026-01-15 16:23:43,320 - INFO - with_landmark: False
+2026-01-15 16:23:43,320 - INFO - use_data_augmentation: True
+2026-01-15 16:23:43,320 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-15 16:23:43,320 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-15 16:23:43,320 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-15 16:23:43,320 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-15 16:23:43,320 - INFO - lr_scheduler: cosine
+2026-01-15 16:23:43,320 - INFO - lr_T_max: 5
+2026-01-15 16:23:43,320 - INFO - lr_eta_min: 1e-06
+2026-01-15 16:23:43,320 - INFO - nEpochs: 5
+2026-01-15 16:23:43,320 - INFO - start_epoch: 0
+2026-01-15 16:23:43,320 - INFO - save_epoch: 1
+2026-01-15 16:23:43,320 - INFO - rec_iter: 50
+2026-01-15 16:23:43,320 - INFO - logdir: ./logs
+2026-01-15 16:23:43,320 - INFO - manualSeed: 1024
+2026-01-15 16:23:43,320 - INFO - save_ckpt: True
+2026-01-15 16:23:43,320 - INFO - save_feat: True
+2026-01-15 16:23:43,320 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-15 16:23:43,320 - INFO - loss_func: cross_entropy
+2026-01-15 16:23:43,320 - INFO - losstype: None
+2026-01-15 16:23:43,320 - INFO - metric_scoring: auc
+2026-01-15 16:23:43,320 - INFO - fine_tune: True
+2026-01-15 16:23:43,320 - INFO - pretrained_checkpoint: None
+2026-01-15 16:23:43,320 - INFO - freeze_backbone: True
+2026-01-15 16:23:43,320 - INFO - train_classification_head: True
+2026-01-15 16:23:43,320 - INFO - train_svd_residuals: True
+2026-01-15 16:23:43,320 - INFO - save_avg: True
+2026-01-15 16:23:43,320 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-15 16:23:43,320 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-15 16:23:43,321 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-15 16:24:00,784 - INFO - Model loaded successfully
+2026-01-15 16:24:00,787 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/test-dts']
+2026-01-15 16:24:00,787 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/test-dts
+2026-01-15 16:24:00,803 - INFO - Validating directory structure: /Volumes/Crucial/AI/DATASETS/test-dts
+2026-01-15 16:24:00,895 - INFO - All subdirectories found: ['fake']
+2026-01-15 16:24:00,895 - INFO - Found real directories: []
+2026-01-15 16:24:00,895 - INFO - Found fake directories: ['fake']
+2026-01-15 16:24:00,895 - INFO - Discovering files in /Volumes/Crucial/AI/DATASETS/test-dts
+2026-01-15 16:24:00,895 - INFO - Processing fake directory: fake
+2026-01-15 16:24:00,898 - INFO - Checking for faulty images...
+2026-01-15 16:24:00,952 - INFO - No faulty images found.
+2026-01-15 16:24:00,952 - INFO - Dataset contains 0 real and 27 fake samples
+2026-01-15 16:24:00,952 - INFO - RawFileDataset initialized with 27 samples for test mode
+2026-01-15 16:24:00,953 - INFO - Test loader prepared with 2 batches
+2026-01-15 16:24:00,953 - INFO - Evaluating on dataset_1_test-dts
+2026-01-15 16:24:20,891 - INFO - Evaluation results for dataset_1_test-dts:
+2026-01-15 16:24:20,892 - INFO -   auc: 0.0000
+2026-01-15 16:24:20,893 - INFO -   eer: 0.0000
+2026-01-15 16:24:20,893 - INFO -   accuracy: 0.7778
+2026-01-15 16:24:20,893 - INFO -   ap: 0.0000
+2026-01-15 16:24:20,893 - INFO -   precision: 1.0000
+2026-01-15 16:24:20,893 - INFO -   recall: 0.7778
+2026-01-15 16:24:20,893 - INFO -   f1: 0.8750
+2026-01-15 16:24:20,893 - INFO -   sample_count: 27.0000
+2026-01-15 16:24:20,893 - INFO -   video_auc: 0.0000
+2026-01-15 16:24:20,893 - INFO -   video_eer: 0.0000
+2026-01-15 16:24:20,893 - INFO -   video_acc: 1.0000
+2026-01-15 16:24:20,894 - INFO - Saved evaluation results to evaluation_results/dataset_1_test-dts_eval_20260115_162420.json
+2026-01-15 16:24:20,895 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-15 16:24:20,895 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-15 16:35:36,787 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-15 16:35:36,788 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-15 16:35:36,788 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-15 16:35:36,788 - INFO - pretrained: no need to provide this for the effort model
+2026-01-15 16:35:36,788 - INFO - model_name: effort
+2026-01-15 16:35:36,788 - INFO - backbone_name: vit
+2026-01-15 16:35:36,788 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-15 16:35:36,788 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-15 16:35:36,788 - INFO - train_dataset: ['UADFV']
+2026-01-15 16:35:36,788 - INFO - test_dataset: ['UADFV']
+2026-01-15 16:35:36,788 - INFO - train_batchSize: 8
+2026-01-15 16:35:36,788 - INFO - test_batchSize: 8
+2026-01-15 16:35:36,788 - INFO - workers: 4
+2026-01-15 16:35:36,788 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-15 16:35:36,788 - INFO - resolution: 224
+2026-01-15 16:35:36,788 - INFO - with_mask: False
+2026-01-15 16:35:36,788 - INFO - with_landmark: False
+2026-01-15 16:35:36,788 - INFO - use_data_augmentation: True
+2026-01-15 16:35:36,788 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-15 16:35:36,788 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-15 16:35:36,788 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-15 16:35:36,788 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-15 16:35:36,788 - INFO - lr_scheduler: cosine
+2026-01-15 16:35:36,789 - INFO - lr_T_max: 5
+2026-01-15 16:35:36,789 - INFO - lr_eta_min: 1e-06
+2026-01-15 16:35:36,789 - INFO - nEpochs: 5
+2026-01-15 16:35:36,789 - INFO - start_epoch: 0
+2026-01-15 16:35:36,789 - INFO - save_epoch: 1
+2026-01-15 16:35:36,789 - INFO - rec_iter: 50
+2026-01-15 16:35:36,789 - INFO - logdir: ./logs
+2026-01-15 16:35:36,789 - INFO - manualSeed: 1024
+2026-01-15 16:35:36,789 - INFO - save_ckpt: True
+2026-01-15 16:35:36,789 - INFO - save_feat: True
+2026-01-15 16:35:36,789 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-15 16:35:36,789 - INFO - loss_func: cross_entropy
+2026-01-15 16:35:36,789 - INFO - losstype: None
+2026-01-15 16:35:36,789 - INFO - metric_scoring: auc
+2026-01-15 16:35:36,789 - INFO - fine_tune: True
+2026-01-15 16:35:36,789 - INFO - pretrained_checkpoint: None
+2026-01-15 16:35:36,789 - INFO - freeze_backbone: True
+2026-01-15 16:35:36,789 - INFO - train_classification_head: True
+2026-01-15 16:35:36,789 - INFO - train_svd_residuals: True
+2026-01-15 16:35:36,789 - INFO - save_avg: True
+2026-01-15 16:35:36,789 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-15 16:35:36,789 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-15 16:35:36,789 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-15 16:35:54,297 - INFO - Model loaded successfully
+2026-01-15 16:35:54,300 - INFO - Preparing test data for paths: ['DeepfakeBench/training/facedata/Chameleon_retinafaces']
+2026-01-15 16:35:54,300 - INFO - Using RawFileDataset with data from DeepfakeBench/training/facedata/Chameleon_retinafaces
+2026-01-15 16:35:54,302 - INFO - Auto-descending into val directory: DeepfakeBench/training/facedata/Chameleon_retinafaces/val
+2026-01-15 16:35:54,315 - INFO - Validating directory structure: DeepfakeBench/training/facedata/Chameleon_retinafaces/val
+2026-01-15 16:35:54,317 - INFO - All subdirectories found: ['real', 'fake']
+2026-01-15 16:35:54,317 - INFO - Found real directories: ['real']
+2026-01-15 16:35:54,317 - INFO - Found fake directories: ['fake']
+2026-01-15 16:35:54,317 - INFO - Discovering files in DeepfakeBench/training/facedata/Chameleon_retinafaces/val
+2026-01-15 16:35:54,317 - INFO - Processing real directory: real
+2026-01-15 16:35:54,328 - INFO - Processing fake directory: fake
+2026-01-15 16:35:54,345 - INFO - Checking for faulty images...
+2026-01-15 16:36:04,741 - INFO - No faulty images found.
+2026-01-15 16:36:04,741 - INFO - Dataset contains 1028 real and 1805 fake samples
+2026-01-15 16:36:04,742 - INFO - RawFileDataset initialized with 2833 samples for test mode
+2026-01-15 16:36:04,742 - INFO - Test loader prepared with 178 batches
+2026-01-15 16:36:04,742 - INFO - Evaluating on dataset_1_Chameleon_retinafaces
+2026-01-15 16:37:12,473 - INFO - Processed batch 50/178
+2026-01-15 16:38:01,016 - INFO - Processed batch 100/178
+2026-01-15 16:38:53,422 - INFO - Processed batch 150/178
+2026-01-15 16:39:40,446 - INFO - Evaluation results for dataset_1_Chameleon_retinafaces:
+2026-01-15 16:39:40,447 - INFO -   auc: 0.9611
+2026-01-15 16:39:40,447 - INFO -   eer: 0.1041
+2026-01-15 16:39:40,447 - INFO -   accuracy: 0.8945
+2026-01-15 16:39:40,447 - INFO -   ap: 0.9785
+2026-01-15 16:39:40,447 - INFO -   precision: 0.8959
+2026-01-15 16:39:40,447 - INFO -   recall: 0.9440
+2026-01-15 16:39:40,447 - INFO -   f1: 0.9193
+2026-01-15 16:39:40,447 - INFO -   sample_count: 2833.0000
+2026-01-15 16:39:40,447 - INFO -   video_auc: 1.0000
+2026-01-15 16:39:40,447 - INFO -   video_eer: 0.0000
+2026-01-15 16:39:40,447 - INFO -   video_acc: 1.0000
+2026-01-15 16:39:40,449 - INFO - Saved evaluation results to evaluation_results/dataset_1_Chameleon_retinafaces_eval_20260115_163940.json
+2026-01-15 16:39:40,450 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-15 16:39:40,450 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-15 16:57:35,632 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-15 16:57:35,632 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-15 16:57:35,632 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-15 16:57:35,632 - INFO - pretrained: no need to provide this for the effort model
+2026-01-15 16:57:35,632 - INFO - model_name: effort
+2026-01-15 16:57:35,632 - INFO - backbone_name: vit
+2026-01-15 16:57:35,632 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-15 16:57:35,632 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-15 16:57:35,632 - INFO - train_dataset: ['UADFV']
+2026-01-15 16:57:35,632 - INFO - test_dataset: ['UADFV']
+2026-01-15 16:57:35,632 - INFO - train_batchSize: 8
+2026-01-15 16:57:35,633 - INFO - test_batchSize: 8
+2026-01-15 16:57:35,633 - INFO - workers: 4
+2026-01-15 16:57:35,633 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-15 16:57:35,633 - INFO - resolution: 224
+2026-01-15 16:57:35,633 - INFO - with_mask: False
+2026-01-15 16:57:35,633 - INFO - with_landmark: False
+2026-01-15 16:57:35,633 - INFO - use_data_augmentation: True
+2026-01-15 16:57:35,633 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-15 16:57:35,633 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-15 16:57:35,633 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-15 16:57:35,633 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-15 16:57:35,633 - INFO - lr_scheduler: cosine
+2026-01-15 16:57:35,633 - INFO - lr_T_max: 5
+2026-01-15 16:57:35,633 - INFO - lr_eta_min: 1e-06
+2026-01-15 16:57:35,633 - INFO - nEpochs: 5
+2026-01-15 16:57:35,633 - INFO - start_epoch: 0
+2026-01-15 16:57:35,633 - INFO - save_epoch: 1
+2026-01-15 16:57:35,633 - INFO - rec_iter: 50
+2026-01-15 16:57:35,633 - INFO - logdir: ./logs
+2026-01-15 16:57:35,633 - INFO - manualSeed: 1024
+2026-01-15 16:57:35,633 - INFO - save_ckpt: True
+2026-01-15 16:57:35,633 - INFO - save_feat: True
+2026-01-15 16:57:35,633 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-15 16:57:35,633 - INFO - loss_func: cross_entropy
+2026-01-15 16:57:35,633 - INFO - losstype: None
+2026-01-15 16:57:35,633 - INFO - metric_scoring: auc
+2026-01-15 16:57:35,633 - INFO - fine_tune: True
+2026-01-15 16:57:35,633 - INFO - pretrained_checkpoint: None
+2026-01-15 16:57:35,633 - INFO - freeze_backbone: True
+2026-01-15 16:57:35,633 - INFO - train_classification_head: True
+2026-01-15 16:57:35,633 - INFO - train_svd_residuals: True
+2026-01-15 16:57:35,633 - INFO - save_avg: True
+2026-01-15 16:57:35,633 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-15 16:57:35,633 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-15 16:57:35,633 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-15 16:57:53,231 - INFO - Model loaded successfully
+2026-01-15 16:57:53,234 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed']
+2026-01-15 16:57:53,235 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-15 16:57:53,249 - INFO - Validating directory structure: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-15 16:57:53,249 - INFO - All subdirectories found: ['AniPortraitAudio', 'LivePortrait', 'Hallo2', 'AniPortraitVideo', 'EmoPortrait', 'Hallo']
+2026-01-15 16:57:53,249 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/TalkingHead_processed: No valid subdirectories found in /Volumes/Crucial/AI/DATASETS/TalkingHead_processed. Expected directories containing real/fake synonyms. Found directories: ['AniPortraitAudio', 'LivePortrait', 'Hallo2', 'AniPortraitVideo', 'EmoPortrait', 'Hallo']. Real synonyms: ['real', 'original', 'natural', '0_real', 'real_0']... Fake synonyms: ['fake', 'synthetic', 'ai', 'generated', '1_fake']...
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 277, in __init__
+    self._validate_directory_structure()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 350, in _validate_directory_structure
+    raise ValueError(
+    ...<5 lines>...
+    )
+ValueError: No valid subdirectories found in /Volumes/Crucial/AI/DATASETS/TalkingHead_processed. Expected directories containing real/fake synonyms. Found directories: ['AniPortraitAudio', 'LivePortrait', 'Hallo2', 'AniPortraitVideo', 'EmoPortrait', 'Hallo']. Real synonyms: ['real', 'original', 'natural', '0_real', 'real_0']... Fake synonyms: ['fake', 'synthetic', 'ai', 'generated', '1_fake']...
+2026-01-15 16:57:53,256 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-15 16:57:53,256 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-15 17:06:15,329 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-15 17:06:15,329 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-15 17:06:15,329 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-15 17:06:15,329 - INFO - pretrained: no need to provide this for the effort model
+2026-01-15 17:06:15,329 - INFO - model_name: effort
+2026-01-15 17:06:15,329 - INFO - backbone_name: vit
+2026-01-15 17:06:15,329 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-15 17:06:15,329 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-15 17:06:15,329 - INFO - train_dataset: ['UADFV']
+2026-01-15 17:06:15,329 - INFO - test_dataset: ['UADFV']
+2026-01-15 17:06:15,329 - INFO - train_batchSize: 8
+2026-01-15 17:06:15,329 - INFO - test_batchSize: 8
+2026-01-15 17:06:15,329 - INFO - workers: 4
+2026-01-15 17:06:15,329 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-15 17:06:15,329 - INFO - resolution: 224
+2026-01-15 17:06:15,329 - INFO - with_mask: False
+2026-01-15 17:06:15,330 - INFO - with_landmark: False
+2026-01-15 17:06:15,330 - INFO - use_data_augmentation: True
+2026-01-15 17:06:15,330 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-15 17:06:15,330 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-15 17:06:15,330 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-15 17:06:15,330 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-15 17:06:15,330 - INFO - lr_scheduler: cosine
+2026-01-15 17:06:15,330 - INFO - lr_T_max: 5
+2026-01-15 17:06:15,330 - INFO - lr_eta_min: 1e-06
+2026-01-15 17:06:15,330 - INFO - nEpochs: 5
+2026-01-15 17:06:15,330 - INFO - start_epoch: 0
+2026-01-15 17:06:15,330 - INFO - save_epoch: 1
+2026-01-15 17:06:15,330 - INFO - rec_iter: 50
+2026-01-15 17:06:15,330 - INFO - logdir: ./logs
+2026-01-15 17:06:15,330 - INFO - manualSeed: 1024
+2026-01-15 17:06:15,330 - INFO - save_ckpt: True
+2026-01-15 17:06:15,330 - INFO - save_feat: True
+2026-01-15 17:06:15,330 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-15 17:06:15,330 - INFO - loss_func: cross_entropy
+2026-01-15 17:06:15,330 - INFO - losstype: None
+2026-01-15 17:06:15,330 - INFO - metric_scoring: auc
+2026-01-15 17:06:15,330 - INFO - fine_tune: True
+2026-01-15 17:06:15,330 - INFO - pretrained_checkpoint: None
+2026-01-15 17:06:15,330 - INFO - freeze_backbone: True
+2026-01-15 17:06:15,330 - INFO - train_classification_head: True
+2026-01-15 17:06:15,330 - INFO - train_svd_residuals: True
+2026-01-15 17:06:15,330 - INFO - save_avg: True
+2026-01-15 17:06:15,330 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-15 17:06:15,330 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-15 17:06:15,330 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-15 17:06:32,223 - INFO - Model loaded successfully
+2026-01-15 17:06:32,224 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed']
+2026-01-15 17:06:32,224 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-15 17:06:32,244 - INFO - Validating directory structure: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-15 17:06:32,244 - INFO - All subdirectories found: ['AniPortraitAudio', 'LivePortrait', 'Hallo2', 'AniPortraitVideo', 'EmoPortrait', 'Hallo', 'fake']
+2026-01-15 17:06:32,244 - INFO - Found real directories: []
+2026-01-15 17:06:32,244 - INFO - Found fake directories: ['fake']
+2026-01-15 17:06:32,244 - INFO - Discovering files in /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-15 17:06:32,245 - INFO - Processing fake directory: fake
+2026-01-15 17:06:32,246 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/TalkingHead_processed: No valid images found in /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 440, in _discover_and_build_index
+    raise ValueError(f"No valid images found in {self.raw_data_root}")
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-15 17:06:32,252 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-15 17:06:32,252 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-15 17:08:45,270 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-15 17:08:45,270 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-15 17:08:45,270 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-15 17:08:45,270 - INFO - pretrained: no need to provide this for the effort model
+2026-01-15 17:08:45,270 - INFO - model_name: effort
+2026-01-15 17:08:45,270 - INFO - backbone_name: vit
+2026-01-15 17:08:45,270 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-15 17:08:45,270 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-15 17:08:45,270 - INFO - train_dataset: ['UADFV']
+2026-01-15 17:08:45,270 - INFO - test_dataset: ['UADFV']
+2026-01-15 17:08:45,270 - INFO - train_batchSize: 8
+2026-01-15 17:08:45,270 - INFO - test_batchSize: 8
+2026-01-15 17:08:45,270 - INFO - workers: 4
+2026-01-15 17:08:45,270 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-15 17:08:45,270 - INFO - resolution: 224
+2026-01-15 17:08:45,270 - INFO - with_mask: False
+2026-01-15 17:08:45,270 - INFO - with_landmark: False
+2026-01-15 17:08:45,270 - INFO - use_data_augmentation: True
+2026-01-15 17:08:45,270 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-15 17:08:45,270 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-15 17:08:45,270 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-15 17:08:45,270 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-15 17:08:45,270 - INFO - lr_scheduler: cosine
+2026-01-15 17:08:45,270 - INFO - lr_T_max: 5
+2026-01-15 17:08:45,270 - INFO - lr_eta_min: 1e-06
+2026-01-15 17:08:45,270 - INFO - nEpochs: 5
+2026-01-15 17:08:45,270 - INFO - start_epoch: 0
+2026-01-15 17:08:45,270 - INFO - save_epoch: 1
+2026-01-15 17:08:45,270 - INFO - rec_iter: 50
+2026-01-15 17:08:45,270 - INFO - logdir: ./logs
+2026-01-15 17:08:45,270 - INFO - manualSeed: 1024
+2026-01-15 17:08:45,270 - INFO - save_ckpt: True
+2026-01-15 17:08:45,270 - INFO - save_feat: True
+2026-01-15 17:08:45,270 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-15 17:08:45,270 - INFO - loss_func: cross_entropy
+2026-01-15 17:08:45,270 - INFO - losstype: None
+2026-01-15 17:08:45,270 - INFO - metric_scoring: auc
+2026-01-15 17:08:45,270 - INFO - fine_tune: True
+2026-01-15 17:08:45,270 - INFO - pretrained_checkpoint: None
+2026-01-15 17:08:45,270 - INFO - freeze_backbone: True
+2026-01-15 17:08:45,270 - INFO - train_classification_head: True
+2026-01-15 17:08:45,270 - INFO - train_svd_residuals: True
+2026-01-15 17:08:45,270 - INFO - save_avg: True
+2026-01-15 17:08:45,270 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-15 17:08:45,271 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-15 17:08:45,271 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-15 17:09:02,662 - INFO - Model loaded successfully
+2026-01-15 17:09:02,663 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed']
+2026-01-15 17:09:02,663 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-15 17:09:02,672 - INFO - Validating directory structure: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-15 17:09:02,673 - INFO - All subdirectories found: ['AniPortraitAudio', 'LivePortrait', 'Hallo2', 'AniPortraitVideo', 'EmoPortrait', 'Hallo', 'fake']
+2026-01-15 17:09:02,674 - INFO - Found real directories: []
+2026-01-15 17:09:02,675 - INFO - Found fake directories: ['fake']
+2026-01-15 17:09:02,675 - INFO - Discovering files in /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-15 17:09:02,675 - INFO - Processing fake directory: fake
+2026-01-15 17:09:02,677 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/TalkingHead_processed: No valid images found in /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 440, in _discover_and_build_index
+    raise ValueError(f"No valid images found in {self.raw_data_root}")
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-15 17:09:02,681 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-15 17:09:02,681 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-16 08:10:56,939 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-16 08:10:56,939 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-16 08:10:56,939 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-16 08:10:56,939 - INFO - pretrained: no need to provide this for the effort model
+2026-01-16 08:10:56,939 - INFO - model_name: effort
+2026-01-16 08:10:56,939 - INFO - backbone_name: vit
+2026-01-16 08:10:56,939 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-16 08:10:56,939 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-16 08:10:56,939 - INFO - train_dataset: ['UADFV']
+2026-01-16 08:10:56,939 - INFO - test_dataset: ['UADFV']
+2026-01-16 08:10:56,939 - INFO - train_batchSize: 8
+2026-01-16 08:10:56,939 - INFO - test_batchSize: 8
+2026-01-16 08:10:56,939 - INFO - workers: 4
+2026-01-16 08:10:56,939 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-16 08:10:56,939 - INFO - resolution: 224
+2026-01-16 08:10:56,939 - INFO - with_mask: False
+2026-01-16 08:10:56,939 - INFO - with_landmark: False
+2026-01-16 08:10:56,939 - INFO - use_data_augmentation: True
+2026-01-16 08:10:56,939 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-16 08:10:56,939 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-16 08:10:56,939 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-16 08:10:56,940 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-16 08:10:56,940 - INFO - lr_scheduler: cosine
+2026-01-16 08:10:56,940 - INFO - lr_T_max: 5
+2026-01-16 08:10:56,940 - INFO - lr_eta_min: 1e-06
+2026-01-16 08:10:56,940 - INFO - nEpochs: 5
+2026-01-16 08:10:56,940 - INFO - start_epoch: 0
+2026-01-16 08:10:56,940 - INFO - save_epoch: 1
+2026-01-16 08:10:56,940 - INFO - rec_iter: 50
+2026-01-16 08:10:56,940 - INFO - logdir: ./logs
+2026-01-16 08:10:56,940 - INFO - manualSeed: 1024
+2026-01-16 08:10:56,940 - INFO - save_ckpt: True
+2026-01-16 08:10:56,940 - INFO - save_feat: True
+2026-01-16 08:10:56,940 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-16 08:10:56,940 - INFO - loss_func: cross_entropy
+2026-01-16 08:10:56,940 - INFO - losstype: None
+2026-01-16 08:10:56,940 - INFO - metric_scoring: auc
+2026-01-16 08:10:56,940 - INFO - fine_tune: True
+2026-01-16 08:10:56,940 - INFO - pretrained_checkpoint: None
+2026-01-16 08:10:56,940 - INFO - freeze_backbone: True
+2026-01-16 08:10:56,940 - INFO - train_classification_head: True
+2026-01-16 08:10:56,940 - INFO - train_svd_residuals: True
+2026-01-16 08:10:56,940 - INFO - save_avg: True
+2026-01-16 08:10:56,940 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-16 08:10:56,940 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-16 08:10:56,940 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-16 08:11:13,318 - INFO - Model loaded successfully
+2026-01-16 08:11:13,331 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed']
+2026-01-16 08:11:13,331 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-16 08:11:13,383 - INFO - Validating directory structure: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-16 08:11:13,520 - INFO - All subdirectories found: ['AniPortraitAudio', 'LivePortrait', 'Hallo2', 'AniPortraitVideo', 'EmoPortrait', 'Hallo', 'fake']
+2026-01-16 08:11:13,579 - INFO - Found real directories: []
+2026-01-16 08:11:13,580 - INFO - Found fake directories: ['fake']
+2026-01-16 08:11:13,580 - INFO - Discovering files in /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-16 08:11:13,580 - INFO - Processing fake directory: fake
+2026-01-16 08:11:13,585 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/TalkingHead_processed: No valid images found in /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 440, in _discover_and_build_index
+    raise ValueError(f"No valid images found in {self.raw_data_root}")
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-16 08:11:13,597 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-16 08:11:13,597 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-16 08:26:24,936 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-16 08:26:24,936 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-16 08:26:24,936 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-16 08:26:24,936 - INFO - pretrained: no need to provide this for the effort model
+2026-01-16 08:26:24,936 - INFO - model_name: effort
+2026-01-16 08:26:24,936 - INFO - backbone_name: vit
+2026-01-16 08:26:24,936 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-16 08:26:24,936 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-16 08:26:24,936 - INFO - train_dataset: ['UADFV']
+2026-01-16 08:26:24,936 - INFO - test_dataset: ['UADFV']
+2026-01-16 08:26:24,936 - INFO - train_batchSize: 8
+2026-01-16 08:26:24,936 - INFO - test_batchSize: 8
+2026-01-16 08:26:24,936 - INFO - workers: 4
+2026-01-16 08:26:24,936 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-16 08:26:24,936 - INFO - resolution: 224
+2026-01-16 08:26:24,936 - INFO - with_mask: False
+2026-01-16 08:26:24,936 - INFO - with_landmark: False
+2026-01-16 08:26:24,936 - INFO - use_data_augmentation: True
+2026-01-16 08:26:24,936 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-16 08:26:24,936 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-16 08:26:24,936 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-16 08:26:24,937 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-16 08:26:24,937 - INFO - lr_scheduler: cosine
+2026-01-16 08:26:24,937 - INFO - lr_T_max: 5
+2026-01-16 08:26:24,937 - INFO - lr_eta_min: 1e-06
+2026-01-16 08:26:24,937 - INFO - nEpochs: 5
+2026-01-16 08:26:24,937 - INFO - start_epoch: 0
+2026-01-16 08:26:24,937 - INFO - save_epoch: 1
+2026-01-16 08:26:24,937 - INFO - rec_iter: 50
+2026-01-16 08:26:24,937 - INFO - logdir: ./logs
+2026-01-16 08:26:24,937 - INFO - manualSeed: 1024
+2026-01-16 08:26:24,937 - INFO - save_ckpt: True
+2026-01-16 08:26:24,937 - INFO - save_feat: True
+2026-01-16 08:26:24,937 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-16 08:26:24,937 - INFO - loss_func: cross_entropy
+2026-01-16 08:26:24,937 - INFO - losstype: None
+2026-01-16 08:26:24,937 - INFO - metric_scoring: auc
+2026-01-16 08:26:24,937 - INFO - fine_tune: True
+2026-01-16 08:26:24,937 - INFO - pretrained_checkpoint: None
+2026-01-16 08:26:24,937 - INFO - freeze_backbone: True
+2026-01-16 08:26:24,937 - INFO - train_classification_head: True
+2026-01-16 08:26:24,937 - INFO - train_svd_residuals: True
+2026-01-16 08:26:24,937 - INFO - save_avg: True
+2026-01-16 08:26:24,937 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-16 08:26:24,937 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-16 08:26:24,937 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-16 08:26:41,433 - INFO - Model loaded successfully
+2026-01-16 08:26:41,435 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed']
+2026-01-16 08:26:41,435 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-16 08:26:41,451 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-16 08:26:41,452 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 08:26:41,452 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-16 08:26:41,453 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/fake (label: fake)
+2026-01-16 08:26:41,456 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitAudio/test/fake (label: fake)
+2026-01-16 08:26:41,903 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitAudio/val/fake (label: fake)
+2026-01-16 08:26:41,929 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/LivePortrait/test/fake (label: fake)
+2026-01-16 08:26:42,042 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/LivePortrait/val/fake (label: fake)
+2026-01-16 08:26:42,068 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo2/test/fake (label: fake)
+2026-01-16 08:26:42,148 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo2/val/fake (label: fake)
+2026-01-16 08:26:42,175 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitVideo/test/fake (label: fake)
+2026-01-16 08:26:42,258 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitVideo/val/fake (label: fake)
+2026-01-16 08:26:42,284 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/EmoPortrait/test/fake (label: fake)
+2026-01-16 08:26:42,421 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/EmoPortrait/val/fake (label: fake)
+2026-01-16 08:26:42,449 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo/test/fake (label: fake)
+2026-01-16 08:26:42,534 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo/val/fake (label: fake)
+2026-01-16 08:26:42,568 - INFO - Checking for faulty images...
+2026-01-16 08:27:00,810 - INFO - No faulty images found.
+2026-01-16 08:27:00,811 - INFO - Dataset contains 0 real and 18298 fake samples
+2026-01-16 08:27:00,812 - INFO - RawFileDataset initialized with 18298 samples for test mode
+2026-01-16 08:27:00,813 - INFO - Test loader prepared with 1144 batches
+2026-01-16 08:27:00,813 - INFO - Evaluating on dataset_1_TalkingHead_processed
+2026-01-16 08:28:05,311 - INFO - Processed batch 50/1144
+2026-01-16 08:28:53,831 - INFO - Processed batch 100/1144
+2026-01-16 08:29:43,609 - INFO - Processed batch 150/1144
+2026-01-16 08:30:31,287 - INFO - Processed batch 200/1144
+2026-01-16 08:31:18,799 - INFO - Processed batch 250/1144
+2026-01-16 08:32:07,336 - INFO - Processed batch 300/1144
+2026-01-16 08:32:55,523 - INFO - Processed batch 350/1144
+2026-01-16 08:33:44,674 - INFO - Processed batch 400/1144
+2026-01-16 08:34:32,533 - INFO - Processed batch 450/1144
+2026-01-16 08:35:20,310 - INFO - Processed batch 500/1144
+2026-01-16 08:36:08,515 - INFO - Processed batch 550/1144
+2026-01-16 08:36:56,302 - INFO - Processed batch 600/1144
+2026-01-16 08:37:44,089 - INFO - Processed batch 650/1144
+2026-01-16 08:38:31,854 - INFO - Processed batch 700/1144
+2026-01-16 08:39:19,497 - INFO - Processed batch 750/1144
+2026-01-16 08:40:07,000 - INFO - Processed batch 800/1144
+2026-01-16 08:40:54,331 - INFO - Processed batch 850/1144
+2026-01-16 08:41:41,933 - INFO - Processed batch 900/1144
+2026-01-16 08:42:29,489 - INFO - Processed batch 950/1144
+2026-01-16 08:43:17,022 - INFO - Processed batch 1000/1144
+2026-01-16 08:44:04,719 - INFO - Processed batch 1050/1144
+2026-01-16 08:44:52,312 - INFO - Processed batch 1100/1144
+2026-01-16 08:45:53,822 - INFO - Evaluation results for dataset_1_TalkingHead_processed:
+2026-01-16 08:45:53,823 - INFO -   auc: 0.0000
+2026-01-16 08:45:53,823 - INFO -   eer: 0.0000
+2026-01-16 08:45:53,823 - INFO -   accuracy: 0.6239
+2026-01-16 08:45:53,823 - INFO -   ap: 0.0000
+2026-01-16 08:45:53,823 - INFO -   precision: 1.0000
+2026-01-16 08:45:53,823 - INFO -   recall: 0.6239
+2026-01-16 08:45:53,823 - INFO -   f1: 0.7684
+2026-01-16 08:45:53,823 - INFO -   sample_count: 18298.0000
+2026-01-16 08:45:53,823 - INFO -   video_auc: 0.0000
+2026-01-16 08:45:53,823 - INFO -   video_eer: 0.0000
+2026-01-16 08:45:53,823 - INFO -   video_acc: 0.6314
+2026-01-16 08:45:53,826 - INFO - Saved evaluation results to evaluation_results/dataset_1_TalkingHead_processed_eval_20260116_084553.json
+2026-01-16 08:45:53,827 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-16 08:45:53,827 - INFO - Fine-tuned model evaluation finished successfully

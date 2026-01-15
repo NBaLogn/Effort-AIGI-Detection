@@ -1,0 +1,18 @@
+{
+  "datasets": {
+    "dataset_1_TalkingHead_processed": {
+      "auc": 0.0,
+      "eer": 0.0,
+      "accuracy": 0.6239479724560061,
+      "ap": 0.0,
+      "precision": 1.0,
+      "recall": 0.6239479724560061,
+      "f1": 0.7684334511189634,
+      "sample_count": 18298,
+      "video_auc": 0.0,
+      "video_eer": 0.0,
+      "video_acc": 0.6314410480349345
+    }
+  },
+  "timestamp": "2026-01-16T08:45:53.827268"
+}

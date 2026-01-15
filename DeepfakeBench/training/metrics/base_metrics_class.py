@@ -68,9 +68,13 @@ def calculate_metrics_for_train(label, output):
         # for the case when all the samples within a batch is fake/real
         auc, eer = None, None
     else:
-        auc = metrics.auc(fpr, tpr)
-        fnr = 1 - tpr
-        eer = fpr[np.nanargmin(np.absolute(fnr - fpr))]
+        unique_labels = np.unique(label.squeeze().cpu().numpy())
+        if len(unique_labels) < 2:
+            auc, eer = 0.0, 0.0
+        else:
+            auc = metrics.auc(fpr, tpr)
+            fnr = 1 - tpr
+            eer = fpr[np.nanargmin(np.absolute(fnr - fpr))]
 
     return auc, eer, accuracy, ap
 
@@ -110,17 +114,13 @@ class Metrics_batch:
         if np.isnan(fpr[0]) or np.isnan(tpr[0]):
             return -1, -1
 
-        auc = metrics.auc(fpr, tpr)
-        interp_tpr = np.interp(self.mean_fpr, fpr, tpr)
-        interp_tpr[0] = 0.0
-        self.tprs.append(interp_tpr)
-        self.aucs.append(auc)
-
-        # return auc
-
-        # EER
-        fnr = 1 - tpr
-        eer = fpr[np.nanargmin(np.absolute(fnr - fpr))]
+        unique_labels = np.unique(lab.squeeze().cpu().numpy())
+        if len(unique_labels) < 2:
+            auc, eer = 0.0, 0.0
+        else:
+            auc = metrics.auc(fpr, tpr)
+            fnr = 1 - tpr
+            eer = fpr[np.nanargmin(np.absolute(fnr - fpr))]
         self.eers.append(eer)
 
         return auc, eer
@@ -188,14 +188,20 @@ class Metrics_all:
     def get_metrics(self):
         y_pred = np.concatenate(self.probs)
         y_true = np.concatenate(self.labels)
-        # auc
-        fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred, pos_label=1)
-        auc = metrics.auc(fpr, tpr)
-        # eer
-        fnr = 1 - tpr
-        eer = fpr[np.nanargmin(np.absolute(fnr - fpr))]
-        # ap
-        ap = metrics.average_precision_score(y_true, y_pred)
+        unique_labels = np.unique(y_true)
+        if len(unique_labels) < 2:
+            auc = 0.0
+            eer = 0.0
+            ap = 0.0
+        else:
+            # auc
+            fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred, pos_label=1)
+            auc = metrics.auc(fpr, tpr)
+            # eer
+            fnr = 1 - tpr
+            eer = fpr[np.nanargmin(np.absolute(fnr - fpr))]
+            # ap
+            ap = metrics.average_precision_score(y_true, y_pred)
         # acc
         acc = self.correct / self.total
         return {"acc": acc, "auc": auc, "eer": eer, "ap": ap}

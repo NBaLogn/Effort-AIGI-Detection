@@ -1,5 +1,6 @@
 from sklearn import metrics
 import numpy as np
+import os
 
 
 def parse_metric_for_print(metric_dict):
@@ -112,13 +113,20 @@ def get_test_metrics(y_pred, y_true, img_names):
                 parts = s.split("\\")
             else:
                 parts = s.split("/")
-            a = parts[-2]
-            b = parts[-1]
 
-            if a not in result_dict:
-                result_dict[a] = []
+            # Robust video name extraction
+            # Structure possibilities:
+            # 1. .../real/video1/frame1.jpg -> parts[-2] == 'video1'
+            # 2. .../real/frames/video1/frame1.jpg -> parts[-2] == 'video1'
+            # 3. .../real/frame1.jpg -> parts[-2] == 'real' (standalone)
 
-            result_dict[a].append(item)
+            # Actually, using the directory path as the key is safest.
+            video_dir = os.path.dirname(s)
+
+            if video_dir not in result_dict:
+                result_dict[video_dir] = []
+
+            result_dict[video_dir].append(item)
         image_arr = list(result_dict.values())
 
         for video in image_arr:
@@ -132,10 +140,15 @@ def get_test_metrics(y_pred, y_true, img_names):
             new_pred.append(pred_sum / leng)
             new_label.append(int(label_sum / leng))
 
-        fpr, tpr, thresholds = metrics.roc_curve(new_label, new_pred)
-        v_auc = metrics.auc(fpr, tpr)
-        fnr = 1 - tpr
-        v_eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
+        unique_labels = np.unique(new_label)
+        if len(unique_labels) < 2:
+            v_auc = 0.0
+            v_eer = 0.0
+        else:
+            fpr, tpr, thresholds = metrics.roc_curve(new_label, new_pred)
+            v_auc = metrics.auc(fpr, tpr)
+            fnr = 1 - tpr
+            v_eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
 
         # Calculate video-level acc
         prediction_class = (np.array(new_pred) > 0.5).astype(int)
@@ -145,14 +158,21 @@ def get_test_metrics(y_pred, y_true, img_names):
         return v_auc, v_eer, v_acc
 
     y_pred = y_pred.squeeze()
-    # auc
-    fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred, pos_label=1)
-    auc = metrics.auc(fpr, tpr)
-    # eer
-    fnr = 1 - tpr
-    eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
-    # ap
-    ap = metrics.average_precision_score(y_true, y_pred)
+    # Check if both classes are present
+    unique_labels = np.unique(y_true)
+    if len(unique_labels) < 2:
+        auc = 0.0
+        eer = 0.0
+        ap = 0.0
+    else:
+        # auc
+        fpr, tpr, thresholds = metrics.roc_curve(y_true, y_pred, pos_label=1)
+        auc = metrics.auc(fpr, tpr)
+        # eer
+        fnr = 1 - tpr
+        eer = fpr[np.nanargmin(np.absolute((fnr - fpr)))]
+        # ap
+        ap = metrics.average_precision_score(y_true, y_pred)
     # acc
     prediction_class = (y_pred > 0.5).astype(int)
     correct = (prediction_class == np.clip(y_true, a_min=0, a_max=1)).sum().item()

@@ -8,7 +8,7 @@ uv run 'DeepfakeBench/training/evaluate_finetune.py' \
 	--weights \
 		'DeepfakeBench/training/weights/finetuned/newBatchFaces.pth' \
 	--test_dataset \
-		'DeepfakeBench/training/facedata/Genimage_faces_09_flat' \
+		'/Volumes/Crucial/AI/DATASETS/TalkingHead_processed' \
 	--output_dir 'evaluation_results'
 		# 'DeepfakeBench/training/facedata/Chameleon_retinafaces' \
 		# 'DeepfakeBench/training/facedata/df40/CollabDiff' \

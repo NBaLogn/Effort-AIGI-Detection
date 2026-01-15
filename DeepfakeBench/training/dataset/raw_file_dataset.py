@@ -319,44 +319,19 @@ class RawFileDataset(data.Dataset):
 
     def _validate_directory_structure(self):
         """Validate that the directory structure is compatible with RawFileDataset."""
-        logger.info(f"Validating directory structure: {self.raw_data_root}")
+        logger.info(
+            f"Validating directory structure starting from: {self.raw_data_root}"
+        )
 
         # Check if directory is readable
         if not os.access(self.raw_data_root, os.R_OK):
             raise PermissionError(f"Cannot read directory: {self.raw_data_root}")
 
-        # Log all subdirectories found
-        try:
-            all_subdirs = [
-                d
-                for d in os.listdir(self.raw_data_root)
-                if os.path.isdir(os.path.join(self.raw_data_root, d))
-            ]
-            logger.info(f"All subdirectories found: {all_subdirs}")
-        except Exception as e:
-            logger.warning(f"Could not list subdirectories: {e}")
-
-        # Find directories that match our synonyms
-        found_real_dirs = []
-        found_fake_dirs = []
-
-        for subdir in all_subdirs:
-            if self._is_real_directory(subdir):
-                found_real_dirs.append(subdir)
-            elif self._is_fake_directory(subdir):
-                found_fake_dirs.append(subdir)
-
-        if not found_real_dirs and not found_fake_dirs:
-            raise ValueError(
-                f"No valid subdirectories found in {self.raw_data_root}. "
-                f"Expected directories containing real/fake synonyms. "
-                f"Found directories: {all_subdirs}. "
-                f"Real synonyms: {self.REAL_SYNONYMS[:5]}... "
-                f"Fake synonyms: {self.FAKE_SYNONYMS[:5]}...",
-            )
-
-        logger.info(f"Found real directories: {found_real_dirs}")
-        logger.info(f"Found fake directories: {found_fake_dirs}")
+        # We used to check for real/fake subdirs here, but with recursive search
+        # we can be more permissive. We'll rely on _discover_and_build_index to find images.
+        logger.info(
+            "Validation complete. Relying on recursive search for class discovery."
+        )
 
     def _is_real_directory(self, dir_name: str) -> bool:
         """Check if directory name matches real synonyms."""
@@ -400,44 +375,84 @@ class RawFileDataset(data.Dataset):
 
     def _discover_and_build_index(self):
         """Discover files and build dataset index with balanced class distribution."""
-        logger.info(f"Discovering files in {self.raw_data_root}")
+        logger.info(f"Discovering files recursively starting from {self.raw_data_root}")
 
         # Collect samples from each class separately
         real_samples = []
         fake_samples = []
 
-        # Get all subdirectories
-        all_subdirs = [
-            d
-            for d in os.listdir(self.raw_data_root)
-            if os.path.isdir(os.path.join(self.raw_data_root, d))
-        ]
+        # Modes and synonyms to filter by
+        mode_synonyms = {
+            "train": ["train", "training"],
+            "test": [
+                "test",
+                "testing",
+                "val",
+                "validation",
+            ],  # val is often used for testing
+            "val": ["val", "validation", "test", "testing"],
+        }
 
-        # Process each directory
-        for subdir in all_subdirs:
-            dir_path = os.path.join(self.raw_data_root, subdir)
+        target_modes = mode_synonyms.get(self.mode, [self.mode])
+        other_modes = []
+        for m, syns in mode_synonyms.items():
+            if m != self.mode:
+                # Add modes that are NOT our target modes
+                # (Be careful: val/test overlap in our config above)
+                if self.mode == "train":
+                    other_modes.extend(syns)
+                else:  # test or val
+                    if m == "train":
+                        other_modes.extend(syns)
 
-            if self._is_real_directory(subdir):
-                label = 0
-                label_name = "real"
-                logger.info(f"Processing real directory: {subdir}")
-            elif self._is_fake_directory(subdir):
-                label = 1
-                label_name = "fake"
-                logger.info(f"Processing fake directory: {subdir}")
-            else:
-                logger.debug(f"Skipping non-matching directory: {subdir}")
-                continue
+        # Recursively search for real/fake directories
+        for root, dirs, _ in os.walk(self.raw_data_root):
+            for subdir in dirs:
+                dir_path = os.path.join(root, subdir)
 
-            samples = self._process_directory_get_samples(dir_path, label, label_name)
+                is_real = self._is_real_directory(subdir)
+                is_fake = self._is_fake_directory(subdir)
 
-            if label == 0:  # real
-                real_samples.extend(samples)
-            else:  # fake
-                fake_samples.extend(samples)
+                if not (is_real or is_fake):
+                    continue
+
+                # Mode filtering
+                rel_path = os.path.relpath(dir_path, self.raw_data_root)
+                path_parts = rel_path.lower().split(os.sep)
+
+                # Check for incompatible modes in the path
+                skip = False
+                for part in path_parts:
+                    if part in other_modes and part not in target_modes:
+                        skip = True
+                        break
+
+                if skip:
+                    continue
+
+                label = 0 if is_real else 1
+                label_name = "real" if is_real else "fake"
+
+                logger.info(
+                    f"Processing matching directory: {dir_path} (label: {label_name})"
+                )
+
+                samples = self._process_directory_get_samples(
+                    dir_path, label, label_name
+                )
+
+                if label == 0:  # real
+                    real_samples.extend(samples)
+                else:  # fake
+                    fake_samples.extend(samples)
 
         if not real_samples and not fake_samples:
-            raise ValueError(f"No valid images found in {self.raw_data_root}")
+            # Provide more helpful error message with mode info
+            raise ValueError(
+                f"No valid images found in {self.raw_data_root} for mode {self.mode}. "
+                f"Check that directory structure contains real/fake subdirs "
+                f"and optionally reflects the mode in the path."
+            )
 
         # Interleave real and fake samples for balanced batches
         self._interleave_samples(real_samples, fake_samples)
@@ -477,12 +492,34 @@ class RawFileDataset(data.Dataset):
             self._process_standalone_images_get_samples(dir_path, label, label_name),
         )
 
-        # 2. Process video frames
+        # 2. Process video frames in 'frames' directory
         frames_dir = os.path.join(dir_path, "frames")
         if os.path.exists(frames_dir):
             samples.extend(
                 self._process_video_frames_get_samples(frames_dir, label, label_name),
             )
+
+        # 3. Process other subdirectories as potential video directories
+        # This covers [fake|real]/[VIDEONAMES]/<file>
+        try:
+            subdirs = [
+                d
+                for d in os.listdir(dir_path)
+                if os.path.isdir(os.path.join(dir_path, d))
+                and d != "frames"
+                and not self._is_real_directory(d)
+                and not self._is_fake_directory(d)
+            ]
+            for subdir in subdirs:
+                subdir_path = os.path.join(dir_path, subdir)
+                # Avoid infinite recursion if there are weird symbolic links
+                # but basically we want to see if this subdir has images
+                video_samples = self._process_video_frames_get_samples(
+                    dir_path, label, label_name, specific_video_dir=subdir
+                )
+                samples.extend(video_samples)
+        except Exception as e:
+            logger.warning(f"Error searching subdirectories in {dir_path}: {e}")
 
         return samples
 
@@ -600,16 +637,23 @@ class RawFileDataset(data.Dataset):
         frames_dir: str,
         label: int,
         label_name: str,
+        specific_video_dir: str | None = None,
     ) -> list:
         """Process video frames and return samples without adding to main lists."""
         samples = []
 
-        # Get all video directories
-        video_dirs = [
-            d
-            for d in os.listdir(frames_dir)
-            if os.path.isdir(os.path.join(frames_dir, d))
-        ]
+        if specific_video_dir:
+            video_dirs = [specific_video_dir]
+        else:
+            # Get all video directories
+            try:
+                video_dirs = [
+                    d
+                    for d in os.listdir(frames_dir)
+                    if os.path.isdir(os.path.join(frames_dir, d))
+                ]
+            except Exception:
+                return []
 
         for video_dir in video_dirs:
             video_path = os.path.join(frames_dir, video_dir)
@@ -627,7 +671,7 @@ class RawFileDataset(data.Dataset):
                 frame_files.sort(
                     key=lambda x: int(os.path.splitext(os.path.basename(x))[0]),
                 )
-            except ValueError:
+            except (ValueError, IndexError):
                 # If numeric sorting fails, sort alphabetically
                 frame_files.sort()
 
