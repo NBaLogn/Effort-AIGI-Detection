@@ -93,62 +93,68 @@ export default function Home() {
       });
     };
 
+    const MAX_CONCURRENT_REQUESTS = 6;
+    const queue = [...files];
+
     try {
-      // Create an array of potential promises, but manage them so we can update progress
-      // We still run them concurrently, but we intercept each completion.
-      const promises = files.map(async (file) => {
-        const formData = new FormData();
-        formData.append("file", file);
+      const workers = Array.from({
+        length: Math.min(MAX_CONCURRENT_REQUESTS, files.length)
+      }).map(async () => {
+        while (queue.length > 0) {
+          const file = queue.shift();
+          if (!file) break;
 
-        try {
-          const endpoint = file.type.startsWith("video/")
-            ? "http://localhost:8000/predict_video"
-            : "http://localhost:8000/predict";
+          const formData = new FormData();
+          formData.append("file", file);
 
-          const response = await fetch(endpoint, {
-            method: "POST",
-            body: formData,
-          });
+          try {
+            const endpoint = file.type.startsWith("video/")
+              ? "http://localhost:8000/predict_video"
+              : "http://localhost:8000/predict";
 
-          if (!response.ok) {
-            throw new Error(`Failed to process ${file.name}`);
-          }
+            const response = await fetch(endpoint, {
+              method: "POST",
+              body: formData,
+            });
 
-          const data = await response.json();
-          const objectUrl = URL.createObjectURL(file);
+            if (!response.ok) {
+              throw new Error(`Failed to process ${file.name}`);
+            }
 
-          const result: AnalysisResult = {
-            filename: file.name,
-            originalImage: objectUrl,
-            gradCamImage: data.grad_cam_image,
-            label: data.label,
-            score: data.score,
-            reasoning: data.reasoning,
-            kind: file.type.startsWith("video/") ? "video" : "image",
-            videoMeta: file.type.startsWith("video/")
-              ? {
+            const data = await response.json();
+            const objectUrl = URL.createObjectURL(file);
+
+            const result: AnalysisResult = {
+              filename: file.name,
+              originalImage: objectUrl,
+              gradCamImage: data.grad_cam_image,
+              label: data.label,
+              score: data.score,
+              reasoning: data.reasoning,
+              kind: file.type.startsWith("video/") ? "video" : "image",
+              videoMeta: file.type.startsWith("video/")
+                ? {
                   sampledFrames: data.sampled_frames,
                   worstFrameIndex: data.worst_frame_index,
                   worstFrameScore: data.worst_frame_score,
                 }
-              : undefined,
-          };
+                : undefined,
+            };
 
-          addResult(result);
+            addResult(result);
 
-        } catch (err) {
-          console.error(err);
-          // For now, we just log errors but don't stop the whole batch.
-          // We could optionally add an "ErrorResult" type to the UI.
-        } finally {
-          setProgress((prev) => {
-            if (!prev) return null;
-            return { ...prev, current: prev.current + 1 };
-          });
+          } catch (err) {
+            console.error(err);
+          } finally {
+            setProgress((prev) => {
+              if (!prev) return null;
+              return { ...prev, current: prev.current + 1 };
+            });
+          }
         }
       });
 
-      await Promise.all(promises);
+      await Promise.all(workers);
 
     } catch (err) {
       setError("An error occurred while processing images.");
