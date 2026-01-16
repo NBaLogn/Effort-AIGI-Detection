@@ -3,5 +3,17 @@
     "enabled": true,
     "autoAllowBashIfSandboxed": true
   },
-  "outputStyle": "default"
+  "outputStyle": "default",
+  "permissions": {
+    "allow": [
+      "Read(evaluation_results)",
+      "Read(inference_results)",
+      "Read(logs)",
+      "Read(.agent)",
+      "Read(.gemini)",
+      "Read(.kilocode)",
+      "Read(.opencode)",
+      "Read(.vscode)"
+    ]
+  }
 }
