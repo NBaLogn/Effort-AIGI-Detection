@@ -1,0 +1,31 @@
+{
+  "datasets": {
+    "dataset_1_Hallo3": {
+      "auc": 0.0,
+      "eer": 0.0,
+      "accuracy": 0.79375,
+      "ap": 0.0,
+      "precision": 1.0,
+      "recall": 0.79375,
+      "f1": 0.8850174216027874,
+      "sample_count": 160,
+      "video_auc": 0.0,
+      "video_eer": 0.0,
+      "video_acc": 0.8
+    },
+    "dataset_2_MAGI-1": {
+      "auc": 0.0,
+      "eer": 0.0,
+      "accuracy": 0.19886363636363635,
+      "ap": 0.0,
+      "precision": 1.0,
+      "recall": 0.19886363636363635,
+      "f1": 0.33175355450236965,
+      "sample_count": 1056,
+      "video_auc": 0.0,
+      "video_eer": 0.0,
+      "video_acc": 0.16666666666666666
+    }
+  },
+  "timestamp": "2026-01-16T11:46:43.533849"
+}

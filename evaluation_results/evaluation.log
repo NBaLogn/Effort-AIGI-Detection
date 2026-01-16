@@ -9694,3 +9694,1118 @@ ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/TalkingHead_pr
 2026-01-16 09:49:19,263 - INFO - Saved evaluation results to evaluation_results/dataset_8_whichfaceisreal_eval_20260116_094919.json
 2026-01-16 09:49:19,264 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
 2026-01-16 09:49:19,264 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-16 10:17:37,804 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-16 10:17:37,805 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-16 10:17:37,805 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-16 10:17:37,805 - INFO - pretrained: no need to provide this for the effort model
+2026-01-16 10:17:37,805 - INFO - model_name: effort
+2026-01-16 10:17:37,805 - INFO - backbone_name: vit
+2026-01-16 10:17:37,805 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-16 10:17:37,805 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-16 10:17:37,805 - INFO - train_dataset: ['UADFV']
+2026-01-16 10:17:37,805 - INFO - test_dataset: ['UADFV']
+2026-01-16 10:17:37,805 - INFO - train_batchSize: 8
+2026-01-16 10:17:37,805 - INFO - test_batchSize: 8
+2026-01-16 10:17:37,805 - INFO - workers: 4
+2026-01-16 10:17:37,805 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-16 10:17:37,805 - INFO - resolution: 224
+2026-01-16 10:17:37,805 - INFO - with_mask: False
+2026-01-16 10:17:37,805 - INFO - with_landmark: False
+2026-01-16 10:17:37,805 - INFO - use_data_augmentation: True
+2026-01-16 10:17:37,805 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-16 10:17:37,805 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-16 10:17:37,805 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-16 10:17:37,805 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-16 10:17:37,805 - INFO - lr_scheduler: cosine
+2026-01-16 10:17:37,805 - INFO - lr_T_max: 5
+2026-01-16 10:17:37,805 - INFO - lr_eta_min: 1e-06
+2026-01-16 10:17:37,805 - INFO - nEpochs: 5
+2026-01-16 10:17:37,805 - INFO - start_epoch: 0
+2026-01-16 10:17:37,805 - INFO - save_epoch: 1
+2026-01-16 10:17:37,805 - INFO - rec_iter: 50
+2026-01-16 10:17:37,805 - INFO - logdir: ./logs
+2026-01-16 10:17:37,805 - INFO - manualSeed: 1024
+2026-01-16 10:17:37,805 - INFO - save_ckpt: True
+2026-01-16 10:17:37,805 - INFO - save_feat: True
+2026-01-16 10:17:37,805 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-16 10:17:37,806 - INFO - loss_func: cross_entropy
+2026-01-16 10:17:37,806 - INFO - losstype: None
+2026-01-16 10:17:37,806 - INFO - metric_scoring: auc
+2026-01-16 10:17:37,806 - INFO - fine_tune: True
+2026-01-16 10:17:37,806 - INFO - pretrained_checkpoint: None
+2026-01-16 10:17:37,806 - INFO - freeze_backbone: True
+2026-01-16 10:17:37,806 - INFO - train_classification_head: True
+2026-01-16 10:17:37,806 - INFO - train_svd_residuals: True
+2026-01-16 10:17:37,806 - INFO - save_avg: True
+2026-01-16 10:17:37,806 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-16 10:17:37,806 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-16 10:17:37,806 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-16 10:17:54,250 - INFO - Model loaded successfully
+2026-01-16 10:17:54,252 - INFO - Preparing test data for paths: ['DeepfakeBench/training/facedata/df40/CollabDiff']
+2026-01-16 10:17:54,252 - INFO - Using RawFileDataset with data from DeepfakeBench/training/facedata/df40/CollabDiff
+2026-01-16 10:17:54,255 - INFO - Auto-descending into val directory: DeepfakeBench/training/facedata/df40/CollabDiff/val
+2026-01-16 10:17:54,267 - INFO - Validating directory structure starting from: DeepfakeBench/training/facedata/df40/CollabDiff/val
+2026-01-16 10:17:54,267 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 10:17:54,268 - INFO - Discovering files recursively starting from DeepfakeBench/training/facedata/df40/CollabDiff/val
+2026-01-16 10:17:54,268 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/CollabDiff/val/real (label: real)
+2026-01-16 10:17:54,272 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/CollabDiff/val/fake (label: fake)
+2026-01-16 10:17:54,276 - INFO - Checking for faulty images...
+2026-01-16 10:17:55,261 - INFO - No faulty images found.
+2026-01-16 10:17:55,261 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-16 10:17:55,261 - INFO - RawFileDataset initialized with 300 samples for test mode
+2026-01-16 10:17:55,263 - INFO - Test loader prepared with 19 batches
+2026-01-16 10:17:55,263 - INFO - Evaluating on dataset_1_CollabDiff
+2026-01-16 10:18:40,595 - INFO - Evaluation results for dataset_1_CollabDiff:
+2026-01-16 10:18:40,596 - INFO -   auc: 0.9840
+2026-01-16 10:18:40,596 - INFO -   eer: 0.0667
+2026-01-16 10:18:40,596 - INFO -   accuracy: 0.9367
+2026-01-16 10:18:40,596 - INFO -   ap: 0.9829
+2026-01-16 10:18:40,596 - INFO -   precision: 0.9226
+2026-01-16 10:18:40,596 - INFO -   recall: 0.9533
+2026-01-16 10:18:40,596 - INFO -   f1: 0.9377
+2026-01-16 10:18:40,596 - INFO -   sample_count: 300.0000
+2026-01-16 10:18:40,596 - INFO -   video_auc: 1.0000
+2026-01-16 10:18:40,596 - INFO -   video_eer: 0.0000
+2026-01-16 10:18:40,596 - INFO -   video_acc: 1.0000
+2026-01-16 10:18:40,597 - INFO - Saved evaluation results to evaluation_results/dataset_1_CollabDiff_eval_20260116_101840.json
+2026-01-16 10:18:40,597 - INFO - Preparing test data for paths: ['DeepfakeBench/training/facedata/df40/deepfacelab']
+2026-01-16 10:18:40,598 - INFO - Using RawFileDataset with data from DeepfakeBench/training/facedata/df40/deepfacelab
+2026-01-16 10:18:40,599 - INFO - Auto-descending into val directory: DeepfakeBench/training/facedata/df40/deepfacelab/val
+2026-01-16 10:18:40,603 - INFO - Validating directory structure starting from: DeepfakeBench/training/facedata/df40/deepfacelab/val
+2026-01-16 10:18:40,603 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 10:18:40,603 - INFO - Discovering files recursively starting from DeepfakeBench/training/facedata/df40/deepfacelab/val
+2026-01-16 10:18:40,604 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/deepfacelab/val/real (label: real)
+2026-01-16 10:18:40,609 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/deepfacelab/val/fake (label: fake)
+2026-01-16 10:18:40,613 - INFO - Checking for faulty images...
+2026-01-16 10:18:41,165 - INFO - No faulty images found.
+2026-01-16 10:18:41,165 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-16 10:18:41,165 - INFO - RawFileDataset initialized with 300 samples for test mode
+2026-01-16 10:18:41,165 - INFO - Test loader prepared with 19 batches
+2026-01-16 10:18:41,166 - INFO - Evaluating on dataset_2_deepfacelab
+2026-01-16 10:19:26,443 - INFO - Evaluation results for dataset_2_deepfacelab:
+2026-01-16 10:19:26,445 - INFO -   auc: 0.8947
+2026-01-16 10:19:26,445 - INFO -   eer: 0.1667
+2026-01-16 10:19:26,445 - INFO -   accuracy: 0.7167
+2026-01-16 10:19:26,445 - INFO -   ap: 0.9073
+2026-01-16 10:19:26,446 - INFO -   precision: 0.6540
+2026-01-16 10:19:26,446 - INFO -   recall: 0.9200
+2026-01-16 10:19:26,446 - INFO -   f1: 0.7645
+2026-01-16 10:19:26,446 - INFO -   sample_count: 300.0000
+2026-01-16 10:19:26,446 - INFO -   video_auc: 1.0000
+2026-01-16 10:19:26,446 - INFO -   video_eer: 0.0000
+2026-01-16 10:19:26,446 - INFO -   video_acc: 0.5000
+2026-01-16 10:19:26,447 - INFO - Saved evaluation results to evaluation_results/dataset_2_deepfacelab_eval_20260116_101926.json
+2026-01-16 10:19:26,447 - INFO - Preparing test data for paths: ['DeepfakeBench/training/facedata/df40/heygen_new']
+2026-01-16 10:19:26,448 - INFO - Using RawFileDataset with data from DeepfakeBench/training/facedata/df40/heygen_new
+2026-01-16 10:19:26,449 - INFO - Auto-descending into val directory: DeepfakeBench/training/facedata/df40/heygen_new/val
+2026-01-16 10:19:26,456 - INFO - Validating directory structure starting from: DeepfakeBench/training/facedata/df40/heygen_new/val
+2026-01-16 10:19:26,457 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 10:19:26,457 - INFO - Discovering files recursively starting from DeepfakeBench/training/facedata/df40/heygen_new/val
+2026-01-16 10:19:26,458 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/heygen_new/val/real (label: real)
+2026-01-16 10:19:26,465 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/heygen_new/val/fake (label: fake)
+2026-01-16 10:19:26,469 - INFO - Checking for faulty images...
+2026-01-16 10:19:27,514 - INFO - No faulty images found.
+2026-01-16 10:19:27,514 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-16 10:19:27,514 - INFO - RawFileDataset initialized with 300 samples for test mode
+2026-01-16 10:19:27,514 - INFO - Test loader prepared with 19 batches
+2026-01-16 10:19:27,514 - INFO - Evaluating on dataset_3_heygen_new
+2026-01-16 10:20:11,854 - INFO - Evaluation results for dataset_3_heygen_new:
+2026-01-16 10:20:11,856 - INFO -   auc: 0.9074
+2026-01-16 10:20:11,856 - INFO -   eer: 0.1800
+2026-01-16 10:20:11,856 - INFO -   accuracy: 0.5633
+2026-01-16 10:20:11,856 - INFO -   ap: 0.9223
+2026-01-16 10:20:11,856 - INFO -   precision: 0.5341
+2026-01-16 10:20:11,856 - INFO -   recall: 0.9933
+2026-01-16 10:20:11,856 - INFO -   f1: 0.6946
+2026-01-16 10:20:11,856 - INFO -   sample_count: 300.0000
+2026-01-16 10:20:11,856 - INFO -   video_auc: 1.0000
+2026-01-16 10:20:11,856 - INFO -   video_eer: 0.0000
+2026-01-16 10:20:11,856 - INFO -   video_acc: 0.5000
+2026-01-16 10:20:11,857 - INFO - Saved evaluation results to evaluation_results/dataset_3_heygen_new_eval_20260116_102011.json
+2026-01-16 10:20:11,857 - INFO - Preparing test data for paths: ['DeepfakeBench/training/facedata/df40/MidJourney']
+2026-01-16 10:20:11,857 - INFO - Using RawFileDataset with data from DeepfakeBench/training/facedata/df40/MidJourney
+2026-01-16 10:20:11,858 - INFO - Auto-descending into val directory: DeepfakeBench/training/facedata/df40/MidJourney/val
+2026-01-16 10:20:11,861 - INFO - Validating directory structure starting from: DeepfakeBench/training/facedata/df40/MidJourney/val
+2026-01-16 10:20:11,861 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 10:20:11,861 - INFO - Discovering files recursively starting from DeepfakeBench/training/facedata/df40/MidJourney/val
+2026-01-16 10:20:11,862 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/MidJourney/val/real (label: real)
+2026-01-16 10:20:11,867 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/MidJourney/val/fake (label: fake)
+2026-01-16 10:20:11,873 - INFO - Checking for faulty images...
+2026-01-16 10:20:14,796 - INFO - No faulty images found.
+2026-01-16 10:20:14,796 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-16 10:20:14,796 - INFO - RawFileDataset initialized with 300 samples for test mode
+2026-01-16 10:20:14,796 - INFO - Test loader prepared with 19 batches
+2026-01-16 10:20:14,796 - INFO - Evaluating on dataset_4_MidJourney
+2026-01-16 10:20:59,416 - INFO - Evaluation results for dataset_4_MidJourney:
+2026-01-16 10:20:59,418 - INFO -   auc: 0.9932
+2026-01-16 10:20:59,418 - INFO -   eer: 0.0333
+2026-01-16 10:20:59,418 - INFO -   accuracy: 0.9567
+2026-01-16 10:20:59,418 - INFO -   ap: 0.9924
+2026-01-16 10:20:59,418 - INFO -   precision: 0.9202
+2026-01-16 10:20:59,418 - INFO -   recall: 1.0000
+2026-01-16 10:20:59,418 - INFO -   f1: 0.9585
+2026-01-16 10:20:59,418 - INFO -   sample_count: 300.0000
+2026-01-16 10:20:59,418 - INFO -   video_auc: 1.0000
+2026-01-16 10:20:59,418 - INFO -   video_eer: 0.0000
+2026-01-16 10:20:59,418 - INFO -   video_acc: 1.0000
+2026-01-16 10:20:59,420 - INFO - Saved evaluation results to evaluation_results/dataset_4_MidJourney_eval_20260116_102059.json
+2026-01-16 10:20:59,420 - INFO - Preparing test data for paths: ['DeepfakeBench/training/facedata/df40/stargan']
+2026-01-16 10:20:59,420 - INFO - Using RawFileDataset with data from DeepfakeBench/training/facedata/df40/stargan
+2026-01-16 10:20:59,421 - INFO - Auto-descending into val directory: DeepfakeBench/training/facedata/df40/stargan/val
+2026-01-16 10:20:59,427 - INFO - Validating directory structure starting from: DeepfakeBench/training/facedata/df40/stargan/val
+2026-01-16 10:20:59,428 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 10:20:59,428 - INFO - Discovering files recursively starting from DeepfakeBench/training/facedata/df40/stargan/val
+2026-01-16 10:20:59,429 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/stargan/val/real (label: real)
+2026-01-16 10:20:59,432 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/stargan/val/fake (label: fake)
+2026-01-16 10:20:59,436 - INFO - Checking for faulty images...
+2026-01-16 10:20:59,633 - INFO - No faulty images found.
+2026-01-16 10:20:59,633 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-16 10:20:59,633 - INFO - RawFileDataset initialized with 300 samples for test mode
+2026-01-16 10:20:59,634 - INFO - Test loader prepared with 19 batches
+2026-01-16 10:20:59,634 - INFO - Evaluating on dataset_5_stargan
+2026-01-16 10:21:44,346 - INFO - Evaluation results for dataset_5_stargan:
+2026-01-16 10:21:44,348 - INFO -   auc: 0.9795
+2026-01-16 10:21:44,348 - INFO -   eer: 0.0733
+2026-01-16 10:21:44,348 - INFO -   accuracy: 0.7600
+2026-01-16 10:21:44,348 - INFO -   ap: 0.9758
+2026-01-16 10:21:44,348 - INFO -   precision: 0.6757
+2026-01-16 10:21:44,348 - INFO -   recall: 1.0000
+2026-01-16 10:21:44,348 - INFO -   f1: 0.8065
+2026-01-16 10:21:44,348 - INFO -   sample_count: 300.0000
+2026-01-16 10:21:44,348 - INFO -   video_auc: 1.0000
+2026-01-16 10:21:44,348 - INFO -   video_eer: 0.0000
+2026-01-16 10:21:44,348 - INFO -   video_acc: 0.5000
+2026-01-16 10:21:44,349 - INFO - Saved evaluation results to evaluation_results/dataset_5_stargan_eval_20260116_102144.json
+2026-01-16 10:21:44,349 - INFO - Preparing test data for paths: ['DeepfakeBench/training/facedata/df40/starganv2']
+2026-01-16 10:21:44,350 - INFO - Using RawFileDataset with data from DeepfakeBench/training/facedata/df40/starganv2
+2026-01-16 10:21:44,351 - INFO - Auto-descending into val directory: DeepfakeBench/training/facedata/df40/starganv2/val
+2026-01-16 10:21:44,356 - INFO - Validating directory structure starting from: DeepfakeBench/training/facedata/df40/starganv2/val
+2026-01-16 10:21:44,357 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 10:21:44,357 - INFO - Discovering files recursively starting from DeepfakeBench/training/facedata/df40/starganv2/val
+2026-01-16 10:21:44,357 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/starganv2/val/real (label: real)
+2026-01-16 10:21:44,361 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/starganv2/val/fake (label: fake)
+2026-01-16 10:21:44,366 - INFO - Checking for faulty images...
+2026-01-16 10:21:44,481 - ERROR - Error loading image DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg: cannot identify image file 'DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg'
+2026-01-16 10:21:44,481 - ERROR - Error loading image DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg: Cannot identify image file: DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg
+2026-01-16 10:21:44,481 - WARNING - Removing faulty image: DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg - Cannot identify image file: DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg
+2026-01-16 10:21:44,566 - ERROR - Error loading image DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg: cannot identify image file 'DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg'
+2026-01-16 10:21:44,566 - ERROR - Error loading image DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg: Cannot identify image file: DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg
+2026-01-16 10:21:44,566 - WARNING - Removing faulty image: DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg - Cannot identify image file: DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg
+2026-01-16 10:21:44,641 - INFO - Removed 2 faulty images. Remaining: 298
+2026-01-16 10:21:44,641 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-16 10:21:44,641 - INFO - RawFileDataset initialized with 298 samples for test mode
+2026-01-16 10:21:44,641 - INFO - Test loader prepared with 19 batches
+2026-01-16 10:21:44,641 - INFO - Evaluating on dataset_6_starganv2
+2026-01-16 10:22:29,269 - INFO - Evaluation results for dataset_6_starganv2:
+2026-01-16 10:22:29,271 - INFO -   auc: 0.9490
+2026-01-16 10:22:29,271 - INFO -   eer: 0.1275
+2026-01-16 10:22:29,271 - INFO -   accuracy: 0.7181
+2026-01-16 10:22:29,271 - INFO -   ap: 0.9490
+2026-01-16 10:22:29,271 - INFO -   precision: 0.6407
+2026-01-16 10:22:29,271 - INFO -   recall: 0.9933
+2026-01-16 10:22:29,271 - INFO -   f1: 0.7789
+2026-01-16 10:22:29,271 - INFO -   sample_count: 298.0000
+2026-01-16 10:22:29,271 - INFO -   video_auc: 1.0000
+2026-01-16 10:22:29,271 - INFO -   video_eer: 0.0000
+2026-01-16 10:22:29,271 - INFO -   video_acc: 0.5000
+2026-01-16 10:22:29,273 - INFO - Saved evaluation results to evaluation_results/dataset_6_starganv2_eval_20260116_102229.json
+2026-01-16 10:22:29,273 - INFO - Preparing test data for paths: ['DeepfakeBench/training/facedata/df40/styleclip']
+2026-01-16 10:22:29,273 - INFO - Using RawFileDataset with data from DeepfakeBench/training/facedata/df40/styleclip
+2026-01-16 10:22:29,274 - INFO - Auto-descending into val directory: DeepfakeBench/training/facedata/df40/styleclip/val
+2026-01-16 10:22:29,280 - INFO - Validating directory structure starting from: DeepfakeBench/training/facedata/df40/styleclip/val
+2026-01-16 10:22:29,281 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 10:22:29,281 - INFO - Discovering files recursively starting from DeepfakeBench/training/facedata/df40/styleclip/val
+2026-01-16 10:22:29,282 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/styleclip/val/real (label: real)
+2026-01-16 10:22:29,285 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/styleclip/val/fake (label: fake)
+2026-01-16 10:22:29,291 - INFO - Checking for faulty images...
+2026-01-16 10:22:29,869 - INFO - No faulty images found.
+2026-01-16 10:22:29,869 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-16 10:22:29,870 - INFO - RawFileDataset initialized with 300 samples for test mode
+2026-01-16 10:22:29,870 - INFO - Test loader prepared with 19 batches
+2026-01-16 10:22:29,870 - INFO - Evaluating on dataset_7_styleclip
+2026-01-16 10:23:14,590 - INFO - Evaluation results for dataset_7_styleclip:
+2026-01-16 10:23:14,592 - INFO -   auc: 0.9984
+2026-01-16 10:23:14,592 - INFO -   eer: 0.0067
+2026-01-16 10:23:14,592 - INFO -   accuracy: 0.9600
+2026-01-16 10:23:14,592 - INFO -   ap: 0.9985
+2026-01-16 10:23:14,592 - INFO -   precision: 0.9313
+2026-01-16 10:23:14,592 - INFO -   recall: 0.9933
+2026-01-16 10:23:14,592 - INFO -   f1: 0.9613
+2026-01-16 10:23:14,592 - INFO -   sample_count: 300.0000
+2026-01-16 10:23:14,592 - INFO -   video_auc: 1.0000
+2026-01-16 10:23:14,592 - INFO -   video_eer: 0.0000
+2026-01-16 10:23:14,592 - INFO -   video_acc: 1.0000
+2026-01-16 10:23:14,594 - INFO - Saved evaluation results to evaluation_results/dataset_7_styleclip_eval_20260116_102314.json
+2026-01-16 10:23:14,594 - INFO - Preparing test data for paths: ['DeepfakeBench/training/facedata/df40/whichfaceisreal']
+2026-01-16 10:23:14,595 - INFO - Using RawFileDataset with data from DeepfakeBench/training/facedata/df40/whichfaceisreal
+2026-01-16 10:23:14,596 - INFO - Auto-descending into val directory: DeepfakeBench/training/facedata/df40/whichfaceisreal/val
+2026-01-16 10:23:14,602 - INFO - Validating directory structure starting from: DeepfakeBench/training/facedata/df40/whichfaceisreal/val
+2026-01-16 10:23:14,602 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 10:23:14,602 - INFO - Discovering files recursively starting from DeepfakeBench/training/facedata/df40/whichfaceisreal/val
+2026-01-16 10:23:14,604 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/whichfaceisreal/val/real (label: real)
+2026-01-16 10:23:14,611 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/whichfaceisreal/val/fake (label: fake)
+2026-01-16 10:23:14,616 - INFO - Checking for faulty images...
+2026-01-16 10:23:18,909 - INFO - No faulty images found.
+2026-01-16 10:23:18,909 - INFO - Dataset contains 150 real and 150 fake samples
+2026-01-16 10:23:18,910 - INFO - RawFileDataset initialized with 300 samples for test mode
+2026-01-16 10:23:18,910 - INFO - Test loader prepared with 19 batches
+2026-01-16 10:23:18,910 - INFO - Evaluating on dataset_8_whichfaceisreal
+2026-01-16 10:24:04,275 - INFO - Evaluation results for dataset_8_whichfaceisreal:
+2026-01-16 10:24:04,275 - INFO -   auc: 0.9560
+2026-01-16 10:24:04,275 - INFO -   eer: 0.1333
+2026-01-16 10:24:04,275 - INFO -   accuracy: 0.8700
+2026-01-16 10:24:04,275 - INFO -   ap: 0.9595
+2026-01-16 10:24:04,275 - INFO -   precision: 0.8675
+2026-01-16 10:24:04,276 - INFO -   recall: 0.8733
+2026-01-16 10:24:04,276 - INFO -   f1: 0.8704
+2026-01-16 10:24:04,276 - INFO -   sample_count: 300.0000
+2026-01-16 10:24:04,276 - INFO -   video_auc: 1.0000
+2026-01-16 10:24:04,276 - INFO -   video_eer: 0.0000
+2026-01-16 10:24:04,276 - INFO -   video_acc: 1.0000
+2026-01-16 10:24:04,277 - INFO - Saved evaluation results to evaluation_results/dataset_8_whichfaceisreal_eval_20260116_102404.json
+2026-01-16 10:24:04,278 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-16 10:24:04,278 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-16 10:31:08,451 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-16 10:31:08,451 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-16 10:31:08,451 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-16 10:31:08,451 - INFO - pretrained: no need to provide this for the effort model
+2026-01-16 10:31:08,451 - INFO - model_name: effort
+2026-01-16 10:31:08,451 - INFO - backbone_name: vit
+2026-01-16 10:31:08,451 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-16 10:31:08,451 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-16 10:31:08,451 - INFO - train_dataset: ['UADFV']
+2026-01-16 10:31:08,451 - INFO - test_dataset: ['UADFV']
+2026-01-16 10:31:08,451 - INFO - train_batchSize: 8
+2026-01-16 10:31:08,451 - INFO - test_batchSize: 8
+2026-01-16 10:31:08,451 - INFO - workers: 4
+2026-01-16 10:31:08,451 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-16 10:31:08,451 - INFO - resolution: 224
+2026-01-16 10:31:08,451 - INFO - with_mask: False
+2026-01-16 10:31:08,451 - INFO - with_landmark: False
+2026-01-16 10:31:08,451 - INFO - use_data_augmentation: True
+2026-01-16 10:31:08,451 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-16 10:31:08,451 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-16 10:31:08,451 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-16 10:31:08,451 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-16 10:31:08,451 - INFO - lr_scheduler: cosine
+2026-01-16 10:31:08,451 - INFO - lr_T_max: 5
+2026-01-16 10:31:08,451 - INFO - lr_eta_min: 1e-06
+2026-01-16 10:31:08,451 - INFO - nEpochs: 5
+2026-01-16 10:31:08,451 - INFO - start_epoch: 0
+2026-01-16 10:31:08,452 - INFO - save_epoch: 1
+2026-01-16 10:31:08,452 - INFO - rec_iter: 50
+2026-01-16 10:31:08,452 - INFO - logdir: ./logs
+2026-01-16 10:31:08,452 - INFO - manualSeed: 1024
+2026-01-16 10:31:08,452 - INFO - save_ckpt: True
+2026-01-16 10:31:08,452 - INFO - save_feat: True
+2026-01-16 10:31:08,452 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-16 10:31:08,452 - INFO - loss_func: cross_entropy
+2026-01-16 10:31:08,452 - INFO - losstype: None
+2026-01-16 10:31:08,452 - INFO - metric_scoring: auc
+2026-01-16 10:31:08,452 - INFO - fine_tune: True
+2026-01-16 10:31:08,452 - INFO - pretrained_checkpoint: None
+2026-01-16 10:31:08,452 - INFO - freeze_backbone: True
+2026-01-16 10:31:08,452 - INFO - train_classification_head: True
+2026-01-16 10:31:08,452 - INFO - train_svd_residuals: True
+2026-01-16 10:31:08,452 - INFO - save_avg: True
+2026-01-16 10:31:08,452 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-16 10:31:08,452 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-16 10:31:08,452 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-16 10:31:24,584 - INFO - Model loaded successfully
+2026-01-16 10:31:24,585 - INFO - Preparing test data for paths: ['DeepfakeBench/training/facedata/df40']
+2026-01-16 10:31:24,585 - INFO - Using RawFileDataset with data from DeepfakeBench/training/facedata/df40
+2026-01-16 10:31:24,588 - INFO - Validating directory structure starting from: DeepfakeBench/training/facedata/df40
+2026-01-16 10:31:24,588 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 10:31:24,588 - INFO - Discovering files recursively starting from DeepfakeBench/training/facedata/df40
+2026-01-16 10:31:24,588 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/whichfaceisreal (label: real)
+2026-01-16 10:31:24,594 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/stargan/val/real (label: real)
+2026-01-16 10:31:24,596 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/stargan/val/fake (label: fake)
+2026-01-16 10:31:24,603 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/CollabDiff/val/real (label: real)
+2026-01-16 10:31:24,605 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/CollabDiff/val/fake (label: fake)
+2026-01-16 10:31:24,610 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/heygen_new/val/real (label: real)
+2026-01-16 10:31:24,613 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/heygen_new/val/fake (label: fake)
+2026-01-16 10:31:24,617 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/whichfaceisreal/val/real (label: real)
+2026-01-16 10:31:24,619 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/whichfaceisreal/val/fake (label: fake)
+2026-01-16 10:31:24,626 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/MidJourney/val/real (label: real)
+2026-01-16 10:31:24,628 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/MidJourney/val/fake (label: fake)
+2026-01-16 10:31:24,635 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/deepfacelab/val/real (label: real)
+2026-01-16 10:31:24,636 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/deepfacelab/val/fake (label: fake)
+2026-01-16 10:31:24,645 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/starganv2/val/real (label: real)
+2026-01-16 10:31:24,647 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/starganv2/val/fake (label: fake)
+2026-01-16 10:31:24,652 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/styleclip/val/real (label: real)
+2026-01-16 10:31:24,654 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/styleclip/val/fake (label: fake)
+2026-01-16 10:31:24,656 - INFO - Checking for faulty images...
+2026-01-16 10:31:28,592 - ERROR - Error loading image DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg: cannot identify image file 'DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg'
+2026-01-16 10:31:28,592 - ERROR - Error loading image DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg: Cannot identify image file: DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg
+2026-01-16 10:31:28,592 - WARNING - Removing faulty image: DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg - Cannot identify image file: DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg
+2026-01-16 10:31:31,496 - ERROR - Error loading image DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg: cannot identify image file 'DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg'
+2026-01-16 10:31:31,496 - ERROR - Error loading image DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg: Cannot identify image file: DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg
+2026-01-16 10:31:31,496 - WARNING - Removing faulty image: DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg - Cannot identify image file: DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg
+2026-01-16 10:31:35,668 - INFO - Removed 2 faulty images. Remaining: 2398
+2026-01-16 10:31:35,668 - INFO - Dataset contains 1200 real and 1200 fake samples
+2026-01-16 10:31:35,669 - INFO - RawFileDataset initialized with 2398 samples for test mode
+2026-01-16 10:31:35,669 - INFO - Test loader prepared with 150 batches
+2026-01-16 10:31:35,669 - INFO - Evaluating on dataset_1_df40
+2026-01-16 10:32:44,023 - INFO - Processed batch 50/150
+2026-01-16 10:33:32,515 - INFO - Processed batch 100/150
+2026-01-16 10:34:20,867 - INFO - Processed batch 150/150
+2026-01-16 10:34:40,911 - INFO - Evaluation results for dataset_1_df40:
+2026-01-16 10:34:40,911 - INFO -   auc: 0.9477
+2026-01-16 10:34:40,911 - INFO -   eer: 0.1276
+2026-01-16 10:34:40,911 - INFO -   accuracy: 0.8103
+2026-01-16 10:34:40,911 - INFO -   ap: 0.9494
+2026-01-16 10:34:40,911 - INFO -   precision: 0.7366
+2026-01-16 10:34:40,911 - INFO -   recall: 0.9658
+2026-01-16 10:34:40,912 - INFO -   f1: 0.8358
+2026-01-16 10:34:40,912 - INFO -   sample_count: 2398.0000
+2026-01-16 10:34:40,912 - INFO -   video_auc: 1.0000
+2026-01-16 10:34:40,912 - INFO -   video_eer: 0.0000
+2026-01-16 10:34:40,912 - INFO -   video_acc: 0.7500
+2026-01-16 10:34:40,913 - INFO - Saved evaluation results to evaluation_results/dataset_1_df40_eval_20260116_103440.json
+2026-01-16 10:34:40,914 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-16 10:34:40,914 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-16 10:43:12,656 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-16 10:43:12,656 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-16 10:43:12,656 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-16 10:43:12,656 - INFO - pretrained: no need to provide this for the effort model
+2026-01-16 10:43:12,656 - INFO - model_name: effort
+2026-01-16 10:43:12,656 - INFO - backbone_name: vit
+2026-01-16 10:43:12,656 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-16 10:43:12,656 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-16 10:43:12,656 - INFO - train_dataset: ['UADFV']
+2026-01-16 10:43:12,657 - INFO - test_dataset: ['UADFV']
+2026-01-16 10:43:12,657 - INFO - train_batchSize: 8
+2026-01-16 10:43:12,657 - INFO - test_batchSize: 8
+2026-01-16 10:43:12,657 - INFO - workers: 4
+2026-01-16 10:43:12,657 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-16 10:43:12,657 - INFO - resolution: 224
+2026-01-16 10:43:12,657 - INFO - with_mask: False
+2026-01-16 10:43:12,657 - INFO - with_landmark: False
+2026-01-16 10:43:12,657 - INFO - use_data_augmentation: True
+2026-01-16 10:43:12,657 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-16 10:43:12,657 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-16 10:43:12,657 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-16 10:43:12,657 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-16 10:43:12,657 - INFO - lr_scheduler: cosine
+2026-01-16 10:43:12,657 - INFO - lr_T_max: 5
+2026-01-16 10:43:12,657 - INFO - lr_eta_min: 1e-06
+2026-01-16 10:43:12,657 - INFO - nEpochs: 5
+2026-01-16 10:43:12,657 - INFO - start_epoch: 0
+2026-01-16 10:43:12,657 - INFO - save_epoch: 1
+2026-01-16 10:43:12,657 - INFO - rec_iter: 50
+2026-01-16 10:43:12,657 - INFO - logdir: ./logs
+2026-01-16 10:43:12,657 - INFO - manualSeed: 1024
+2026-01-16 10:43:12,657 - INFO - save_ckpt: True
+2026-01-16 10:43:12,657 - INFO - save_feat: True
+2026-01-16 10:43:12,657 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-16 10:43:12,657 - INFO - loss_func: cross_entropy
+2026-01-16 10:43:12,657 - INFO - losstype: None
+2026-01-16 10:43:12,657 - INFO - metric_scoring: auc
+2026-01-16 10:43:12,657 - INFO - fine_tune: True
+2026-01-16 10:43:12,657 - INFO - pretrained_checkpoint: None
+2026-01-16 10:43:12,657 - INFO - freeze_backbone: True
+2026-01-16 10:43:12,657 - INFO - train_classification_head: True
+2026-01-16 10:43:12,657 - INFO - train_svd_residuals: True
+2026-01-16 10:43:12,657 - INFO - save_avg: True
+2026-01-16 10:43:12,657 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-16 10:43:12,657 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-16 10:43:12,657 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-16 10:43:29,056 - INFO - Model loaded successfully
+2026-01-16 10:43:29,057 - INFO - Preparing test data for paths: ['DeepfakeBench/training/facedata/df40']
+2026-01-16 10:43:29,057 - INFO - Using RawFileDataset with data from DeepfakeBench/training/facedata/df40
+2026-01-16 10:43:29,075 - INFO - Validating directory structure starting from: DeepfakeBench/training/facedata/df40
+2026-01-16 10:43:29,076 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 10:43:29,076 - INFO - Discovering files recursively starting from DeepfakeBench/training/facedata/df40
+2026-01-16 10:43:29,078 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/whichfaceisreal (label: real)
+2026-01-16 10:43:29,086 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/stargan/val/real (label: real)
+2026-01-16 10:43:29,088 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/stargan/val/fake (label: fake)
+2026-01-16 10:43:29,094 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/CollabDiff/val/real (label: real)
+2026-01-16 10:43:29,097 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/CollabDiff/val/fake (label: fake)
+2026-01-16 10:43:29,103 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/heygen_new/val/real (label: real)
+2026-01-16 10:43:29,105 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/heygen_new/val/fake (label: fake)
+2026-01-16 10:43:29,109 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/whichfaceisreal/val/real (label: real)
+2026-01-16 10:43:29,111 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/whichfaceisreal/val/fake (label: fake)
+2026-01-16 10:43:29,118 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/MidJourney/val/real (label: real)
+2026-01-16 10:43:29,120 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/MidJourney/val/fake (label: fake)
+2026-01-16 10:43:29,126 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/deepfacelab/val/real (label: real)
+2026-01-16 10:43:29,128 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/deepfacelab/val/fake (label: fake)
+2026-01-16 10:43:29,133 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/starganv2/val/real (label: real)
+2026-01-16 10:43:29,136 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/starganv2/val/fake (label: fake)
+2026-01-16 10:43:29,140 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/styleclip/val/real (label: real)
+2026-01-16 10:43:29,142 - INFO - Processing matching directory: DeepfakeBench/training/facedata/df40/styleclip/val/fake (label: fake)
+2026-01-16 10:43:29,145 - INFO - Checking for faulty images...
+2026-01-16 10:43:34,152 - ERROR - Error loading image DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg: cannot identify image file 'DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg'
+2026-01-16 10:43:34,152 - ERROR - Error loading image DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg: Cannot identify image file: DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg
+2026-01-16 10:43:34,152 - WARNING - Removing faulty image: DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg - Cannot identify image file: DeepfakeBench/training/facedata/df40/starganv2/val/real/1132.jpg
+2026-01-16 10:43:39,154 - ERROR - Error loading image DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg: cannot identify image file 'DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg'
+2026-01-16 10:43:39,154 - ERROR - Error loading image DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg: Cannot identify image file: DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg
+2026-01-16 10:43:39,154 - WARNING - Removing faulty image: DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg - Cannot identify image file: DeepfakeBench/training/facedata/df40/starganv2/val/fake/1096.jpg
+2026-01-16 10:43:40,041 - INFO - Removed 2 faulty images. Remaining: 2398
+2026-01-16 10:43:40,041 - INFO - Dataset contains 1200 real and 1200 fake samples
+2026-01-16 10:43:40,042 - INFO - RawFileDataset initialized with 2398 samples for test mode
+2026-01-16 10:43:40,042 - INFO - Test loader prepared with 150 batches
+2026-01-16 10:43:40,042 - INFO - Evaluating on dataset_1_df40
+2026-01-16 10:44:44,954 - INFO - Processed batch 50/150
+2026-01-16 10:45:32,772 - INFO - Processed batch 100/150
+2026-01-16 10:46:20,395 - INFO - Processed batch 150/150
+2026-01-16 10:46:40,450 - INFO - Evaluation results for dataset_1_df40:
+2026-01-16 10:46:40,450 - INFO -   auc: 0.9477
+2026-01-16 10:46:40,450 - INFO -   eer: 0.1276
+2026-01-16 10:46:40,450 - INFO -   accuracy: 0.8103
+2026-01-16 10:46:40,450 - INFO -   ap: 0.9494
+2026-01-16 10:46:40,450 - INFO -   precision: 0.7366
+2026-01-16 10:46:40,450 - INFO -   recall: 0.9658
+2026-01-16 10:46:40,450 - INFO -   f1: 0.8358
+2026-01-16 10:46:40,450 - INFO -   sample_count: 2398.0000
+2026-01-16 10:46:40,450 - INFO -   video_auc: 1.0000
+2026-01-16 10:46:40,450 - INFO -   video_eer: 0.0000
+2026-01-16 10:46:40,450 - INFO -   video_acc: 0.7500
+2026-01-16 10:46:40,452 - INFO - Saved evaluation results to evaluation_results/dataset_1_df40_eval_20260116_104640.json
+2026-01-16 10:46:40,453 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-16 10:46:40,453 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-16 10:50:26,530 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-16 10:50:26,530 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-16 10:50:26,530 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-16 10:50:26,530 - INFO - pretrained: no need to provide this for the effort model
+2026-01-16 10:50:26,530 - INFO - model_name: effort
+2026-01-16 10:50:26,530 - INFO - backbone_name: vit
+2026-01-16 10:50:26,530 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-16 10:50:26,531 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-16 10:50:26,531 - INFO - train_dataset: ['UADFV']
+2026-01-16 10:50:26,531 - INFO - test_dataset: ['UADFV']
+2026-01-16 10:50:26,531 - INFO - train_batchSize: 8
+2026-01-16 10:50:26,531 - INFO - test_batchSize: 8
+2026-01-16 10:50:26,531 - INFO - workers: 4
+2026-01-16 10:50:26,531 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-16 10:50:26,531 - INFO - resolution: 224
+2026-01-16 10:50:26,531 - INFO - with_mask: False
+2026-01-16 10:50:26,531 - INFO - with_landmark: False
+2026-01-16 10:50:26,531 - INFO - use_data_augmentation: True
+2026-01-16 10:50:26,531 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-16 10:50:26,531 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-16 10:50:26,531 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-16 10:50:26,531 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-16 10:50:26,531 - INFO - lr_scheduler: cosine
+2026-01-16 10:50:26,531 - INFO - lr_T_max: 5
+2026-01-16 10:50:26,531 - INFO - lr_eta_min: 1e-06
+2026-01-16 10:50:26,531 - INFO - nEpochs: 5
+2026-01-16 10:50:26,531 - INFO - start_epoch: 0
+2026-01-16 10:50:26,531 - INFO - save_epoch: 1
+2026-01-16 10:50:26,531 - INFO - rec_iter: 50
+2026-01-16 10:50:26,531 - INFO - logdir: ./logs
+2026-01-16 10:50:26,531 - INFO - manualSeed: 1024
+2026-01-16 10:50:26,531 - INFO - save_ckpt: True
+2026-01-16 10:50:26,531 - INFO - save_feat: True
+2026-01-16 10:50:26,531 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-16 10:50:26,531 - INFO - loss_func: cross_entropy
+2026-01-16 10:50:26,531 - INFO - losstype: None
+2026-01-16 10:50:26,531 - INFO - metric_scoring: auc
+2026-01-16 10:50:26,531 - INFO - fine_tune: True
+2026-01-16 10:50:26,531 - INFO - pretrained_checkpoint: None
+2026-01-16 10:50:26,531 - INFO - freeze_backbone: True
+2026-01-16 10:50:26,531 - INFO - train_classification_head: True
+2026-01-16 10:50:26,531 - INFO - train_svd_residuals: True
+2026-01-16 10:50:26,531 - INFO - save_avg: True
+2026-01-16 10:50:26,531 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-16 10:50:26,531 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-16 10:50:26,531 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-16 10:50:42,706 - INFO - Model loaded successfully
+2026-01-16 10:50:42,707 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed']
+2026-01-16 10:50:42,707 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-16 10:50:42,713 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-16 10:50:42,713 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 10:50:42,713 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed
+2026-01-16 10:50:42,714 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/fake (label: fake)
+2026-01-16 10:50:42,716 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitAudio/test/fake (label: fake)
+2026-01-16 10:50:43,120 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitAudio/val/fake (label: fake)
+2026-01-16 10:50:43,175 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/LivePortrait/test/fake (label: fake)
+2026-01-16 10:50:43,546 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/LivePortrait/val/fake (label: fake)
+2026-01-16 10:50:43,599 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo2/test/fake (label: fake)
+2026-01-16 10:50:43,863 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo2/val/fake (label: fake)
+2026-01-16 10:50:43,914 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitVideo/test/fake (label: fake)
+2026-01-16 10:50:44,208 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitVideo/val/fake (label: fake)
+2026-01-16 10:50:44,261 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/EmoPortrait/test/fake (label: fake)
+2026-01-16 10:50:44,704 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/EmoPortrait/val/fake (label: fake)
+2026-01-16 10:50:44,760 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo/test/fake (label: fake)
+2026-01-16 10:50:45,013 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo/val/fake (label: fake)
+2026-01-16 10:50:45,069 - INFO - Checking for faulty images...
+2026-01-16 10:51:03,621 - INFO - No faulty images found.
+2026-01-16 10:51:03,622 - INFO - Dataset contains 0 real and 18298 fake samples
+2026-01-16 10:51:03,623 - INFO - RawFileDataset initialized with 18298 samples for test mode
+2026-01-16 10:51:03,624 - INFO - Test loader prepared with 1144 batches
+2026-01-16 10:51:03,624 - INFO - Evaluating on dataset_1_TalkingHead_processed
+2026-01-16 10:52:07,559 - INFO - Processed batch 50/1144
+2026-01-16 10:52:55,015 - INFO - Processed batch 100/1144
+2026-01-16 10:53:42,618 - INFO - Processed batch 150/1144
+2026-01-16 10:54:30,125 - INFO - Processed batch 200/1144
+2026-01-16 10:55:17,378 - INFO - Processed batch 250/1144
+2026-01-16 10:56:04,835 - INFO - Processed batch 300/1144
+2026-01-16 10:56:52,158 - INFO - Processed batch 350/1144
+2026-01-16 10:57:39,912 - INFO - Processed batch 400/1144
+2026-01-16 10:58:27,674 - INFO - Processed batch 450/1144
+2026-01-16 10:59:16,266 - INFO - Processed batch 500/1144
+2026-01-16 11:00:05,547 - INFO - Processed batch 550/1144
+2026-01-16 11:00:54,463 - INFO - Processed batch 600/1144
+2026-01-16 11:01:42,343 - INFO - Processed batch 650/1144
+2026-01-16 11:02:30,166 - INFO - Processed batch 700/1144
+2026-01-16 11:03:17,855 - INFO - Processed batch 750/1144
+2026-01-16 11:04:05,401 - INFO - Processed batch 800/1144
+2026-01-16 11:04:53,069 - INFO - Processed batch 850/1144
+2026-01-16 11:05:41,696 - INFO - Processed batch 900/1144
+2026-01-16 11:06:30,045 - INFO - Processed batch 950/1144
+2026-01-16 11:07:17,935 - INFO - Processed batch 1000/1144
+2026-01-16 11:08:05,872 - INFO - Processed batch 1050/1144
+2026-01-16 11:08:53,762 - INFO - Processed batch 1100/1144
+2026-01-16 11:09:56,212 - INFO - Evaluation results for dataset_1_TalkingHead_processed:
+2026-01-16 11:09:56,212 - INFO -   auc: 0.0000
+2026-01-16 11:09:56,212 - INFO -   eer: 0.0000
+2026-01-16 11:09:56,212 - INFO -   accuracy: 0.6239
+2026-01-16 11:09:56,212 - INFO -   ap: 0.0000
+2026-01-16 11:09:56,212 - INFO -   precision: 1.0000
+2026-01-16 11:09:56,212 - INFO -   recall: 0.6239
+2026-01-16 11:09:56,212 - INFO -   f1: 0.7684
+2026-01-16 11:09:56,212 - INFO -   sample_count: 18298.0000
+2026-01-16 11:09:56,212 - INFO -   video_auc: 0.0000
+2026-01-16 11:09:56,213 - INFO -   video_eer: 0.0000
+2026-01-16 11:09:56,213 - INFO -   video_acc: 0.6314
+2026-01-16 11:09:56,218 - INFO - Saved evaluation results to evaluation_results/dataset_1_TalkingHead_processed_eval_20260116_110956.json
+2026-01-16 11:09:56,219 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-16 11:09:56,219 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-16 11:17:38,134 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-16 11:17:38,134 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-16 11:17:38,134 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-16 11:17:38,134 - INFO - pretrained: no need to provide this for the effort model
+2026-01-16 11:17:38,134 - INFO - model_name: effort
+2026-01-16 11:17:38,134 - INFO - backbone_name: vit
+2026-01-16 11:17:38,134 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-16 11:17:38,134 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-16 11:17:38,135 - INFO - train_dataset: ['UADFV']
+2026-01-16 11:17:38,135 - INFO - test_dataset: ['UADFV']
+2026-01-16 11:17:38,135 - INFO - train_batchSize: 8
+2026-01-16 11:17:38,135 - INFO - test_batchSize: 8
+2026-01-16 11:17:38,135 - INFO - workers: 4
+2026-01-16 11:17:38,135 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-16 11:17:38,135 - INFO - resolution: 224
+2026-01-16 11:17:38,135 - INFO - with_mask: False
+2026-01-16 11:17:38,135 - INFO - with_landmark: False
+2026-01-16 11:17:38,135 - INFO - use_data_augmentation: True
+2026-01-16 11:17:38,135 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-16 11:17:38,135 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-16 11:17:38,135 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-16 11:17:38,135 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-16 11:17:38,135 - INFO - lr_scheduler: cosine
+2026-01-16 11:17:38,135 - INFO - lr_T_max: 5
+2026-01-16 11:17:38,135 - INFO - lr_eta_min: 1e-06
+2026-01-16 11:17:38,135 - INFO - nEpochs: 5
+2026-01-16 11:17:38,135 - INFO - start_epoch: 0
+2026-01-16 11:17:38,135 - INFO - save_epoch: 1
+2026-01-16 11:17:38,135 - INFO - rec_iter: 50
+2026-01-16 11:17:38,135 - INFO - logdir: ./logs
+2026-01-16 11:17:38,135 - INFO - manualSeed: 1024
+2026-01-16 11:17:38,135 - INFO - save_ckpt: True
+2026-01-16 11:17:38,135 - INFO - save_feat: True
+2026-01-16 11:17:38,135 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-16 11:17:38,135 - INFO - loss_func: cross_entropy
+2026-01-16 11:17:38,135 - INFO - losstype: None
+2026-01-16 11:17:38,135 - INFO - metric_scoring: auc
+2026-01-16 11:17:38,135 - INFO - fine_tune: True
+2026-01-16 11:17:38,135 - INFO - pretrained_checkpoint: None
+2026-01-16 11:17:38,135 - INFO - freeze_backbone: True
+2026-01-16 11:17:38,135 - INFO - train_classification_head: True
+2026-01-16 11:17:38,135 - INFO - train_svd_residuals: True
+2026-01-16 11:17:38,135 - INFO - save_avg: True
+2026-01-16 11:17:38,135 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-16 11:17:38,135 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-16 11:17:38,135 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-16 11:17:54,855 - INFO - Model loaded successfully
+2026-01-16 11:17:54,857 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed/LivePortrait']
+2026-01-16 11:17:54,857 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/LivePortrait
+2026-01-16 11:17:54,859 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/LivePortrait/val
+2026-01-16 11:17:54,871 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/LivePortrait/val
+2026-01-16 11:17:54,871 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 11:17:54,871 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/LivePortrait/val
+2026-01-16 11:17:54,871 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/LivePortrait/val/fake (label: fake)
+2026-01-16 11:17:54,936 - INFO - Checking for faulty images...
+2026-01-16 11:17:55,765 - INFO - No faulty images found.
+2026-01-16 11:17:55,765 - INFO - Dataset contains 0 real and 800 fake samples
+2026-01-16 11:17:55,765 - INFO - RawFileDataset initialized with 800 samples for test mode
+2026-01-16 11:17:55,765 - INFO - Test loader prepared with 50 batches
+2026-01-16 11:17:55,765 - INFO - Evaluating on dataset_1_LivePortrait
+2026-01-16 11:19:01,267 - INFO - Processed batch 50/50
+2026-01-16 11:19:21,307 - INFO - Evaluation results for dataset_1_LivePortrait:
+2026-01-16 11:19:21,307 - INFO -   auc: 0.0000
+2026-01-16 11:19:21,307 - INFO -   eer: 0.0000
+2026-01-16 11:19:21,307 - INFO -   accuracy: 0.6787
+2026-01-16 11:19:21,307 - INFO -   ap: 0.0000
+2026-01-16 11:19:21,307 - INFO -   precision: 1.0000
+2026-01-16 11:19:21,307 - INFO -   recall: 0.6787
+2026-01-16 11:19:21,307 - INFO -   f1: 0.8086
+2026-01-16 11:19:21,307 - INFO -   sample_count: 800.0000
+2026-01-16 11:19:21,307 - INFO -   video_auc: 0.0000
+2026-01-16 11:19:21,307 - INFO -   video_eer: 0.0000
+2026-01-16 11:19:21,307 - INFO -   video_acc: 0.7200
+2026-01-16 11:19:21,309 - INFO - Saved evaluation results to evaluation_results/dataset_1_LivePortrait_eval_20260116_111921.json
+2026-01-16 11:19:21,309 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo2']
+2026-01-16 11:19:21,309 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo2
+2026-01-16 11:19:21,312 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo2/val
+2026-01-16 11:19:21,320 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo2/val
+2026-01-16 11:19:21,320 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 11:19:21,320 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo2/val
+2026-01-16 11:19:21,322 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo2/val/fake (label: fake)
+2026-01-16 11:19:21,380 - INFO - Checking for faulty images...
+2026-01-16 11:19:22,218 - INFO - No faulty images found.
+2026-01-16 11:19:22,218 - INFO - Dataset contains 0 real and 800 fake samples
+2026-01-16 11:19:22,218 - INFO - RawFileDataset initialized with 800 samples for test mode
+2026-01-16 11:19:22,219 - INFO - Test loader prepared with 50 batches
+2026-01-16 11:19:22,219 - INFO - Evaluating on dataset_2_Hallo2
+2026-01-16 11:20:26,291 - INFO - Processed batch 50/50
+2026-01-16 11:20:46,311 - INFO - Evaluation results for dataset_2_Hallo2:
+2026-01-16 11:20:46,311 - INFO -   auc: 0.0000
+2026-01-16 11:20:46,311 - INFO -   eer: 0.0000
+2026-01-16 11:20:46,311 - INFO -   accuracy: 0.3750
+2026-01-16 11:20:46,311 - INFO -   ap: 0.0000
+2026-01-16 11:20:46,311 - INFO -   precision: 1.0000
+2026-01-16 11:20:46,311 - INFO -   recall: 0.3750
+2026-01-16 11:20:46,311 - INFO -   f1: 0.5455
+2026-01-16 11:20:46,311 - INFO -   sample_count: 800.0000
+2026-01-16 11:20:46,311 - INFO -   video_auc: 0.0000
+2026-01-16 11:20:46,311 - INFO -   video_eer: 0.0000
+2026-01-16 11:20:46,311 - INFO -   video_acc: 0.3200
+2026-01-16 11:20:46,312 - INFO - Saved evaluation results to evaluation_results/dataset_2_Hallo2_eval_20260116_112046.json
+2026-01-16 11:20:46,312 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo']
+2026-01-16 11:20:46,312 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo
+2026-01-16 11:20:46,315 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo/val
+2026-01-16 11:20:46,319 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo/val
+2026-01-16 11:20:46,319 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 11:20:46,319 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo/val
+2026-01-16 11:20:46,321 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/Hallo/val/fake (label: fake)
+2026-01-16 11:20:46,382 - INFO - Checking for faulty images...
+2026-01-16 11:20:47,208 - INFO - No faulty images found.
+2026-01-16 11:20:47,208 - INFO - Dataset contains 0 real and 800 fake samples
+2026-01-16 11:20:47,208 - INFO - RawFileDataset initialized with 800 samples for test mode
+2026-01-16 11:20:47,208 - INFO - Test loader prepared with 50 batches
+2026-01-16 11:20:47,208 - INFO - Evaluating on dataset_3_Hallo
+2026-01-16 11:21:52,323 - INFO - Processed batch 50/50
+2026-01-16 11:22:12,364 - INFO - Evaluation results for dataset_3_Hallo:
+2026-01-16 11:22:12,364 - INFO -   auc: 0.0000
+2026-01-16 11:22:12,364 - INFO -   eer: 0.0000
+2026-01-16 11:22:12,364 - INFO -   accuracy: 0.5138
+2026-01-16 11:22:12,364 - INFO -   ap: 0.0000
+2026-01-16 11:22:12,365 - INFO -   precision: 1.0000
+2026-01-16 11:22:12,365 - INFO -   recall: 0.5138
+2026-01-16 11:22:12,365 - INFO -   f1: 0.6788
+2026-01-16 11:22:12,365 - INFO -   sample_count: 800.0000
+2026-01-16 11:22:12,365 - INFO -   video_auc: 0.0000
+2026-01-16 11:22:12,365 - INFO -   video_eer: 0.0000
+2026-01-16 11:22:12,365 - INFO -   video_acc: 0.5400
+2026-01-16 11:22:12,368 - INFO - Saved evaluation results to evaluation_results/dataset_3_Hallo_eval_20260116_112212.json
+2026-01-16 11:22:12,368 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed/EmoPortrait']
+2026-01-16 11:22:12,368 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/EmoPortrait
+2026-01-16 11:22:12,370 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/EmoPortrait/val
+2026-01-16 11:22:12,381 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/EmoPortrait/val
+2026-01-16 11:22:12,381 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 11:22:12,381 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/EmoPortrait/val
+2026-01-16 11:22:12,382 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/EmoPortrait/val/fake (label: fake)
+2026-01-16 11:22:12,441 - INFO - Checking for faulty images...
+2026-01-16 11:22:13,194 - INFO - No faulty images found.
+2026-01-16 11:22:13,195 - INFO - Dataset contains 0 real and 800 fake samples
+2026-01-16 11:22:13,195 - INFO - RawFileDataset initialized with 800 samples for test mode
+2026-01-16 11:22:13,195 - INFO - Test loader prepared with 50 batches
+2026-01-16 11:22:13,195 - INFO - Evaluating on dataset_4_EmoPortrait
+2026-01-16 11:23:18,536 - INFO - Processed batch 50/50
+2026-01-16 11:23:38,571 - INFO - Evaluation results for dataset_4_EmoPortrait:
+2026-01-16 11:23:38,572 - INFO -   auc: 0.0000
+2026-01-16 11:23:38,572 - INFO -   eer: 0.0000
+2026-01-16 11:23:38,572 - INFO -   accuracy: 0.9875
+2026-01-16 11:23:38,572 - INFO -   ap: 0.0000
+2026-01-16 11:23:38,572 - INFO -   precision: 1.0000
+2026-01-16 11:23:38,572 - INFO -   recall: 0.9875
+2026-01-16 11:23:38,572 - INFO -   f1: 0.9937
+2026-01-16 11:23:38,572 - INFO -   sample_count: 800.0000
+2026-01-16 11:23:38,572 - INFO -   video_auc: 0.0000
+2026-01-16 11:23:38,572 - INFO -   video_eer: 0.0000
+2026-01-16 11:23:38,572 - INFO -   video_acc: 0.9800
+2026-01-16 11:23:38,574 - INFO - Saved evaluation results to evaluation_results/dataset_4_EmoPortrait_eval_20260116_112338.json
+2026-01-16 11:23:38,574 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitVideo']
+2026-01-16 11:23:38,574 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitVideo
+2026-01-16 11:23:38,576 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitVideo/val
+2026-01-16 11:23:38,582 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitVideo/val
+2026-01-16 11:23:38,583 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 11:23:38,583 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitVideo/val
+2026-01-16 11:23:38,584 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitVideo/val/fake (label: fake)
+2026-01-16 11:23:38,645 - INFO - Checking for faulty images...
+2026-01-16 11:23:39,602 - INFO - No faulty images found.
+2026-01-16 11:23:39,603 - INFO - Dataset contains 0 real and 778 fake samples
+2026-01-16 11:23:39,603 - INFO - RawFileDataset initialized with 778 samples for test mode
+2026-01-16 11:23:39,603 - INFO - Test loader prepared with 49 batches
+2026-01-16 11:23:39,603 - INFO - Evaluating on dataset_5_AniPortraitVideo
+2026-01-16 11:25:03,657 - INFO - Evaluation results for dataset_5_AniPortraitVideo:
+2026-01-16 11:25:03,658 - INFO -   auc: 0.0000
+2026-01-16 11:25:03,658 - INFO -   eer: 0.0000
+2026-01-16 11:25:03,658 - INFO -   accuracy: 0.4846
+2026-01-16 11:25:03,658 - INFO -   ap: 0.0000
+2026-01-16 11:25:03,658 - INFO -   precision: 1.0000
+2026-01-16 11:25:03,658 - INFO -   recall: 0.4846
+2026-01-16 11:25:03,658 - INFO -   f1: 0.6528
+2026-01-16 11:25:03,658 - INFO -   sample_count: 778.0000
+2026-01-16 11:25:03,658 - INFO -   video_auc: 0.0000
+2026-01-16 11:25:03,658 - INFO -   video_eer: 0.0000
+2026-01-16 11:25:03,658 - INFO -   video_acc: 0.5000
+2026-01-16 11:25:03,660 - INFO - Saved evaluation results to evaluation_results/dataset_5_AniPortraitVideo_eval_20260116_112503.json
+2026-01-16 11:25:03,660 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitAudio']
+2026-01-16 11:25:03,660 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitAudio
+2026-01-16 11:25:03,662 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitAudio/val
+2026-01-16 11:25:03,679 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitAudio/val
+2026-01-16 11:25:03,679 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 11:25:03,679 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitAudio/val
+2026-01-16 11:25:03,681 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed/AniPortraitAudio/val/fake (label: fake)
+2026-01-16 11:25:03,740 - INFO - Checking for faulty images...
+2026-01-16 11:25:04,600 - INFO - No faulty images found.
+2026-01-16 11:25:04,600 - INFO - Dataset contains 0 real and 800 fake samples
+2026-01-16 11:25:04,600 - INFO - RawFileDataset initialized with 800 samples for test mode
+2026-01-16 11:25:04,602 - INFO - Test loader prepared with 50 batches
+2026-01-16 11:25:04,602 - INFO - Evaluating on dataset_6_AniPortraitAudio
+2026-01-16 11:26:10,747 - INFO - Processed batch 50/50
+2026-01-16 11:26:30,773 - INFO - Evaluation results for dataset_6_AniPortraitAudio:
+2026-01-16 11:26:30,773 - INFO -   auc: 0.0000
+2026-01-16 11:26:30,773 - INFO -   eer: 0.0000
+2026-01-16 11:26:30,773 - INFO -   accuracy: 0.3975
+2026-01-16 11:26:30,773 - INFO -   ap: 0.0000
+2026-01-16 11:26:30,773 - INFO -   precision: 1.0000
+2026-01-16 11:26:30,773 - INFO -   recall: 0.3975
+2026-01-16 11:26:30,773 - INFO -   f1: 0.5689
+2026-01-16 11:26:30,773 - INFO -   sample_count: 800.0000
+2026-01-16 11:26:30,773 - INFO -   video_auc: 0.0000
+2026-01-16 11:26:30,773 - INFO -   video_eer: 0.0000
+2026-01-16 11:26:30,773 - INFO -   video_acc: 0.4000
+2026-01-16 11:26:30,774 - INFO - Saved evaluation results to evaluation_results/dataset_6_AniPortraitAudio_eval_20260116_112630.json
+2026-01-16 11:26:30,775 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-16 11:26:30,775 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-16 11:29:14,886 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-16 11:29:14,886 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-16 11:29:14,886 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-16 11:29:14,886 - INFO - pretrained: no need to provide this for the effort model
+2026-01-16 11:29:14,886 - INFO - model_name: effort
+2026-01-16 11:29:14,886 - INFO - backbone_name: vit
+2026-01-16 11:29:14,886 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-16 11:29:14,886 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-16 11:29:14,886 - INFO - train_dataset: ['UADFV']
+2026-01-16 11:29:14,886 - INFO - test_dataset: ['UADFV']
+2026-01-16 11:29:14,886 - INFO - train_batchSize: 8
+2026-01-16 11:29:14,886 - INFO - test_batchSize: 8
+2026-01-16 11:29:14,886 - INFO - workers: 4
+2026-01-16 11:29:14,886 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-16 11:29:14,886 - INFO - resolution: 224
+2026-01-16 11:29:14,886 - INFO - with_mask: False
+2026-01-16 11:29:14,886 - INFO - with_landmark: False
+2026-01-16 11:29:14,886 - INFO - use_data_augmentation: True
+2026-01-16 11:29:14,886 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-16 11:29:14,886 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-16 11:29:14,886 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-16 11:29:14,886 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-16 11:29:14,886 - INFO - lr_scheduler: cosine
+2026-01-16 11:29:14,886 - INFO - lr_T_max: 5
+2026-01-16 11:29:14,886 - INFO - lr_eta_min: 1e-06
+2026-01-16 11:29:14,886 - INFO - nEpochs: 5
+2026-01-16 11:29:14,886 - INFO - start_epoch: 0
+2026-01-16 11:29:14,886 - INFO - save_epoch: 1
+2026-01-16 11:29:14,886 - INFO - rec_iter: 50
+2026-01-16 11:29:14,886 - INFO - logdir: ./logs
+2026-01-16 11:29:14,886 - INFO - manualSeed: 1024
+2026-01-16 11:29:14,886 - INFO - save_ckpt: True
+2026-01-16 11:29:14,886 - INFO - save_feat: True
+2026-01-16 11:29:14,886 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-16 11:29:14,886 - INFO - loss_func: cross_entropy
+2026-01-16 11:29:14,886 - INFO - losstype: None
+2026-01-16 11:29:14,886 - INFO - metric_scoring: auc
+2026-01-16 11:29:14,886 - INFO - fine_tune: True
+2026-01-16 11:29:14,886 - INFO - pretrained_checkpoint: None
+2026-01-16 11:29:14,886 - INFO - freeze_backbone: True
+2026-01-16 11:29:14,886 - INFO - train_classification_head: True
+2026-01-16 11:29:14,886 - INFO - train_svd_residuals: True
+2026-01-16 11:29:14,886 - INFO - save_avg: True
+2026-01-16 11:29:14,887 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-16 11:29:14,887 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-16 11:29:14,887 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-16 11:29:31,086 - INFO - Model loaded successfully
+2026-01-16 11:29:31,087 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized']
+2026-01-16 11:29:31,087 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized
+2026-01-16 11:29:31,092 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized
+2026-01-16 11:29:31,092 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 11:29:31,092 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized
+2026-01-16 11:29:31,110 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized: No valid images found in /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 451, in _discover_and_build_index
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+2026-01-16 11:29:31,113 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-16 11:29:31,113 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-16 11:32:31,344 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-16 11:32:31,344 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-16 11:32:31,344 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-16 11:32:31,344 - INFO - pretrained: no need to provide this for the effort model
+2026-01-16 11:32:31,344 - INFO - model_name: effort
+2026-01-16 11:32:31,344 - INFO - backbone_name: vit
+2026-01-16 11:32:31,344 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-16 11:32:31,344 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-16 11:32:31,344 - INFO - train_dataset: ['UADFV']
+2026-01-16 11:32:31,344 - INFO - test_dataset: ['UADFV']
+2026-01-16 11:32:31,344 - INFO - train_batchSize: 8
+2026-01-16 11:32:31,344 - INFO - test_batchSize: 8
+2026-01-16 11:32:31,344 - INFO - workers: 4
+2026-01-16 11:32:31,344 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-16 11:32:31,344 - INFO - resolution: 224
+2026-01-16 11:32:31,344 - INFO - with_mask: False
+2026-01-16 11:32:31,344 - INFO - with_landmark: False
+2026-01-16 11:32:31,344 - INFO - use_data_augmentation: True
+2026-01-16 11:32:31,344 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-16 11:32:31,344 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-16 11:32:31,344 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-16 11:32:31,344 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-16 11:32:31,344 - INFO - lr_scheduler: cosine
+2026-01-16 11:32:31,344 - INFO - lr_T_max: 5
+2026-01-16 11:32:31,344 - INFO - lr_eta_min: 1e-06
+2026-01-16 11:32:31,344 - INFO - nEpochs: 5
+2026-01-16 11:32:31,344 - INFO - start_epoch: 0
+2026-01-16 11:32:31,344 - INFO - save_epoch: 1
+2026-01-16 11:32:31,344 - INFO - rec_iter: 50
+2026-01-16 11:32:31,344 - INFO - logdir: ./logs
+2026-01-16 11:32:31,344 - INFO - manualSeed: 1024
+2026-01-16 11:32:31,345 - INFO - save_ckpt: True
+2026-01-16 11:32:31,345 - INFO - save_feat: True
+2026-01-16 11:32:31,345 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-16 11:32:31,345 - INFO - loss_func: cross_entropy
+2026-01-16 11:32:31,345 - INFO - losstype: None
+2026-01-16 11:32:31,345 - INFO - metric_scoring: auc
+2026-01-16 11:32:31,345 - INFO - fine_tune: True
+2026-01-16 11:32:31,345 - INFO - pretrained_checkpoint: None
+2026-01-16 11:32:31,345 - INFO - freeze_backbone: True
+2026-01-16 11:32:31,345 - INFO - train_classification_head: True
+2026-01-16 11:32:31,345 - INFO - train_svd_residuals: True
+2026-01-16 11:32:31,345 - INFO - save_avg: True
+2026-01-16 11:32:31,345 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-16 11:32:31,345 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-16 11:32:31,345 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-16 11:32:47,901 - INFO - Model loaded successfully
+2026-01-16 11:32:47,903 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized']
+2026-01-16 11:32:47,903 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized
+2026-01-16 11:32:47,918 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized
+2026-01-16 11:32:47,918 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 11:32:47,918 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized
+2026-01-16 11:32:47,920 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/MAGI-1/fake (label: fake)
+2026-01-16 11:32:47,951 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/Hallo3/fake (label: fake)
+2026-01-16 11:32:47,957 - INFO - Checking for faulty images...
+2026-01-16 11:32:49,288 - INFO - No faulty images found.
+2026-01-16 11:32:49,289 - INFO - Dataset contains 0 real and 1216 fake samples
+2026-01-16 11:32:49,289 - INFO - RawFileDataset initialized with 1216 samples for test mode
+2026-01-16 11:32:49,289 - INFO - Test loader prepared with 76 batches
+2026-01-16 11:32:49,289 - INFO - Evaluating on dataset_1_TalkingHead_processed_additional_dataset_optimized
+2026-01-16 11:33:54,905 - INFO - Processed batch 50/76
+2026-01-16 11:34:39,860 - INFO - Evaluation results for dataset_1_TalkingHead_processed_additional_dataset_optimized:
+2026-01-16 11:34:39,860 - INFO -   auc: 0.0000
+2026-01-16 11:34:39,860 - INFO -   eer: 0.0000
+2026-01-16 11:34:39,860 - INFO -   accuracy: 0.2771
+2026-01-16 11:34:39,860 - INFO -   ap: 0.0000
+2026-01-16 11:34:39,860 - INFO -   precision: 1.0000
+2026-01-16 11:34:39,860 - INFO -   recall: 0.2771
+2026-01-16 11:34:39,860 - INFO -   f1: 0.4340
+2026-01-16 11:34:39,860 - INFO -   sample_count: 1216.0000
+2026-01-16 11:34:39,860 - INFO -   video_auc: 0.0000
+2026-01-16 11:34:39,860 - INFO -   video_eer: 0.0000
+2026-01-16 11:34:39,860 - INFO -   video_acc: 0.2500
+2026-01-16 11:34:39,861 - INFO - Saved evaluation results to evaluation_results/dataset_1_TalkingHead_processed_additional_dataset_optimized_eval_20260116_113439.json
+2026-01-16 11:34:39,862 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-16 11:34:39,862 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-16 11:39:39,139 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-16 11:39:39,139 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-16 11:39:39,139 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-16 11:39:39,139 - INFO - pretrained: no need to provide this for the effort model
+2026-01-16 11:39:39,139 - INFO - model_name: effort
+2026-01-16 11:39:39,139 - INFO - backbone_name: vit
+2026-01-16 11:39:39,139 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-16 11:39:39,139 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-16 11:39:39,139 - INFO - train_dataset: ['UADFV']
+2026-01-16 11:39:39,139 - INFO - test_dataset: ['UADFV']
+2026-01-16 11:39:39,139 - INFO - train_batchSize: 8
+2026-01-16 11:39:39,139 - INFO - test_batchSize: 8
+2026-01-16 11:39:39,139 - INFO - workers: 4
+2026-01-16 11:39:39,139 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-16 11:39:39,139 - INFO - resolution: 224
+2026-01-16 11:39:39,139 - INFO - with_mask: False
+2026-01-16 11:39:39,139 - INFO - with_landmark: False
+2026-01-16 11:39:39,139 - INFO - use_data_augmentation: True
+2026-01-16 11:39:39,139 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-16 11:39:39,139 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-16 11:39:39,139 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-16 11:39:39,139 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-16 11:39:39,139 - INFO - lr_scheduler: cosine
+2026-01-16 11:39:39,139 - INFO - lr_T_max: 5
+2026-01-16 11:39:39,139 - INFO - lr_eta_min: 1e-06
+2026-01-16 11:39:39,139 - INFO - nEpochs: 5
+2026-01-16 11:39:39,139 - INFO - start_epoch: 0
+2026-01-16 11:39:39,139 - INFO - save_epoch: 1
+2026-01-16 11:39:39,139 - INFO - rec_iter: 50
+2026-01-16 11:39:39,139 - INFO - logdir: ./logs
+2026-01-16 11:39:39,139 - INFO - manualSeed: 1024
+2026-01-16 11:39:39,139 - INFO - save_ckpt: True
+2026-01-16 11:39:39,139 - INFO - save_feat: True
+2026-01-16 11:39:39,139 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-16 11:39:39,139 - INFO - loss_func: cross_entropy
+2026-01-16 11:39:39,139 - INFO - losstype: None
+2026-01-16 11:39:39,139 - INFO - metric_scoring: auc
+2026-01-16 11:39:39,140 - INFO - fine_tune: True
+2026-01-16 11:39:39,140 - INFO - pretrained_checkpoint: None
+2026-01-16 11:39:39,140 - INFO - freeze_backbone: True
+2026-01-16 11:39:39,140 - INFO - train_classification_head: True
+2026-01-16 11:39:39,140 - INFO - train_svd_residuals: True
+2026-01-16 11:39:39,140 - INFO - save_avg: True
+2026-01-16 11:39:39,140 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-16 11:39:39,140 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-16 11:39:39,140 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-16 11:39:56,160 - INFO - Model loaded successfully
+2026-01-16 11:39:56,161 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized']
+2026-01-16 11:39:56,161 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized
+2026-01-16 11:39:56,165 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized
+2026-01-16 11:39:56,166 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 11:39:56,166 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized
+2026-01-16 11:39:56,166 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/MAGI-1/val/fake (label: fake)
+2026-01-16 11:39:56,202 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/Hallo3/val/fake (label: fake)
+2026-01-16 11:39:56,208 - INFO - Checking for faulty images...
+2026-01-16 11:39:57,532 - INFO - No faulty images found.
+2026-01-16 11:39:57,532 - INFO - Dataset contains 0 real and 1216 fake samples
+2026-01-16 11:39:57,532 - INFO - RawFileDataset initialized with 1216 samples for test mode
+2026-01-16 11:39:57,532 - INFO - Test loader prepared with 76 batches
+2026-01-16 11:39:57,532 - INFO - Evaluating on dataset_1_TalkingHead_processed_additional_dataset_optimized
+2026-01-16 11:41:01,981 - INFO - Processed batch 50/76
+2026-01-16 11:41:47,371 - INFO - Evaluation results for dataset_1_TalkingHead_processed_additional_dataset_optimized:
+2026-01-16 11:41:47,372 - INFO -   auc: 0.0000
+2026-01-16 11:41:47,372 - INFO -   eer: 0.0000
+2026-01-16 11:41:47,372 - INFO -   accuracy: 0.2771
+2026-01-16 11:41:47,372 - INFO -   ap: 0.0000
+2026-01-16 11:41:47,372 - INFO -   precision: 1.0000
+2026-01-16 11:41:47,372 - INFO -   recall: 0.2771
+2026-01-16 11:41:47,372 - INFO -   f1: 0.4340
+2026-01-16 11:41:47,372 - INFO -   sample_count: 1216.0000
+2026-01-16 11:41:47,372 - INFO -   video_auc: 0.0000
+2026-01-16 11:41:47,372 - INFO -   video_eer: 0.0000
+2026-01-16 11:41:47,372 - INFO -   video_acc: 0.2500
+2026-01-16 11:41:47,373 - INFO - Saved evaluation results to evaluation_results/dataset_1_TalkingHead_processed_additional_dataset_optimized_eval_20260116_114147.json
+2026-01-16 11:41:47,374 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-16 11:41:47,374 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-16 11:44:07,696 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-16 11:44:07,696 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-16 11:44:07,696 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-16 11:44:07,696 - INFO - pretrained: no need to provide this for the effort model
+2026-01-16 11:44:07,696 - INFO - model_name: effort
+2026-01-16 11:44:07,696 - INFO - backbone_name: vit
+2026-01-16 11:44:07,696 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-16 11:44:07,696 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-16 11:44:07,696 - INFO - train_dataset: ['UADFV']
+2026-01-16 11:44:07,696 - INFO - test_dataset: ['UADFV']
+2026-01-16 11:44:07,696 - INFO - train_batchSize: 8
+2026-01-16 11:44:07,696 - INFO - test_batchSize: 8
+2026-01-16 11:44:07,696 - INFO - workers: 4
+2026-01-16 11:44:07,697 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-16 11:44:07,697 - INFO - resolution: 224
+2026-01-16 11:44:07,697 - INFO - with_mask: False
+2026-01-16 11:44:07,697 - INFO - with_landmark: False
+2026-01-16 11:44:07,697 - INFO - use_data_augmentation: True
+2026-01-16 11:44:07,697 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-16 11:44:07,697 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-16 11:44:07,697 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-16 11:44:07,697 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-16 11:44:07,697 - INFO - lr_scheduler: cosine
+2026-01-16 11:44:07,697 - INFO - lr_T_max: 5
+2026-01-16 11:44:07,697 - INFO - lr_eta_min: 1e-06
+2026-01-16 11:44:07,697 - INFO - nEpochs: 5
+2026-01-16 11:44:07,697 - INFO - start_epoch: 0
+2026-01-16 11:44:07,697 - INFO - save_epoch: 1
+2026-01-16 11:44:07,697 - INFO - rec_iter: 50
+2026-01-16 11:44:07,697 - INFO - logdir: ./logs
+2026-01-16 11:44:07,697 - INFO - manualSeed: 1024
+2026-01-16 11:44:07,697 - INFO - save_ckpt: True
+2026-01-16 11:44:07,697 - INFO - save_feat: True
+2026-01-16 11:44:07,697 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-16 11:44:07,697 - INFO - loss_func: cross_entropy
+2026-01-16 11:44:07,697 - INFO - losstype: None
+2026-01-16 11:44:07,697 - INFO - metric_scoring: auc
+2026-01-16 11:44:07,697 - INFO - fine_tune: True
+2026-01-16 11:44:07,697 - INFO - pretrained_checkpoint: None
+2026-01-16 11:44:07,697 - INFO - freeze_backbone: True
+2026-01-16 11:44:07,697 - INFO - train_classification_head: True
+2026-01-16 11:44:07,697 - INFO - train_svd_residuals: True
+2026-01-16 11:44:07,697 - INFO - save_avg: True
+2026-01-16 11:44:07,697 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-16 11:44:07,697 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-16 11:44:07,697 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-16 11:44:24,451 - INFO - Model loaded successfully
+2026-01-16 11:44:24,452 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/Hallo3']
+2026-01-16 11:44:24,452 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/Hallo3
+2026-01-16 11:44:24,453 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/Hallo3/val
+2026-01-16 11:44:24,463 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/Hallo3/val
+2026-01-16 11:44:24,463 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 11:44:24,463 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/Hallo3/val
+2026-01-16 11:44:24,463 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/Hallo3/val/fake (label: fake)
+2026-01-16 11:44:24,478 - INFO - Checking for faulty images...
+2026-01-16 11:44:24,664 - INFO - No faulty images found.
+2026-01-16 11:44:24,664 - INFO - Dataset contains 0 real and 160 fake samples
+2026-01-16 11:44:24,664 - INFO - RawFileDataset initialized with 160 samples for test mode
+2026-01-16 11:44:24,665 - INFO - Test loader prepared with 10 batches
+2026-01-16 11:44:24,665 - INFO - Evaluating on dataset_1_Hallo3
+2026-01-16 11:45:02,439 - INFO - Evaluation results for dataset_1_Hallo3:
+2026-01-16 11:45:02,440 - INFO -   auc: 0.0000
+2026-01-16 11:45:02,440 - INFO -   eer: 0.0000
+2026-01-16 11:45:02,440 - INFO -   accuracy: 0.7937
+2026-01-16 11:45:02,440 - INFO -   ap: 0.0000
+2026-01-16 11:45:02,440 - INFO -   precision: 1.0000
+2026-01-16 11:45:02,440 - INFO -   recall: 0.7937
+2026-01-16 11:45:02,440 - INFO -   f1: 0.8850
+2026-01-16 11:45:02,440 - INFO -   sample_count: 160.0000
+2026-01-16 11:45:02,440 - INFO -   video_auc: 0.0000
+2026-01-16 11:45:02,440 - INFO -   video_eer: 0.0000
+2026-01-16 11:45:02,440 - INFO -   video_acc: 0.8000
+2026-01-16 11:45:02,441 - INFO - Saved evaluation results to evaluation_results/dataset_1_Hallo3_eval_20260116_114502.json
+2026-01-16 11:45:02,441 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/MAGI-1']
+2026-01-16 11:45:02,441 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/MAGI-1
+2026-01-16 11:45:02,441 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/MAGI-1/val
+2026-01-16 11:45:02,448 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/MAGI-1/val
+2026-01-16 11:45:02,449 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-16 11:45:02,449 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/MAGI-1/val
+2026-01-16 11:45:02,449 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/TalkingHead_processed_additional_dataset_optimized/MAGI-1/val/fake (label: fake)
+2026-01-16 11:45:02,498 - INFO - Checking for faulty images...
+2026-01-16 11:45:03,604 - INFO - No faulty images found.
+2026-01-16 11:45:03,605 - INFO - Dataset contains 0 real and 1056 fake samples
+2026-01-16 11:45:03,605 - INFO - RawFileDataset initialized with 1056 samples for test mode
+2026-01-16 11:45:03,605 - INFO - Test loader prepared with 66 batches
+2026-01-16 11:45:03,605 - INFO - Evaluating on dataset_2_MAGI-1
+2026-01-16 11:46:08,182 - INFO - Processed batch 50/66
+2026-01-16 11:46:43,531 - INFO - Evaluation results for dataset_2_MAGI-1:
+2026-01-16 11:46:43,532 - INFO -   auc: 0.0000
+2026-01-16 11:46:43,532 - INFO -   eer: 0.0000
+2026-01-16 11:46:43,532 - INFO -   accuracy: 0.1989
+2026-01-16 11:46:43,532 - INFO -   ap: 0.0000
+2026-01-16 11:46:43,532 - INFO -   precision: 1.0000
+2026-01-16 11:46:43,532 - INFO -   recall: 0.1989
+2026-01-16 11:46:43,532 - INFO -   f1: 0.3318
+2026-01-16 11:46:43,532 - INFO -   sample_count: 1056.0000
+2026-01-16 11:46:43,532 - INFO -   video_auc: 0.0000
+2026-01-16 11:46:43,532 - INFO -   video_eer: 0.0000
+2026-01-16 11:46:43,532 - INFO -   video_acc: 0.1667
+2026-01-16 11:46:43,533 - INFO - Saved evaluation results to evaluation_results/dataset_2_MAGI-1_eval_20260116_114643.json
+2026-01-16 11:46:43,533 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-16 11:46:43,534 - INFO - Fine-tuned model evaluation finished successfully
