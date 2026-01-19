@@ -10809,3 +10809,995 @@ ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/TalkingHead_pr
 2026-01-16 11:46:43,533 - INFO - Saved evaluation results to evaluation_results/dataset_2_MAGI-1_eval_20260116_114643.json
 2026-01-16 11:46:43,533 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
 2026-01-16 11:46:43,534 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-19 10:05:48,361 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-19 10:05:48,361 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-19 10:05:48,361 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-19 10:05:48,361 - INFO - pretrained: no need to provide this for the effort model
+2026-01-19 10:05:48,361 - INFO - model_name: effort
+2026-01-19 10:05:48,361 - INFO - backbone_name: vit
+2026-01-19 10:05:48,361 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-19 10:05:48,361 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-19 10:05:48,362 - INFO - train_dataset: ['UADFV']
+2026-01-19 10:05:48,362 - INFO - test_dataset: ['UADFV']
+2026-01-19 10:05:48,362 - INFO - train_batchSize: 8
+2026-01-19 10:05:48,362 - INFO - test_batchSize: 8
+2026-01-19 10:05:48,362 - INFO - workers: 4
+2026-01-19 10:05:48,362 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-19 10:05:48,362 - INFO - resolution: 224
+2026-01-19 10:05:48,362 - INFO - with_mask: False
+2026-01-19 10:05:48,362 - INFO - with_landmark: False
+2026-01-19 10:05:48,362 - INFO - use_data_augmentation: True
+2026-01-19 10:05:48,362 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-19 10:05:48,362 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-19 10:05:48,362 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-19 10:05:48,362 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-19 10:05:48,362 - INFO - lr_scheduler: cosine
+2026-01-19 10:05:48,362 - INFO - lr_T_max: 5
+2026-01-19 10:05:48,362 - INFO - lr_eta_min: 1e-06
+2026-01-19 10:05:48,362 - INFO - nEpochs: 5
+2026-01-19 10:05:48,362 - INFO - start_epoch: 0
+2026-01-19 10:05:48,362 - INFO - save_epoch: 1
+2026-01-19 10:05:48,362 - INFO - rec_iter: 50
+2026-01-19 10:05:48,362 - INFO - logdir: ./logs
+2026-01-19 10:05:48,362 - INFO - manualSeed: 1024
+2026-01-19 10:05:48,362 - INFO - save_ckpt: True
+2026-01-19 10:05:48,362 - INFO - save_feat: True
+2026-01-19 10:05:48,362 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-19 10:05:48,362 - INFO - loss_func: cross_entropy
+2026-01-19 10:05:48,362 - INFO - losstype: None
+2026-01-19 10:05:48,362 - INFO - metric_scoring: auc
+2026-01-19 10:05:48,362 - INFO - fine_tune: True
+2026-01-19 10:05:48,362 - INFO - pretrained_checkpoint: None
+2026-01-19 10:05:48,362 - INFO - freeze_backbone: True
+2026-01-19 10:05:48,362 - INFO - train_classification_head: True
+2026-01-19 10:05:48,362 - INFO - train_svd_residuals: True
+2026-01-19 10:05:48,362 - INFO - save_avg: True
+2026-01-19 10:05:48,362 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-19 10:05:48,362 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-19 10:05:48,362 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-19 10:06:05,198 - INFO - Model loaded successfully
+2026-01-19 10:06:05,200 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_CoDiff']
+2026-01-19 10:06:05,200 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_CoDiff
+2026-01-19 10:06:05,203 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_CoDiff/val
+2026-01-19 10:06:05,238 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_CoDiff/val
+2026-01-19 10:06:05,238 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:06:05,238 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_CoDiff/val
+2026-01-19 10:06:05,272 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_CoDiff: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_CoDiff/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 451, in _discover_and_build_index
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_CoDiff/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+2026-01-19 10:06:05,279 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_Imagic']
+2026-01-19 10:06:05,280 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_Imagic
+2026-01-19 10:06:05,281 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_Imagic/val
+2026-01-19 10:06:05,283 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_Imagic/val
+2026-01-19 10:06:05,283 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:06:05,284 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_Imagic/val
+2026-01-19 10:06:05,312 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_Imagic: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_Imagic/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 451, in _discover_and_build_index
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_Imagic/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+2026-01-19 10:06:05,313 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_cycle_diff']
+2026-01-19 10:06:05,313 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_cycle_diff
+2026-01-19 10:06:05,314 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_cycle_diff/val
+2026-01-19 10:06:05,316 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_cycle_diff/val
+2026-01-19 10:06:05,316 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:06:05,316 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_cycle_diff/val
+2026-01-19 10:06:05,350 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_cycle_diff: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_cycle_diff/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 451, in _discover_and_build_index
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_cycle_diff/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+2026-01-19 10:06:05,352 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DCFace']
+2026-01-19 10:06:05,352 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DCFace
+2026-01-19 10:06:05,352 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DCFace/val
+2026-01-19 10:06:05,354 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DCFace/val
+2026-01-19 10:06:05,354 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:06:05,354 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DCFace/val
+2026-01-19 10:06:05,373 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DCFace: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DCFace/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 451, in _discover_and_build_index
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DCFace/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+2026-01-19 10:06:05,374 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DiffFace']
+2026-01-19 10:06:05,374 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DiffFace
+2026-01-19 10:06:05,375 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DiffFace/val
+2026-01-19 10:06:05,376 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DiffFace/val
+2026-01-19 10:06:05,376 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:06:05,376 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DiffFace/val
+2026-01-19 10:06:05,387 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DiffFace: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DiffFace/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 451, in _discover_and_build_index
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DiffFace/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+2026-01-19 10:06:05,388 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_DreamBooth']
+2026-01-19 10:06:05,388 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_DreamBooth
+2026-01-19 10:06:05,389 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_DreamBooth/val
+2026-01-19 10:06:05,390 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_DreamBooth/val
+2026-01-19 10:06:05,390 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:06:05,390 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_DreamBooth/val
+2026-01-19 10:06:05,407 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_DreamBooth: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_DreamBooth/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 451, in _discover_and_build_index
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_DreamBooth/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+2026-01-19 10:06:05,408 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_FreeDoM_I']
+2026-01-19 10:06:05,408 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_FreeDoM_I
+2026-01-19 10:06:05,409 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_FreeDoM_I/val
+2026-01-19 10:06:05,410 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_FreeDoM_I/val
+2026-01-19 10:06:05,410 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:06:05,410 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_FreeDoM_I/val
+2026-01-19 10:06:05,424 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_FreeDoM_I: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_FreeDoM_I/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 451, in _discover_and_build_index
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_FreeDoM_I/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+2026-01-19 10:06:05,424 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_LoRA']
+2026-01-19 10:06:05,424 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_LoRA
+2026-01-19 10:06:05,425 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_LoRA/val
+2026-01-19 10:06:05,427 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_LoRA/val
+2026-01-19 10:06:05,427 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:06:05,427 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_LoRA/val
+2026-01-19 10:06:05,439 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_LoRA: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_LoRA/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 451, in _discover_and_build_index
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_LoRA/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+2026-01-19 10:06:05,439 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_SDXL_Refine']
+2026-01-19 10:06:05,439 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_SDXL_Refine
+2026-01-19 10:06:05,440 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_SDXL_Refine/val
+2026-01-19 10:06:05,441 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_SDXL_Refine/val
+2026-01-19 10:06:05,442 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:06:05,442 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_SDXL_Refine/val
+2026-01-19 10:06:05,469 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_SDXL_Refine: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_SDXL_Refine/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 451, in _discover_and_build_index
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_SDXL_Refine/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+2026-01-19 10:06:05,470 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_FreeDoM_T']
+2026-01-19 10:06:05,470 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_FreeDoM_T
+2026-01-19 10:06:05,470 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_FreeDoM_T/val
+2026-01-19 10:06:05,472 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_FreeDoM_T/val
+2026-01-19 10:06:05,472 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:06:05,472 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_FreeDoM_T/val
+2026-01-19 10:06:05,487 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_FreeDoM_T: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_FreeDoM_T/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 451, in _discover_and_build_index
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_FreeDoM_T/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+2026-01-19 10:06:05,488 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_HPS']
+2026-01-19 10:06:05,488 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_HPS
+2026-01-19 10:06:05,489 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_HPS/val
+2026-01-19 10:06:05,490 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_HPS/val
+2026-01-19 10:06:05,490 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:06:05,490 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_HPS/val
+2026-01-19 10:06:05,526 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_HPS: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_HPS/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 451, in _discover_and_build_index
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_HPS/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+2026-01-19 10:06:05,527 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_Midjourney']
+2026-01-19 10:06:05,527 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_Midjourney
+2026-01-19 10:06:05,528 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_Midjourney/val
+2026-01-19 10:06:05,530 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_Midjourney/val
+2026-01-19 10:06:05,530 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:06:05,530 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_Midjourney/val
+2026-01-19 10:06:05,549 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_Midjourney: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_Midjourney/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 451, in _discover_and_build_index
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_Midjourney/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+2026-01-19 10:06:05,549 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_SDXL']
+2026-01-19 10:06:05,549 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_SDXL
+2026-01-19 10:06:05,550 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_SDXL/val
+2026-01-19 10:06:05,552 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_SDXL/val
+2026-01-19 10:06:05,552 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:06:05,552 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_SDXL/val
+2026-01-19 10:06:05,577 - ERROR - Failed to evaluate on /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_SDXL: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_SDXL/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+Traceback (most recent call last):
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 324, in main
+    test_loader = prepare_test_data(config, [dataset_path], args.batch_size)
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/evaluate_finetune.py", line 138, in prepare_test_data
+    test_set = DatasetFactory.create_dataset(
+        config=test_config,
+        mode="test",
+        raw_data_root=test_dataset_paths,
+    )
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/factory.py", line 59, in create_dataset
+    return RawFileDataset(config, mode, raw_data_root[0])
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 280, in __init__
+    self._discover_and_build_index()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/logan/Developer/vibes/Effort-AIGI-Detection/DeepfakeBench/training/dataset/raw_file_dataset.py", line 451, in _discover_and_build_index
+    raise ValueError(
+    ...<3 lines>...
+    )
+ValueError: No valid images found in /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_SDXL/val for mode test. Check that directory structure contains real/fake subdirs and optionally reflects the mode in the path.
+2026-01-19 10:06:05,578 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-19 10:06:05,579 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-19 10:36:16,735 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-19 10:36:16,736 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-19 10:36:16,736 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-19 10:36:16,736 - INFO - pretrained: no need to provide this for the effort model
+2026-01-19 10:36:16,736 - INFO - model_name: effort
+2026-01-19 10:36:16,736 - INFO - backbone_name: vit
+2026-01-19 10:36:16,736 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-19 10:36:16,736 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-19 10:36:16,736 - INFO - train_dataset: ['UADFV']
+2026-01-19 10:36:16,736 - INFO - test_dataset: ['UADFV']
+2026-01-19 10:36:16,736 - INFO - train_batchSize: 8
+2026-01-19 10:36:16,736 - INFO - test_batchSize: 8
+2026-01-19 10:36:16,736 - INFO - workers: 4
+2026-01-19 10:36:16,736 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-19 10:36:16,737 - INFO - resolution: 224
+2026-01-19 10:36:16,737 - INFO - with_mask: False
+2026-01-19 10:36:16,737 - INFO - with_landmark: False
+2026-01-19 10:36:16,737 - INFO - use_data_augmentation: True
+2026-01-19 10:36:16,737 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-19 10:36:16,737 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-19 10:36:16,737 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-19 10:36:16,737 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-19 10:36:16,737 - INFO - lr_scheduler: cosine
+2026-01-19 10:36:16,737 - INFO - lr_T_max: 5
+2026-01-19 10:36:16,737 - INFO - lr_eta_min: 1e-06
+2026-01-19 10:36:16,737 - INFO - nEpochs: 5
+2026-01-19 10:36:16,737 - INFO - start_epoch: 0
+2026-01-19 10:36:16,737 - INFO - save_epoch: 1
+2026-01-19 10:36:16,737 - INFO - rec_iter: 50
+2026-01-19 10:36:16,737 - INFO - logdir: ./logs
+2026-01-19 10:36:16,737 - INFO - manualSeed: 1024
+2026-01-19 10:36:16,737 - INFO - save_ckpt: True
+2026-01-19 10:36:16,737 - INFO - save_feat: True
+2026-01-19 10:36:16,737 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-19 10:36:16,737 - INFO - loss_func: cross_entropy
+2026-01-19 10:36:16,737 - INFO - losstype: None
+2026-01-19 10:36:16,737 - INFO - metric_scoring: auc
+2026-01-19 10:36:16,737 - INFO - fine_tune: True
+2026-01-19 10:36:16,737 - INFO - pretrained_checkpoint: None
+2026-01-19 10:36:16,737 - INFO - freeze_backbone: True
+2026-01-19 10:36:16,737 - INFO - train_classification_head: True
+2026-01-19 10:36:16,737 - INFO - train_svd_residuals: True
+2026-01-19 10:36:16,737 - INFO - save_avg: True
+2026-01-19 10:36:16,737 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-19 10:36:16,737 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-19 10:36:16,737 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-19 10:36:33,756 - INFO - Model loaded successfully
+2026-01-19 10:36:33,758 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_CoDiff']
+2026-01-19 10:36:33,759 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_CoDiff
+2026-01-19 10:36:33,760 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_CoDiff/val
+2026-01-19 10:36:33,809 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_CoDiff/val
+2026-01-19 10:36:33,810 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:36:33,810 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_CoDiff/val
+2026-01-19 10:36:33,811 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_CoDiff/val/fake (label: fake)
+2026-01-19 10:36:33,886 - INFO - Checking for faulty images...
+2026-01-19 10:36:37,610 - INFO - No faulty images found.
+2026-01-19 10:36:37,610 - INFO - Dataset contains 0 real and 1232 fake samples
+2026-01-19 10:36:37,610 - INFO - RawFileDataset initialized with 1232 samples for test mode
+2026-01-19 10:36:37,611 - INFO - Test loader prepared with 77 batches
+2026-01-19 10:36:37,611 - INFO - Evaluating on dataset_1_FE_CoDiff
+2026-01-19 10:37:46,028 - INFO - Processed batch 50/77
+2026-01-19 10:38:32,292 - INFO - Evaluation results for dataset_1_FE_CoDiff:
+2026-01-19 10:38:32,293 - INFO -   auc: 0.0000
+2026-01-19 10:38:32,293 - INFO -   eer: 0.0000
+2026-01-19 10:38:32,293 - INFO -   accuracy: 0.9976
+2026-01-19 10:38:32,293 - INFO -   ap: 0.0000
+2026-01-19 10:38:32,293 - INFO -   precision: 1.0000
+2026-01-19 10:38:32,293 - INFO -   recall: 0.9976
+2026-01-19 10:38:32,293 - INFO -   f1: 0.9988
+2026-01-19 10:38:32,293 - INFO -   sample_count: 1232.0000
+2026-01-19 10:38:32,293 - INFO -   video_auc: 0.0000
+2026-01-19 10:38:32,293 - INFO -   video_eer: 0.0000
+2026-01-19 10:38:32,293 - INFO -   video_acc: 1.0000
+2026-01-19 10:38:32,295 - INFO - Saved evaluation results to evaluation_results/dataset_1_FE_CoDiff_eval_20260119_103832.json
+2026-01-19 10:38:32,296 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_Imagic']
+2026-01-19 10:38:32,296 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_Imagic
+2026-01-19 10:38:32,297 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_Imagic/val
+2026-01-19 10:38:32,305 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_Imagic/val
+2026-01-19 10:38:32,305 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:38:32,305 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_Imagic/val
+2026-01-19 10:38:32,306 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_Imagic/val/fake (label: fake)
+2026-01-19 10:38:32,440 - INFO - Checking for faulty images...
+2026-01-19 10:38:43,244 - INFO - No faulty images found.
+2026-01-19 10:38:43,245 - INFO - Dataset contains 0 real and 1673 fake samples
+2026-01-19 10:38:43,245 - INFO - RawFileDataset initialized with 1673 samples for test mode
+2026-01-19 10:38:43,245 - INFO - Test loader prepared with 105 batches
+2026-01-19 10:38:43,246 - INFO - Evaluating on dataset_2_FE_Imagic
+2026-01-19 10:39:50,357 - INFO - Processed batch 50/105
+2026-01-19 10:40:38,549 - INFO - Processed batch 100/105
+2026-01-19 10:41:03,042 - INFO - Evaluation results for dataset_2_FE_Imagic:
+2026-01-19 10:41:03,042 - INFO -   auc: 0.0000
+2026-01-19 10:41:03,042 - INFO -   eer: 0.0000
+2026-01-19 10:41:03,042 - INFO -   accuracy: 0.9809
+2026-01-19 10:41:03,042 - INFO -   ap: 0.0000
+2026-01-19 10:41:03,043 - INFO -   precision: 1.0000
+2026-01-19 10:41:03,043 - INFO -   recall: 0.9809
+2026-01-19 10:41:03,043 - INFO -   f1: 0.9903
+2026-01-19 10:41:03,043 - INFO -   sample_count: 1673.0000
+2026-01-19 10:41:03,043 - INFO -   video_auc: 0.0000
+2026-01-19 10:41:03,043 - INFO -   video_eer: 0.0000
+2026-01-19 10:41:03,043 - INFO -   video_acc: 0.9906
+2026-01-19 10:41:03,045 - INFO - Saved evaluation results to evaluation_results/dataset_2_FE_Imagic_eval_20260119_104103.json
+2026-01-19 10:41:03,045 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_cycle_diff']
+2026-01-19 10:41:03,045 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_cycle_diff
+2026-01-19 10:41:03,045 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_cycle_diff/val
+2026-01-19 10:41:03,053 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_cycle_diff/val
+2026-01-19 10:41:03,054 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:41:03,054 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_cycle_diff/val
+2026-01-19 10:41:03,054 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FE_cycle_diff/val/fake (label: fake)
+2026-01-19 10:41:03,129 - INFO - Checking for faulty images...
+2026-01-19 10:41:15,984 - INFO - No faulty images found.
+2026-01-19 10:41:15,985 - INFO - Dataset contains 0 real and 1845 fake samples
+2026-01-19 10:41:15,985 - INFO - RawFileDataset initialized with 1845 samples for test mode
+2026-01-19 10:41:15,986 - INFO - Test loader prepared with 116 batches
+2026-01-19 10:41:15,986 - INFO - Evaluating on dataset_3_FE_cycle_diff
+2026-01-19 10:42:22,669 - INFO - Processed batch 50/116
+2026-01-19 10:43:18,157 - INFO - Processed batch 100/116
+2026-01-19 10:43:53,594 - INFO - Evaluation results for dataset_3_FE_cycle_diff:
+2026-01-19 10:43:53,595 - INFO -   auc: 0.0000
+2026-01-19 10:43:53,595 - INFO -   eer: 0.0000
+2026-01-19 10:43:53,596 - INFO -   accuracy: 0.9756
+2026-01-19 10:43:53,596 - INFO -   ap: 0.0000
+2026-01-19 10:43:53,596 - INFO -   precision: 1.0000
+2026-01-19 10:43:53,596 - INFO -   recall: 0.9756
+2026-01-19 10:43:53,596 - INFO -   f1: 0.9877
+2026-01-19 10:43:53,596 - INFO -   sample_count: 1845.0000
+2026-01-19 10:43:53,596 - INFO -   video_auc: 0.0000
+2026-01-19 10:43:53,596 - INFO -   video_eer: 0.0000
+2026-01-19 10:43:53,596 - INFO -   video_acc: 0.9915
+2026-01-19 10:43:53,599 - INFO - Saved evaluation results to evaluation_results/dataset_3_FE_cycle_diff_eval_20260119_104353.json
+2026-01-19 10:43:53,599 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DCFace']
+2026-01-19 10:43:53,599 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DCFace
+2026-01-19 10:43:53,602 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DCFace/val
+2026-01-19 10:43:53,626 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DCFace/val
+2026-01-19 10:43:53,626 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:43:53,626 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DCFace/val
+2026-01-19 10:43:53,627 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DCFace/val/fake (label: fake)
+2026-01-19 10:43:53,690 - INFO - Checking for faulty images...
+2026-01-19 10:43:54,562 - INFO - No faulty images found.
+2026-01-19 10:43:54,562 - INFO - Dataset contains 0 real and 1229 fake samples
+2026-01-19 10:43:54,563 - INFO - RawFileDataset initialized with 1229 samples for test mode
+2026-01-19 10:43:54,565 - INFO - Test loader prepared with 77 batches
+2026-01-19 10:43:54,566 - INFO - Evaluating on dataset_4_FS_DCFace
+2026-01-19 10:45:05,924 - INFO - Processed batch 50/77
+2026-01-19 10:45:51,924 - INFO - Evaluation results for dataset_4_FS_DCFace:
+2026-01-19 10:45:51,924 - INFO -   auc: 0.0000
+2026-01-19 10:45:51,924 - INFO -   eer: 0.0000
+2026-01-19 10:45:51,924 - INFO -   accuracy: 1.0000
+2026-01-19 10:45:51,925 - INFO -   ap: 0.0000
+2026-01-19 10:45:51,925 - INFO -   precision: 1.0000
+2026-01-19 10:45:51,925 - INFO -   recall: 1.0000
+2026-01-19 10:45:51,925 - INFO -   f1: 1.0000
+2026-01-19 10:45:51,925 - INFO -   sample_count: 1229.0000
+2026-01-19 10:45:51,925 - INFO -   video_auc: 0.0000
+2026-01-19 10:45:51,925 - INFO -   video_eer: 0.0000
+2026-01-19 10:45:51,925 - INFO -   video_acc: 1.0000
+2026-01-19 10:45:51,927 - INFO - Saved evaluation results to evaluation_results/dataset_4_FS_DCFace_eval_20260119_104551.json
+2026-01-19 10:45:51,927 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DiffFace']
+2026-01-19 10:45:51,927 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DiffFace
+2026-01-19 10:45:51,929 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DiffFace/val
+2026-01-19 10:45:51,940 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DiffFace/val
+2026-01-19 10:45:51,941 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:45:51,941 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DiffFace/val
+2026-01-19 10:45:51,942 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/FS_DiffFace/val/fake (label: fake)
+2026-01-19 10:45:51,976 - INFO - Checking for faulty images...
+2026-01-19 10:45:54,486 - INFO - No faulty images found.
+2026-01-19 10:45:54,486 - INFO - Dataset contains 0 real and 880 fake samples
+2026-01-19 10:45:54,486 - INFO - RawFileDataset initialized with 880 samples for test mode
+2026-01-19 10:45:54,487 - INFO - Test loader prepared with 55 batches
+2026-01-19 10:45:54,487 - INFO - Evaluating on dataset_5_FS_DiffFace
+2026-01-19 10:47:04,345 - INFO - Processed batch 50/55
+2026-01-19 10:47:29,148 - INFO - Evaluation results for dataset_5_FS_DiffFace:
+2026-01-19 10:47:29,149 - INFO -   auc: 0.0000
+2026-01-19 10:47:29,149 - INFO -   eer: 0.0000
+2026-01-19 10:47:29,149 - INFO -   accuracy: 0.9909
+2026-01-19 10:47:29,149 - INFO -   ap: 0.0000
+2026-01-19 10:47:29,149 - INFO -   precision: 1.0000
+2026-01-19 10:47:29,149 - INFO -   recall: 0.9909
+2026-01-19 10:47:29,149 - INFO -   f1: 0.9954
+2026-01-19 10:47:29,149 - INFO -   sample_count: 880.0000
+2026-01-19 10:47:29,149 - INFO -   video_auc: 0.0000
+2026-01-19 10:47:29,149 - INFO -   video_eer: 0.0000
+2026-01-19 10:47:29,149 - INFO -   video_acc: 1.0000
+2026-01-19 10:47:29,151 - INFO - Saved evaluation results to evaluation_results/dataset_5_FS_DiffFace_eval_20260119_104729.json
+2026-01-19 10:47:29,151 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_DreamBooth']
+2026-01-19 10:47:29,151 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_DreamBooth
+2026-01-19 10:47:29,154 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_DreamBooth/val
+2026-01-19 10:47:29,164 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_DreamBooth/val
+2026-01-19 10:47:29,164 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:47:29,164 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_DreamBooth/val
+2026-01-19 10:47:29,165 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_DreamBooth/val/fake (label: fake)
+2026-01-19 10:47:29,217 - INFO - Checking for faulty images...
+2026-01-19 10:47:40,013 - INFO - No faulty images found.
+2026-01-19 10:47:40,014 - INFO - Dataset contains 0 real and 1478 fake samples
+2026-01-19 10:47:40,014 - INFO - RawFileDataset initialized with 1478 samples for test mode
+2026-01-19 10:47:40,015 - INFO - Test loader prepared with 93 batches
+2026-01-19 10:47:40,015 - INFO - Evaluating on dataset_6_I2I_DreamBooth
+2026-01-19 10:48:49,364 - INFO - Processed batch 50/93
+2026-01-19 10:49:53,570 - INFO - Evaluation results for dataset_6_I2I_DreamBooth:
+2026-01-19 10:49:53,571 - INFO -   auc: 0.0000
+2026-01-19 10:49:53,571 - INFO -   eer: 0.0000
+2026-01-19 10:49:53,571 - INFO -   accuracy: 0.8403
+2026-01-19 10:49:53,571 - INFO -   ap: 0.0000
+2026-01-19 10:49:53,571 - INFO -   precision: 1.0000
+2026-01-19 10:49:53,571 - INFO -   recall: 0.8403
+2026-01-19 10:49:53,571 - INFO -   f1: 0.9132
+2026-01-19 10:49:53,571 - INFO -   sample_count: 1478.0000
+2026-01-19 10:49:53,571 - INFO -   video_auc: 0.0000
+2026-01-19 10:49:53,571 - INFO -   video_eer: 0.0000
+2026-01-19 10:49:53,571 - INFO -   video_acc: 1.0000
+2026-01-19 10:49:53,574 - INFO - Saved evaluation results to evaluation_results/dataset_6_I2I_DreamBooth_eval_20260119_104953.json
+2026-01-19 10:49:53,574 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_FreeDoM_I']
+2026-01-19 10:49:53,574 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_FreeDoM_I
+2026-01-19 10:49:53,576 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_FreeDoM_I/val
+2026-01-19 10:49:53,584 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_FreeDoM_I/val
+2026-01-19 10:49:53,584 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:49:53,584 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_FreeDoM_I/val
+2026-01-19 10:49:53,585 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_FreeDoM_I/val/fake (label: fake)
+2026-01-19 10:49:53,627 - INFO - Checking for faulty images...
+2026-01-19 10:49:57,034 - INFO - No faulty images found.
+2026-01-19 10:49:57,034 - INFO - Dataset contains 0 real and 1297 fake samples
+2026-01-19 10:49:57,035 - INFO - RawFileDataset initialized with 1297 samples for test mode
+2026-01-19 10:49:57,036 - INFO - Test loader prepared with 82 batches
+2026-01-19 10:49:57,036 - INFO - Evaluating on dataset_7_I2I_FreeDoM_I
+2026-01-19 10:51:03,212 - INFO - Processed batch 50/82
+2026-01-19 10:51:53,713 - INFO - Evaluation results for dataset_7_I2I_FreeDoM_I:
+2026-01-19 10:51:53,714 - INFO -   auc: 0.0000
+2026-01-19 10:51:53,714 - INFO -   eer: 0.0000
+2026-01-19 10:51:53,714 - INFO -   accuracy: 0.9776
+2026-01-19 10:51:53,714 - INFO -   ap: 0.0000
+2026-01-19 10:51:53,714 - INFO -   precision: 1.0000
+2026-01-19 10:51:53,714 - INFO -   recall: 0.9776
+2026-01-19 10:51:53,714 - INFO -   f1: 0.9887
+2026-01-19 10:51:53,714 - INFO -   sample_count: 1297.0000
+2026-01-19 10:51:53,714 - INFO -   video_auc: 0.0000
+2026-01-19 10:51:53,714 - INFO -   video_eer: 0.0000
+2026-01-19 10:51:53,714 - INFO -   video_acc: 1.0000
+2026-01-19 10:51:53,718 - INFO - Saved evaluation results to evaluation_results/dataset_7_I2I_FreeDoM_I_eval_20260119_105153.json
+2026-01-19 10:51:53,718 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_LoRA']
+2026-01-19 10:51:53,718 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_LoRA
+2026-01-19 10:51:53,722 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_LoRA/val
+2026-01-19 10:51:53,733 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_LoRA/val
+2026-01-19 10:51:53,733 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:51:53,733 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_LoRA/val
+2026-01-19 10:51:53,734 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_LoRA/val/fake (label: fake)
+2026-01-19 10:51:53,770 - INFO - Checking for faulty images...
+2026-01-19 10:52:04,182 - INFO - No faulty images found.
+2026-01-19 10:52:04,183 - INFO - Dataset contains 0 real and 953 fake samples
+2026-01-19 10:52:04,183 - INFO - RawFileDataset initialized with 953 samples for test mode
+2026-01-19 10:52:04,184 - INFO - Test loader prepared with 60 batches
+2026-01-19 10:52:04,184 - INFO - Evaluating on dataset_8_I2I_LoRA
+2026-01-19 10:53:11,279 - INFO - Processed batch 50/60
+2026-01-19 10:53:40,678 - INFO - Evaluation results for dataset_8_I2I_LoRA:
+2026-01-19 10:53:40,679 - INFO -   auc: 0.0000
+2026-01-19 10:53:40,679 - INFO -   eer: 0.0000
+2026-01-19 10:53:40,679 - INFO -   accuracy: 0.9780
+2026-01-19 10:53:40,679 - INFO -   ap: 0.0000
+2026-01-19 10:53:40,679 - INFO -   precision: 1.0000
+2026-01-19 10:53:40,679 - INFO -   recall: 0.9780
+2026-01-19 10:53:40,679 - INFO -   f1: 0.9889
+2026-01-19 10:53:40,679 - INFO -   sample_count: 953.0000
+2026-01-19 10:53:40,679 - INFO -   video_auc: 0.0000
+2026-01-19 10:53:40,679 - INFO -   video_eer: 0.0000
+2026-01-19 10:53:40,679 - INFO -   video_acc: 1.0000
+2026-01-19 10:53:40,681 - INFO - Saved evaluation results to evaluation_results/dataset_8_I2I_LoRA_eval_20260119_105340.json
+2026-01-19 10:53:40,681 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_SDXL_Refine']
+2026-01-19 10:53:40,681 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_SDXL_Refine
+2026-01-19 10:53:40,687 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_SDXL_Refine/val
+2026-01-19 10:53:40,697 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_SDXL_Refine/val
+2026-01-19 10:53:40,698 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:53:40,698 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_SDXL_Refine/val
+2026-01-19 10:53:40,698 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/I2I_SDXL_Refine/val/fake (label: fake)
+2026-01-19 10:53:40,823 - INFO - Checking for faulty images...
+2026-01-19 10:54:02,992 - INFO - No faulty images found.
+2026-01-19 10:54:02,993 - INFO - Dataset contains 0 real and 1809 fake samples
+2026-01-19 10:54:02,993 - INFO - RawFileDataset initialized with 1809 samples for test mode
+2026-01-19 10:54:02,994 - INFO - Test loader prepared with 114 batches
+2026-01-19 10:54:02,994 - INFO - Evaluating on dataset_9_I2I_SDXL_Refine
+2026-01-19 10:55:09,918 - INFO - Processed batch 50/114
+2026-01-19 10:55:58,125 - INFO - Processed batch 100/114
+2026-01-19 10:56:31,216 - INFO - Evaluation results for dataset_9_I2I_SDXL_Refine:
+2026-01-19 10:56:31,217 - INFO -   auc: 0.0000
+2026-01-19 10:56:31,217 - INFO -   eer: 0.0000
+2026-01-19 10:56:31,217 - INFO -   accuracy: 0.9823
+2026-01-19 10:56:31,217 - INFO -   ap: 0.0000
+2026-01-19 10:56:31,217 - INFO -   precision: 1.0000
+2026-01-19 10:56:31,217 - INFO -   recall: 0.9823
+2026-01-19 10:56:31,217 - INFO -   f1: 0.9911
+2026-01-19 10:56:31,217 - INFO -   sample_count: 1809.0000
+2026-01-19 10:56:31,217 - INFO -   video_auc: 0.0000
+2026-01-19 10:56:31,217 - INFO -   video_eer: 0.0000
+2026-01-19 10:56:31,217 - INFO -   video_acc: 1.0000
+2026-01-19 10:56:31,220 - INFO - Saved evaluation results to evaluation_results/dataset_9_I2I_SDXL_Refine_eval_20260119_105631.json
+2026-01-19 10:56:31,220 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_FreeDoM_T']
+2026-01-19 10:56:31,220 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_FreeDoM_T
+2026-01-19 10:56:31,223 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_FreeDoM_T/val
+2026-01-19 10:56:31,232 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_FreeDoM_T/val
+2026-01-19 10:56:31,233 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:56:31,233 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_FreeDoM_T/val
+2026-01-19 10:56:31,233 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_FreeDoM_T/val/fake (label: fake)
+2026-01-19 10:56:31,275 - INFO - Checking for faulty images...
+2026-01-19 10:56:35,073 - INFO - No faulty images found.
+2026-01-19 10:56:35,073 - INFO - Dataset contains 0 real and 1384 fake samples
+2026-01-19 10:56:35,073 - INFO - RawFileDataset initialized with 1384 samples for test mode
+2026-01-19 10:56:35,074 - INFO - Test loader prepared with 87 batches
+2026-01-19 10:56:35,074 - INFO - Evaluating on dataset_10_T2I_FreeDoM_T
+2026-01-19 10:57:42,148 - INFO - Processed batch 50/87
+2026-01-19 10:58:37,654 - INFO - Evaluation results for dataset_10_T2I_FreeDoM_T:
+2026-01-19 10:58:37,654 - INFO -   auc: 0.0000
+2026-01-19 10:58:37,654 - INFO -   eer: 0.0000
+2026-01-19 10:58:37,654 - INFO -   accuracy: 0.9942
+2026-01-19 10:58:37,654 - INFO -   ap: 0.0000
+2026-01-19 10:58:37,654 - INFO -   precision: 1.0000
+2026-01-19 10:58:37,654 - INFO -   recall: 0.9942
+2026-01-19 10:58:37,654 - INFO -   f1: 0.9971
+2026-01-19 10:58:37,654 - INFO -   sample_count: 1384.0000
+2026-01-19 10:58:37,654 - INFO -   video_auc: 0.0000
+2026-01-19 10:58:37,654 - INFO -   video_eer: 0.0000
+2026-01-19 10:58:37,655 - INFO -   video_acc: 1.0000
+2026-01-19 10:58:37,656 - INFO - Saved evaluation results to evaluation_results/dataset_10_T2I_FreeDoM_T_eval_20260119_105837.json
+2026-01-19 10:58:37,656 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_HPS']
+2026-01-19 10:58:37,656 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_HPS
+2026-01-19 10:58:37,658 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_HPS/val
+2026-01-19 10:58:37,667 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_HPS/val
+2026-01-19 10:58:37,667 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 10:58:37,667 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_HPS/val
+2026-01-19 10:58:37,669 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_HPS/val/fake (label: fake)
+2026-01-19 10:58:37,779 - INFO - Checking for faulty images...
+2026-01-19 10:58:46,849 - INFO - No faulty images found.
+2026-01-19 10:58:46,850 - INFO - Dataset contains 0 real and 1858 fake samples
+2026-01-19 10:58:46,850 - INFO - RawFileDataset initialized with 1858 samples for test mode
+2026-01-19 10:58:46,851 - INFO - Test loader prepared with 117 batches
+2026-01-19 10:58:46,851 - INFO - Evaluating on dataset_11_T2I_HPS
+2026-01-19 10:59:54,814 - INFO - Processed batch 50/117
+2026-01-19 11:00:43,945 - INFO - Processed batch 100/117
+2026-01-19 11:01:20,235 - INFO - Evaluation results for dataset_11_T2I_HPS:
+2026-01-19 11:01:20,236 - INFO -   auc: 0.0000
+2026-01-19 11:01:20,236 - INFO -   eer: 0.0000
+2026-01-19 11:01:20,236 - INFO -   accuracy: 0.9365
+2026-01-19 11:01:20,236 - INFO -   ap: 0.0000
+2026-01-19 11:01:20,236 - INFO -   precision: 1.0000
+2026-01-19 11:01:20,236 - INFO -   recall: 0.9365
+2026-01-19 11:01:20,236 - INFO -   f1: 0.9672
+2026-01-19 11:01:20,236 - INFO -   sample_count: 1858.0000
+2026-01-19 11:01:20,236 - INFO -   video_auc: 0.0000
+2026-01-19 11:01:20,236 - INFO -   video_eer: 0.0000
+2026-01-19 11:01:20,236 - INFO -   video_acc: 1.0000
+2026-01-19 11:01:20,237 - INFO - Saved evaluation results to evaluation_results/dataset_11_T2I_HPS_eval_20260119_110120.json
+2026-01-19 11:01:20,237 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_Midjourney']
+2026-01-19 11:01:20,237 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_Midjourney
+2026-01-19 11:01:20,240 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_Midjourney/val
+2026-01-19 11:01:20,243 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_Midjourney/val
+2026-01-19 11:01:20,244 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 11:01:20,244 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_Midjourney/val
+2026-01-19 11:01:20,244 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_Midjourney/val/fake (label: fake)
+2026-01-19 11:01:20,305 - INFO - Checking for faulty images...
+2026-01-19 11:01:36,347 - INFO - No faulty images found.
+2026-01-19 11:01:36,347 - INFO - Dataset contains 0 real and 1780 fake samples
+2026-01-19 11:01:36,347 - INFO - RawFileDataset initialized with 1780 samples for test mode
+2026-01-19 11:01:36,347 - INFO - Test loader prepared with 112 batches
+2026-01-19 11:01:36,348 - INFO - Evaluating on dataset_12_T2I_Midjourney
+2026-01-19 11:02:43,650 - INFO - Processed batch 50/112
+2026-01-19 11:03:31,625 - INFO - Processed batch 100/112
+2026-01-19 11:04:03,110 - INFO - Evaluation results for dataset_12_T2I_Midjourney:
+2026-01-19 11:04:03,110 - INFO -   auc: 0.0000
+2026-01-19 11:04:03,110 - INFO -   eer: 0.0000
+2026-01-19 11:04:03,110 - INFO -   accuracy: 0.9820
+2026-01-19 11:04:03,110 - INFO -   ap: 0.0000
+2026-01-19 11:04:03,110 - INFO -   precision: 1.0000
+2026-01-19 11:04:03,110 - INFO -   recall: 0.9820
+2026-01-19 11:04:03,110 - INFO -   f1: 0.9909
+2026-01-19 11:04:03,110 - INFO -   sample_count: 1780.0000
+2026-01-19 11:04:03,111 - INFO -   video_auc: 0.0000
+2026-01-19 11:04:03,111 - INFO -   video_eer: 0.0000
+2026-01-19 11:04:03,111 - INFO -   video_acc: 1.0000
+2026-01-19 11:04:03,113 - INFO - Saved evaluation results to evaluation_results/dataset_12_T2I_Midjourney_eval_20260119_110403.json
+2026-01-19 11:04:03,113 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_SDXL']
+2026-01-19 11:04:03,113 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_SDXL
+2026-01-19 11:04:03,115 - INFO - Auto-descending into val directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_SDXL/val
+2026-01-19 11:04:03,123 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_SDXL/val
+2026-01-19 11:04:03,123 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 11:04:03,123 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_SDXL/val
+2026-01-19 11:04:03,124 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/DiFF/DATA/T2I_SDXL/val/fake (label: fake)
+2026-01-19 11:04:03,184 - INFO - Checking for faulty images...
+2026-01-19 11:04:19,467 - INFO - No faulty images found.
+2026-01-19 11:04:19,467 - INFO - Dataset contains 0 real and 1798 fake samples
+2026-01-19 11:04:19,467 - INFO - RawFileDataset initialized with 1798 samples for test mode
+2026-01-19 11:04:19,468 - INFO - Test loader prepared with 113 batches
+2026-01-19 11:04:19,468 - INFO - Evaluating on dataset_13_T2I_SDXL
+2026-01-19 11:05:25,941 - INFO - Processed batch 50/113
+2026-01-19 11:06:14,042 - INFO - Processed batch 100/113
+2026-01-19 11:06:45,885 - INFO - Evaluation results for dataset_13_T2I_SDXL:
+2026-01-19 11:06:45,886 - INFO -   auc: 0.0000
+2026-01-19 11:06:45,886 - INFO -   eer: 0.0000
+2026-01-19 11:06:45,886 - INFO -   accuracy: 0.9844
+2026-01-19 11:06:45,886 - INFO -   ap: 0.0000
+2026-01-19 11:06:45,886 - INFO -   precision: 1.0000
+2026-01-19 11:06:45,886 - INFO -   recall: 0.9844
+2026-01-19 11:06:45,886 - INFO -   f1: 0.9922
+2026-01-19 11:06:45,886 - INFO -   sample_count: 1798.0000
+2026-01-19 11:06:45,886 - INFO -   video_auc: 0.0000
+2026-01-19 11:06:45,886 - INFO -   video_eer: 0.0000
+2026-01-19 11:06:45,886 - INFO -   video_acc: 1.0000
+2026-01-19 11:06:45,888 - INFO - Saved evaluation results to evaluation_results/dataset_13_T2I_SDXL_eval_20260119_110645.json
+2026-01-19 11:06:45,889 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-19 11:06:45,889 - INFO - Fine-tuned model evaluation finished successfully
+2026-01-19 13:57:33,093 - INFO - Evaluation log: evaluation_results/evaluation.log
+2026-01-19 13:57:33,093 - INFO - --------------- Evaluation Configuration ---------------
+2026-01-19 13:57:33,093 - INFO - log_dir: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/training/logs
+2026-01-19 13:57:33,093 - INFO - pretrained: no need to provide this for the effort model
+2026-01-19 13:57:33,093 - INFO - model_name: effort
+2026-01-19 13:57:33,093 - INFO - backbone_name: vit
+2026-01-19 13:57:33,093 - INFO - backbone_config: {'mode': 'original', 'num_classes': 2, 'inc': 3, 'dropout': False}
+2026-01-19 13:57:33,093 - INFO - all_dataset: ['FaceForensics++', 'FF-F2F', 'FF-DF', 'FF-FS', 'FF-NT', 'FaceShifter', 'DeepFakeDetection', 'Celeb-DF-v1', 'Celeb-DF-v2', 'DFDCP', 'DFDC', 'DeeperForensics-1.0', 'UADFV']
+2026-01-19 13:57:33,093 - INFO - train_dataset: ['UADFV']
+2026-01-19 13:57:33,093 - INFO - test_dataset: ['UADFV']
+2026-01-19 13:57:33,093 - INFO - train_batchSize: 8
+2026-01-19 13:57:33,093 - INFO - test_batchSize: 8
+2026-01-19 13:57:33,093 - INFO - workers: 4
+2026-01-19 13:57:33,093 - INFO - frame_num: {'train': 8, 'test': 16}
+2026-01-19 13:57:33,094 - INFO - resolution: 224
+2026-01-19 13:57:33,094 - INFO - with_mask: False
+2026-01-19 13:57:33,094 - INFO - with_landmark: False
+2026-01-19 13:57:33,094 - INFO - use_data_augmentation: True
+2026-01-19 13:57:33,094 - INFO - data_aug: {'flip_prob': 0.5, 'rotate_prob': 0.4, 'rotate_limit': [-10, 10], 'blur_prob': 0.3, 'blur_limit': [3, 7], 'brightness_prob': 0.3, 'brightness_limit': [-0.1, 0.1], 'contrast_limit': [-0.1, 0.1], 'quality_lower': 40, 'quality_upper': 100}
+2026-01-19 13:57:33,094 - INFO - mean: [0.48145466, 0.4578275, 0.40821073]
+2026-01-19 13:57:33,094 - INFO - std: [0.26862954, 0.26130258, 0.27577711]
+2026-01-19 13:57:33,094 - INFO - optimizer: {'type': 'adam', 'adam': {'lr': 1e-05, 'beta1': 0.9, 'beta2': 0.999, 'eps': 1e-08, 'weight_decay': 0.0001, 'amsgrad': True}, 'sgd': {'lr': 1e-05, 'momentum': 0.9, 'weight_decay': 0.0001}}
+2026-01-19 13:57:33,094 - INFO - lr_scheduler: cosine
+2026-01-19 13:57:33,094 - INFO - lr_T_max: 5
+2026-01-19 13:57:33,094 - INFO - lr_eta_min: 1e-06
+2026-01-19 13:57:33,094 - INFO - nEpochs: 5
+2026-01-19 13:57:33,094 - INFO - start_epoch: 0
+2026-01-19 13:57:33,094 - INFO - save_epoch: 1
+2026-01-19 13:57:33,094 - INFO - rec_iter: 50
+2026-01-19 13:57:33,094 - INFO - logdir: ./logs
+2026-01-19 13:57:33,094 - INFO - manualSeed: 1024
+2026-01-19 13:57:33,094 - INFO - save_ckpt: True
+2026-01-19 13:57:33,094 - INFO - save_feat: True
+2026-01-19 13:57:33,094 - INFO - early_stopping: {'enabled': True, 'patience': 2, 'min_delta': 0.001, 'metric': 'auc'}
+2026-01-19 13:57:33,094 - INFO - loss_func: cross_entropy
+2026-01-19 13:57:33,094 - INFO - losstype: None
+2026-01-19 13:57:33,094 - INFO - metric_scoring: auc
+2026-01-19 13:57:33,094 - INFO - fine_tune: True
+2026-01-19 13:57:33,094 - INFO - pretrained_checkpoint: None
+2026-01-19 13:57:33,094 - INFO - freeze_backbone: True
+2026-01-19 13:57:33,094 - INFO - train_classification_head: True
+2026-01-19 13:57:33,094 - INFO - train_svd_residuals: True
+2026-01-19 13:57:33,094 - INFO - save_avg: True
+2026-01-19 13:57:33,094 - INFO - dataset_json_folder: /Users/logan/Developer/WORK/DEEPFAKE_DETECTION/Effort-AIGI-Detection/DeepfakeBench/preprocessing/dataset_json
+2026-01-19 13:57:33,094 - INFO - label_dict: {'DFD_fake': 1, 'DFD_real': 0, 'FF-SH': 1, 'FF-F2F': 1, 'FF-DF': 1, 'FF-FS': 1, 'FF-NT': 1, 'FF-FH': 1, 'FF-real': 0, 'CelebDFv1_real': 0, 'CelebDFv1_fake': 1, 'CelebDFv2_real': 0, 'CelebDFv2_fake': 1, 'DFDCP_Real': 0, 'DFDCP_FakeA': 1, 'DFDCP_FakeB': 1, 'DFDC_Fake': 1, 'DFDC_Real': 0, 'DF_fake': 1, 'DF_real': 0, 'UADFV_Fake': 1, 'UADFV_Real': 0}
+2026-01-19 13:57:33,094 - INFO - Loading model from DeepfakeBench/training/weights/finetuned/newBatchFaces.pth
+2026-01-19 13:57:49,544 - INFO - Model loaded successfully
+2026-01-19 13:57:49,547 - INFO - Preparing test data for paths: ['/Volumes/Crucial/AI/DATASETS/humans100k_jpg']
+2026-01-19 13:57:49,547 - INFO - Using RawFileDataset with data from /Volumes/Crucial/AI/DATASETS/humans100k_jpg
+2026-01-19 13:57:49,584 - INFO - Validating directory structure starting from: /Volumes/Crucial/AI/DATASETS/humans100k_jpg
+2026-01-19 13:57:49,695 - INFO - Validation complete. Relying on recursive search for class discovery.
+2026-01-19 13:57:49,695 - INFO - Discovering files recursively starting from /Volumes/Crucial/AI/DATASETS/humans100k_jpg
+2026-01-19 13:57:49,696 - INFO - Processing matching directory: /Volumes/Crucial/AI/DATASETS/humans100k_jpg/fake (label: fake)
+2026-01-19 13:58:04,689 - INFO - Checking for faulty images...
+2026-01-19 14:06:13,535 - INFO - No faulty images found.
+2026-01-19 14:06:13,542 - INFO - Dataset contains 0 real and 100000 fake samples
+2026-01-19 14:06:13,560 - INFO - RawFileDataset initialized with 100000 samples for test mode
+2026-01-19 14:06:13,566 - INFO - Test loader prepared with 6250 batches
+2026-01-19 14:06:13,567 - INFO - Evaluating on dataset_1_humans100k_jpg
+2026-01-19 14:07:26,267 - INFO - Processed batch 50/6250
+2026-01-19 14:08:14,953 - INFO - Processed batch 100/6250
+2026-01-19 14:09:04,553 - INFO - Processed batch 150/6250
+2026-01-19 14:09:55,233 - INFO - Processed batch 200/6250
+2026-01-19 14:10:45,793 - INFO - Processed batch 250/6250
+2026-01-19 14:11:34,985 - INFO - Processed batch 300/6250
+2026-01-19 14:12:24,118 - INFO - Processed batch 350/6250
+2026-01-19 14:13:13,382 - INFO - Processed batch 400/6250
+2026-01-19 14:14:04,237 - INFO - Processed batch 450/6250
+2026-01-19 14:14:52,594 - INFO - Processed batch 500/6250
+2026-01-19 14:15:41,737 - INFO - Processed batch 550/6250
+2026-01-19 14:16:30,993 - INFO - Processed batch 600/6250
+2026-01-19 14:17:20,278 - INFO - Processed batch 650/6250
+2026-01-19 14:18:10,055 - INFO - Processed batch 700/6250
+2026-01-19 14:19:02,432 - INFO - Processed batch 750/6250
+2026-01-19 14:19:52,813 - INFO - Processed batch 800/6250
+2026-01-19 14:20:41,340 - INFO - Processed batch 850/6250
+2026-01-19 14:21:33,057 - INFO - Processed batch 900/6250
+2026-01-19 14:22:28,009 - INFO - Processed batch 950/6250
+2026-01-19 14:23:16,293 - INFO - Processed batch 1000/6250
+2026-01-19 14:24:04,521 - INFO - Processed batch 1050/6250
+2026-01-19 14:24:52,857 - INFO - Processed batch 1100/6250
+2026-01-19 14:25:41,104 - INFO - Processed batch 1150/6250
+2026-01-19 14:26:29,340 - INFO - Processed batch 1200/6250
+2026-01-19 14:27:18,372 - INFO - Processed batch 1250/6250
+2026-01-19 14:28:06,622 - INFO - Processed batch 1300/6250
+2026-01-19 14:28:54,462 - INFO - Processed batch 1350/6250
+2026-01-19 14:29:42,460 - INFO - Processed batch 1400/6250
+2026-01-19 14:30:30,585 - INFO - Processed batch 1450/6250
+2026-01-19 14:31:19,175 - INFO - Processed batch 1500/6250
+2026-01-19 14:32:07,596 - INFO - Processed batch 1550/6250
+2026-01-19 14:32:58,943 - INFO - Processed batch 1600/6250
+2026-01-19 14:33:47,491 - INFO - Processed batch 1650/6250
+2026-01-19 14:34:36,476 - INFO - Processed batch 1700/6250
+2026-01-19 14:35:24,712 - INFO - Processed batch 1750/6250
+2026-01-19 14:36:13,037 - INFO - Processed batch 1800/6250
+2026-01-19 14:37:00,888 - INFO - Processed batch 1850/6250
+2026-01-19 14:37:50,459 - INFO - Processed batch 1900/6250
+2026-01-19 14:38:43,740 - INFO - Processed batch 1950/6250
+2026-01-19 14:39:31,547 - INFO - Processed batch 2000/6250
+2026-01-19 14:40:19,723 - INFO - Processed batch 2050/6250
+2026-01-19 14:41:08,058 - INFO - Processed batch 2100/6250
+2026-01-19 14:41:56,160 - INFO - Processed batch 2150/6250
+2026-01-19 14:42:44,072 - INFO - Processed batch 2200/6250
+2026-01-19 14:43:32,466 - INFO - Processed batch 2250/6250
+2026-01-19 14:44:20,527 - INFO - Processed batch 2300/6250
+2026-01-19 14:45:08,572 - INFO - Processed batch 2350/6250
+2026-01-19 14:45:57,132 - INFO - Processed batch 2400/6250
+2026-01-19 14:46:45,241 - INFO - Processed batch 2450/6250
+2026-01-19 14:47:33,325 - INFO - Processed batch 2500/6250
+2026-01-19 14:48:21,526 - INFO - Processed batch 2550/6250
+2026-01-19 14:49:10,173 - INFO - Processed batch 2600/6250
+2026-01-19 14:50:00,162 - INFO - Processed batch 2650/6250
+2026-01-19 14:50:53,454 - INFO - Processed batch 2700/6250
+2026-01-19 14:51:46,522 - INFO - Processed batch 2750/6250
+2026-01-19 14:52:37,976 - INFO - Processed batch 2800/6250
+2026-01-19 14:53:28,950 - INFO - Processed batch 2850/6250
+2026-01-19 14:54:19,903 - INFO - Processed batch 2900/6250
+2026-01-19 14:55:13,418 - INFO - Processed batch 2950/6250
+2026-01-19 14:56:05,437 - INFO - Processed batch 3000/6250
+2026-01-19 14:56:57,192 - INFO - Processed batch 3050/6250
+2026-01-19 14:57:45,998 - INFO - Processed batch 3100/6250
+2026-01-19 14:58:34,331 - INFO - Processed batch 3150/6250
+2026-01-19 14:59:22,590 - INFO - Processed batch 3200/6250
+2026-01-19 15:00:10,826 - INFO - Processed batch 3250/6250
+2026-01-19 15:00:59,365 - INFO - Processed batch 3300/6250
+2026-01-19 15:01:48,809 - INFO - Processed batch 3350/6250
+2026-01-19 15:02:36,854 - INFO - Processed batch 3400/6250
+2026-01-19 15:03:24,910 - INFO - Processed batch 3450/6250
+2026-01-19 15:04:12,949 - INFO - Processed batch 3500/6250
+2026-01-19 15:05:01,271 - INFO - Processed batch 3550/6250
+2026-01-19 15:05:49,355 - INFO - Processed batch 3600/6250
+2026-01-19 15:06:37,902 - INFO - Processed batch 3650/6250
+2026-01-19 15:07:27,373 - INFO - Processed batch 3700/6250
+2026-01-19 15:08:17,130 - INFO - Processed batch 3750/6250
+2026-01-19 15:09:06,592 - INFO - Processed batch 3800/6250
+2026-01-19 15:09:57,071 - INFO - Processed batch 3850/6250
+2026-01-19 15:10:46,892 - INFO - Processed batch 3900/6250
+2026-01-19 15:11:36,984 - INFO - Processed batch 3950/6250
+2026-01-19 15:12:27,217 - INFO - Processed batch 4000/6250
+2026-01-19 15:13:16,521 - INFO - Processed batch 4050/6250
+2026-01-19 15:14:06,881 - INFO - Processed batch 4100/6250
+2026-01-19 15:14:58,994 - INFO - Processed batch 4150/6250
+2026-01-19 15:15:50,973 - INFO - Processed batch 4200/6250
+2026-01-19 15:16:40,725 - INFO - Processed batch 4250/6250
+2026-01-19 15:17:29,967 - INFO - Processed batch 4300/6250
+2026-01-19 15:18:19,791 - INFO - Processed batch 4350/6250
+2026-01-19 15:19:09,849 - INFO - Processed batch 4400/6250
+2026-01-19 15:19:58,651 - INFO - Processed batch 4450/6250
+2026-01-19 15:20:47,083 - INFO - Processed batch 4500/6250
+2026-01-19 15:21:36,761 - INFO - Processed batch 4550/6250
+2026-01-19 15:22:26,306 - INFO - Processed batch 4600/6250
+2026-01-19 15:23:16,124 - INFO - Processed batch 4650/6250
+2026-01-19 15:24:05,555 - INFO - Processed batch 4700/6250
+2026-01-19 15:24:55,161 - INFO - Processed batch 4750/6250
+2026-01-19 15:25:45,351 - INFO - Processed batch 4800/6250
+2026-01-19 15:26:34,136 - INFO - Processed batch 4850/6250
+2026-01-19 15:27:22,495 - INFO - Processed batch 4900/6250
+2026-01-19 15:28:10,926 - INFO - Processed batch 4950/6250
+2026-01-19 15:28:59,964 - INFO - Processed batch 5000/6250
+2026-01-19 15:29:50,146 - INFO - Processed batch 5050/6250
+2026-01-19 15:30:38,769 - INFO - Processed batch 5100/6250
+2026-01-19 15:31:27,412 - INFO - Processed batch 5150/6250
+2026-01-19 15:32:15,734 - INFO - Processed batch 5200/6250
+2026-01-19 15:33:04,243 - INFO - Processed batch 5250/6250
+2026-01-19 15:33:53,013 - INFO - Processed batch 5300/6250
+2026-01-19 15:34:43,177 - INFO - Processed batch 5350/6250
+2026-01-19 15:35:34,171 - INFO - Processed batch 5400/6250
+2026-01-19 15:36:22,833 - INFO - Processed batch 5450/6250
+2026-01-19 15:37:11,956 - INFO - Processed batch 5500/6250
+2026-01-19 15:38:00,504 - INFO - Processed batch 5550/6250
+2026-01-19 15:38:49,328 - INFO - Processed batch 5600/6250
+2026-01-19 15:39:40,545 - INFO - Processed batch 5650/6250
+2026-01-19 15:40:36,646 - INFO - Processed batch 5700/6250
+2026-01-19 15:41:27,343 - INFO - Processed batch 5750/6250
+2026-01-19 15:42:16,034 - INFO - Processed batch 5800/6250
+2026-01-19 15:43:04,593 - INFO - Processed batch 5850/6250
+2026-01-19 15:43:53,815 - INFO - Processed batch 5900/6250
+2026-01-19 15:44:41,743 - INFO - Processed batch 5950/6250
+2026-01-19 15:45:29,992 - INFO - Processed batch 6000/6250
+2026-01-19 15:46:18,226 - INFO - Processed batch 6050/6250
+2026-01-19 15:47:07,025 - INFO - Processed batch 6100/6250
+2026-01-19 15:47:55,618 - INFO - Processed batch 6150/6250
+2026-01-19 15:48:45,410 - INFO - Processed batch 6200/6250
+2026-01-19 15:49:34,839 - INFO - Processed batch 6250/6250
+2026-01-19 15:49:55,597 - INFO - Evaluation results for dataset_1_humans100k_jpg:
+2026-01-19 15:49:55,602 - INFO -   auc: 0.0000
+2026-01-19 15:49:55,602 - INFO -   eer: 0.0000
+2026-01-19 15:49:55,602 - INFO -   accuracy: 0.8435
+2026-01-19 15:49:55,602 - INFO -   ap: 0.0000
+2026-01-19 15:49:55,602 - INFO -   precision: 1.0000
+2026-01-19 15:49:55,602 - INFO -   recall: 0.8435
+2026-01-19 15:49:55,602 - INFO -   f1: 0.9151
+2026-01-19 15:49:55,602 - INFO -   sample_count: 100000.0000
+2026-01-19 15:49:55,602 - INFO -   video_auc: 0.0000
+2026-01-19 15:49:55,603 - INFO -   video_eer: 0.0000
+2026-01-19 15:49:55,603 - INFO -   video_acc: 1.0000
+2026-01-19 15:49:55,704 - INFO - Saved evaluation results to evaluation_results/dataset_1_humans100k_jpg_eval_20260119_154955.json
+2026-01-19 15:49:55,706 - INFO - Evaluation completed! Summary saved to evaluation_results/evaluation_summary.json
+2026-01-19 15:49:55,706 - INFO - Fine-tuned model evaluation finished successfully
