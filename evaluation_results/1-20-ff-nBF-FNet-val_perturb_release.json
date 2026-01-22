@@ -1,0 +1,57 @@
+{
+  "datasets": {
+    "dataset_1_16": {
+      "auc": 0.0,
+      "eer": 0.0,
+      "accuracy": 0.347661188369153,
+      "ap": 0.0,
+      "precision": 1.0,
+      "recall": 0.347661188369153,
+      "f1": 0.5159474671669794,
+      "sample_count": 2373,
+      "video_auc": 0.0,
+      "video_eer": 0.0,
+      "video_acc": 0.3685800604229607
+    },
+    "dataset_2_17": {
+      "auc": 0.0,
+      "eer": 0.0,
+      "accuracy": 0.2837548984681154,
+      "ap": 0.0,
+      "precision": 1.0,
+      "recall": 0.2837548984681154,
+      "f1": 0.44207020951852366,
+      "sample_count": 5614,
+      "video_auc": 0.0,
+      "video_eer": 0.0,
+      "video_acc": 0.2843915343915344
+    },
+    "dataset_3_18": {
+      "auc": 0.0,
+      "eer": 0.0,
+      "accuracy": 0.26014008151636264,
+      "ap": 0.0,
+      "precision": 1.0,
+      "recall": 0.26014008151636264,
+      "f1": 0.41287486261579526,
+      "sample_count": 25271,
+      "video_auc": 0.0,
+      "video_eer": 0.0,
+      "video_acc": 0.250256761383088
+    },
+    "dataset_4_19": {
+      "auc": 0.0,
+      "eer": 0.0,
+      "accuracy": 0.37550992657057386,
+      "ap": 0.0,
+      "precision": 1.0,
+      "recall": 0.37550992657057386,
+      "f1": 0.5459937719341604,
+      "sample_count": 29416,
+      "video_auc": 0.0,
+      "video_eer": 0.0,
+      "video_acc": 0.36907114624505927
+    }
+  },
+  "timestamp": "2026-01-20T16:02:09.415061"
+}

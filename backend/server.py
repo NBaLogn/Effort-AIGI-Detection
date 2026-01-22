@@ -82,8 +82,8 @@ class Config:
         "DeepfakeBench/training/weights/finetuned/newBatchFaces.pth",
     )
     LANDMARK_MODEL_PATH = Path(
-        "DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat",
-        # "DeepfakeBench/preprocessing/missing.dat",
+        # "DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat",
+        "DeepfakeBench/preprocessing/missing.dat",
     )
 
     # Landmark group indices for 81-landmark model

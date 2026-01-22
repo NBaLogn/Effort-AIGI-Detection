@@ -23,14 +23,14 @@ from typing import List, Optional
 
 # Constants
 DEFAULT_EXTENSIONS = ["png", "jpg", "jpeg", "bmp", "tif", "tiff", "webp"]
-DEFAULT_SAMPLE_SIZE = 500
+DEFAULT_SAMPLE_SIZE = 20000
 
 logger = logging.getLogger(__name__)
 
 
 def setup_logging(verbose: bool = False) -> None:
     """Set up logging configuration.
-    
+
     Args:
         verbose: If True, set log level to DEBUG, else INFO.
     """
@@ -72,7 +72,7 @@ def sample_images(images: List[Path], sample_size: int) -> List[Path]:
     """
     if not images:
         return []
-        
+
     if len(images) <= sample_size:
         logger.warning(
             "Requested sample size (%d) >= available images (%d). Using all images.",
@@ -117,13 +117,11 @@ def generate_unique_filename(
         while dest_path.exists():
             dest_path = dest_dir / f"{stem}_{counter}{suffix}"
             counter += 1
-            
+
     return dest_path
 
 
-def copy_images(
-    sampled_images: List[Path], source_root: Path, dest_dir: Path
-) -> None:
+def copy_images(sampled_images: List[Path], source_root: Path, dest_dir: Path) -> None:
     """Copy sampled images to destination directory.
 
     Args:
@@ -132,7 +130,7 @@ def copy_images(
         dest_dir: Destination directory.
     """
     dest_dir.mkdir(parents=True, exist_ok=True)
-    
+
     success_count = 0
     for img_path in sampled_images:
         try:
@@ -149,9 +147,9 @@ def copy_images(
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Sample images from dataset flattening subdirectory structure.",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    
+
     parser.add_argument(
         "--source_dir",
         type=Path,
@@ -181,7 +179,8 @@ def main() -> None:
         help="Random seed for reproducibility",
     )
     parser.add_argument(
-        "-v", "--verbose",
+        "-v",
+        "--verbose",
         action="store_true",
         help="Enable verbose output",
     )
@@ -206,13 +205,13 @@ def main() -> None:
 
     logger.info("Source: %s", source_dir)
     logger.info("Destination: %s", dest_dir)
-    
+
     # Check if user wants to process entire dir as one or treat subdirs as categories
-    # The original script hardcoded 'fake' and 'real'. 
+    # The original script hardcoded 'fake' and 'real'.
     # To be generic, we'll just find all images in source_dir and sample them.
-    # If the user wants per-category sampling, they can run the script multiple times 
-    # or we can look for specific subdirs. 
-    # Since the prompt asked for refactoring and the original script did 
+    # If the user wants per-category sampling, they can run the script multiple times
+    # or we can look for specific subdirs.
+    # Since the prompt asked for refactoring and the original script did
     # 'fake' and 'real' specifically, let's keep it robust:
     # We will search the whole tree. If 'fake' and 'real' folders exist in the root,
     # we can process them separately to ensure balanced classes if desired?
@@ -222,10 +221,10 @@ def main() -> None:
     # and sampling N might bias towards the larger class.
     # Let's try to detect if we are at a root with 'fake'/'real' and preserve that logic if matches,
     # otherwise fallback to simple bulk sampling.
-    
+
     subdirs = [x.name for x in source_dir.iterdir() if x.is_dir()]
     has_fake_real = "fake" in subdirs and "real" in subdirs
-    
+
     if has_fake_real:
         logger.info("Detected 'fake' and 'real' subdirectories. Sampling separately.")
         categories = ["fake", "real"]
@@ -241,14 +240,14 @@ def main() -> None:
         else:
             cat_source = source_dir / cat
             cat_dest = dest_dir / cat
-            
+
         logger.info("Processing category: %s", cat)
         images = find_images(cat_source, args.extensions)
-        
+
         if not images:
             logger.warning("No images found in %s", cat_source)
             continue
-            
+
         sampled = sample_images(images, args.sample_size)
         copy_images(sampled, cat_source, cat_dest)
         total_copied += len(sampled)

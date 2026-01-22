@@ -1,0 +1,18 @@
+{
+  "datasets": {
+    "dataset_1_merged": {
+      "auc": 0.0,
+      "eer": 0.0,
+      "accuracy": 0.5185823657658571,
+      "ap": 0.0,
+      "precision": 1.0,
+      "recall": 0.5185823657658571,
+      "f1": 0.6829822042669694,
+      "sample_count": 59169,
+      "video_auc": 0.0,
+      "video_eer": 0.0,
+      "video_acc": 0.5396651541229854
+    }
+  },
+  "timestamp": "2026-01-21T09:11:18.966438"
+}

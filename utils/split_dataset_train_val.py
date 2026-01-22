@@ -85,5 +85,5 @@ def split_dataset(base_path, split_ratio=0.7) -> None:
 
 if __name__ == "__main__":
     split_dataset(
-        "/Volumes/Crucial/AI/DATASETS/SAMPLED/df40/whichfaceisreal",
+        "/Volumes/Crucial/AI/DATASETS/df40/_MIXED-copy/whichfaceisreal",
     )
