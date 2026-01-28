@@ -85,5 +85,23 @@ def split_dataset(base_path, split_ratio=0.7) -> None:
 
 if __name__ == "__main__":
     split_dataset(
-        "/Volumes/Crucial/AI/DATASETS/df40/_MIXED-copy/whichfaceisreal",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/DDIM",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/DDPM",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/DiffSwap",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/Inpaint",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/LDM",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/PNDM",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/SDv15_DS0.3",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/SDv15_DS0.5",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/SDv15_DS0.7",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/SDv21_DS0.3",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/SDv21_DS0.5",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/SDv21_DS0.7",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/stable_diffusion_v_1_5_text2img_p3g7",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/stable_diffusion_v_1_5_text2img_p4g5",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/stable_diffusion_v_1_5_text2img_p5g3",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/stable_diffusion_v_2_1_text2img_p0g5",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/stable_diffusion_v_2_1_text2img_p1g7",
+        # "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/stable_diffusion_v_2_1_text2img_p2g3",
+        "/Volumes/Crucial/AI/DATASETS/SAMPLED/DiffFace_even_cropped/Wild",
     )

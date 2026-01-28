@@ -6,6 +6,7 @@ It includes endpoints for health checks and image prediction with Grad-CAM visua
 
 import base64
 import logging
+import os
 import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -19,6 +20,7 @@ sys.path.insert(0, str(current_dir))
 
 import cv2
 import dlib
+import mediapipe as mp
 import numpy as np
 import torch
 import uvicorn
@@ -26,12 +28,14 @@ import yaml
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from gradcam_utils import reshape_transform
+from mediapipe.tasks import python
+from mediapipe.tasks.python import vision
 from pydantic import BaseModel
-from video_utils import extract_frames
 
 # Import Grad-CAM
 from pytorch_grad_cam import GradCAM
 from pytorch_grad_cam.utils.image import show_cam_on_image
+from video_utils import extract_frames
 
 from DeepfakeBench.training.detectors import DETECTOR
 from DeepfakeBench.training.inference import (
@@ -82,8 +86,8 @@ class Config:
         "DeepfakeBench/training/weights/finetuned/newBatchFaces.pth",
     )
     LANDMARK_MODEL_PATH = Path(
-        # "DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat",
-        "DeepfakeBench/preprocessing/missing.dat",
+        "DeepfakeBench/preprocessing/shape_predictor_81_face_landmarks.dat",
+        # "DeepfakeBench/preprocessing/missing.dat",
     )
 
     # Landmark group indices for 81-landmark model
@@ -98,6 +102,96 @@ class Config:
     SUBTLE_FEATURES_THRESHOLD: ClassVar[float] = 0.2
     FAKE_PROBABILITY_THRESHOLD: ClassVar[float] = 0.5
 
+    # MediaPipe face detection constants
+    USE_MEDIAPIPE: ClassVar[bool] = os.environ.get("SERVER_USE_MEDIAPIPE", "0").lower() in {
+        "1",
+        "true",
+        "yes",
+    }
+    MEDIAPIPE_MIN_CONFIDENCE: ClassVar[float] = float(
+        os.environ.get("SERVER_MEDIAPIPE_CONFIDENCE", "0.5"),
+    )
+    MEDIAPIPE_PADDING: ClassVar[float] = float(
+        os.environ.get("SERVER_MEDIAPIPE_PADDING", "0.2"),
+    )
+
+
+MODEL_URL = (
+    "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/"
+    "float16/1/blaze_face_short_range.tflite"
+)
+
+
+def _get_mediapipe_model_path() -> Path:
+    model_dir = Path.home() / ".mediapipe" / "models"
+    model_dir.mkdir(parents=True, exist_ok=True)
+    model_path = model_dir / "face_detection_short_range.tflite"
+    if not model_path.exists():
+        logger.info("Downloading MediaPipe face detection model to %s", model_path)
+        import urllib.request
+
+        urllib.request.urlretrieve(MODEL_URL, model_path)
+    return model_path
+
+
+class ServerMediaPipeFaceDetector:
+    def __init__(self, min_confidence: float = 0.5) -> None:
+        model_path = _get_mediapipe_model_path()
+        options = vision.FaceDetectorOptions(
+            base_options=python.BaseOptions(model_asset_path=str(model_path)),
+            min_detection_confidence=min_confidence,
+        )
+        self.detector = vision.FaceDetector.create_from_options(options)
+
+    def detect(self, image: np.ndarray) -> list[vision.FaceDetectorResult.Detection]:
+        rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_image)
+        result = self.detector.detect(mp_image)
+        return list(result.detections)
+
+
+def detection_bbox_to_coords(
+    detection: vision.FaceDetectorResult.Detection,
+    image_shape: tuple[int, int, int],
+) -> tuple[int, int, int, int] | None:
+    bbox = detection.bounding_box
+    if not bbox:
+        return None
+
+    x0 = max(0, int(round(getattr(bbox, "origin_x", 0))))
+    y0 = max(0, int(round(getattr(bbox, "origin_y", 0))))
+    width = max(0, int(round(getattr(bbox, "width", 0))))
+    height = max(0, int(round(getattr(bbox, "height", 0))))
+    x1 = min(image_shape[1], x0 + max(1, width))
+    y1 = min(image_shape[0], y0 + max(1, height))
+    if x1 <= x0 or y1 <= y0:
+        return None
+    return x0, y0, x1, y1
+
+
+def expand_bbox(
+    x0: int,
+    y0: int,
+    x1: int,
+    y1: int,
+    image_shape: tuple[int, int, int],
+    padding: float,
+) -> tuple[int, int, int, int] | None:
+    width = x1 - x0
+    height = y1 - y0
+
+    pad_w = int(round(width * padding))
+    pad_h = int(round(height * padding))
+    new_x0 = max(0, x0 - pad_w)
+    new_y0 = max(0, y0 - pad_h)
+    new_x1 = min(image_shape[1], x1 + pad_w)
+    new_y1 = min(image_shape[0], y1 + pad_h)
+
+    if new_x1 <= new_x0 or new_y1 <= new_y0:
+        return None
+
+    return new_x0, new_y0, new_x1, new_y1
+
 
 class ServerState:
     """Global server state management."""
@@ -108,6 +202,7 @@ class ServerState:
         self.model = None
         self.cam = None
         self.face_detector = None
+        self.mediapipe_detector = None
 
     def cleanup(self) -> None:
         """Clean up resources."""
@@ -117,6 +212,7 @@ class ServerState:
             del self.cam
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
+        self.mediapipe_detector = None
 
 
 # Global server state
@@ -242,6 +338,20 @@ def setup_grad_cam(model: torch.nn.Module) -> GradCAM:
     )
 
 
+def load_mediapipe_detector() -> ServerMediaPipeFaceDetector | None:
+    """Load MediaPipe face detector when enabled."""
+    if not Config.USE_MEDIAPIPE:
+        return None
+
+    try:
+        detector = ServerMediaPipeFaceDetector(Config.MEDIAPIPE_MIN_CONFIDENCE)
+        logger.info("MediaPipe face detector enabled")
+        return detector
+    except Exception as exc:
+        logger.warning("Failed to initialize MediaPipe detector: %s", exc)
+        return None
+
+
 def load_face_detector() -> FaceAlignment | None:
     """Load face detector for face alignment.
 
@@ -259,6 +369,50 @@ def load_face_detector() -> FaceAlignment | None:
         Config.LANDMARK_MODEL_PATH,
     )
     return None
+
+
+def _crop_with_mediapipe(image: np.ndarray) -> np.ndarray | None:
+    detector = server_state.mediapipe_detector
+    if detector is None:
+        return None
+
+    detections = detector.detect(image)
+    if not detections:
+        return None
+
+    bbox_coords = detection_bbox_to_coords(detections[0], image.shape)
+    if bbox_coords is None:
+        return None
+
+    expanded = expand_bbox(*bbox_coords, image.shape, Config.MEDIAPIPE_PADDING)
+    if expanded is None:
+        return None
+
+    x0, y0, x1, y1 = expanded
+    return image[y0:y1, x0:x1]
+
+
+def align_face(image: np.ndarray) -> tuple[np.ndarray, np.ndarray | None]:
+    face_aligned = image
+    landmarks = None
+
+    if server_state.face_detector:
+        face_result = server_state.face_detector.extract_aligned_face(image, res=224)
+        if face_result[0] is not None:
+            face_aligned = face_result[0]
+            landmarks = face_result[1]
+            logger.info("Face aligned successfully")
+        else:
+            logger.warning("No face detected by landmark model, checking fallback.")
+            mp_crop = _crop_with_mediapipe(image)
+            if mp_crop is not None:
+                face_aligned = mp_crop
+    else:
+        mp_crop = _crop_with_mediapipe(image)
+        if mp_crop is not None:
+            face_aligned = mp_crop
+
+    return face_aligned, landmarks
 
 
 def analyze_heatmap_regions(mask: np.ndarray, landmarks: np.ndarray) -> str:
@@ -341,17 +495,7 @@ def preprocess_image(image_data: bytes) -> tuple[np.ndarray, np.ndarray | None]:
     if img_bgr is None:
         raise HTTPException(status_code=400, detail="Invalid image file")
 
-    # Preprocess with Face Alignment if available
-    face_aligned = img_bgr
-    landmarks = None
-    if server_state.face_detector:
-        face_result = server_state.face_detector.extract_aligned_face(img_bgr, res=224)
-        if face_result[0] is not None:
-            face_aligned = face_result[0]
-            landmarks = face_result[1]
-            logger.info("Face aligned successfully")
-        else:
-            logger.warning("No face detected, using original image")
+    face_aligned, landmarks = align_face(img_bgr)
 
     # Convert to RGB and resize for Grad-CAM visualization
     img_rgb = cv2.cvtColor(face_aligned, cv2.COLOR_BGR2RGB)
@@ -439,6 +583,9 @@ async def lifespan(_app: FastAPI) -> None:
 
     # Load Face Detector
     server_state.face_detector = load_face_detector()
+
+    # Load MediaPipe detector if configured
+    server_state.mediapipe_detector = load_mediapipe_detector()
 
     yield
 
@@ -560,16 +707,7 @@ async def predict_video(file: UploadFile = File(...)) -> VideoPredictionResponse
 
     for frame in extracted:
         # Mirror preprocess_image(), but start from an in-memory BGR frame.
-        face_aligned = frame.bgr
-        landmarks = None
-        if server_state.face_detector:
-            face_result = server_state.face_detector.extract_aligned_face(
-                frame.bgr,
-                res=224,
-            )
-            if face_result[0] is not None:
-                face_aligned = face_result[0]
-                landmarks = face_result[1]
+        face_aligned, landmarks = align_face(frame.bgr)
 
         img_rgb = cv2.cvtColor(face_aligned, cv2.COLOR_BGR2RGB)
         img_float_norm = cv2.resize(img_rgb, (224, 224))
